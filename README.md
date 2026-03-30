@@ -84,4 +84,4 @@ app = FastAPI()
 app.include_router(welcome.router)
 ```
 
-- Add __init__.py to all new folders
+- Create '__init__.py' file in all the new folders
