@@ -1,24 +1,40 @@
 ## My FastAPI - A FastAPI learning project
 Sreeraj Sreenivasan - 30 Mar 2026
 
-### Create a python project using UV (Assuming UV is already installed)
-- uv init my-fastapi
-- cd my-fastapi
+- Create a python project using UV (Assuming UV is already installed)
 
-### Create python virtual environment
-- uv venv
+```bash
+uv init my-fastapi
+cd my-fastapi
+```
 
-### Activate virtual environment
-- source .venv/bin/activate
+- Create python virtual environment
 
-### To check the active virtual environment
-- which python
+```bash
+uv venv
+```
 
-### Install FastAPI dependency
-- uv add fastapi --extra standard
+- Activate virtual environment
 
-### Modify main.py 
+```bash
+source .venv/bin/activate
+```
 
+- To check the active virtual environment
+
+```bash
+which python
+```
+
+- Install FastAPI dependency
+
+```bash
+uv add fastapi --extra standard
+```
+
+- Modify main.py 
+
+```bash
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -28,8 +44,11 @@ app = FastAPI()
 async def root():
 
         return {"message": "Hello World!"}
+```
 
-### Run FastAPI
-- uv run fastapi dev
+- Run FastAPI
 
+```bash
+uv run fastapi dev
+```
 
