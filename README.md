@@ -1,6 +1,8 @@
 ## My FastAPI - A FastAPI learning project
 Sreeraj Sreenivasan - 30 Mar 2026
 
+### Create and run a new FastAPI project
+
 - Create a python project using UV (Assuming UV is already installed)
 
 ```bash
