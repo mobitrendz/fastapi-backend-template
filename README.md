@@ -57,6 +57,8 @@ uv run fastapi dev
 
 - Create folders app, app/api
 
+- Create `__init__.py` file in all the new folders
+
 - Create welcome.py in app/api folder
 
 ```bash
@@ -84,4 +86,3 @@ app = FastAPI()
 app.include_router(welcome.router)
 ```
 
-- Create '__init__.py' file in all the new folders
