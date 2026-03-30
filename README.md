@@ -1,8 +1,5 @@
-# New FastAPI project 
-Sreeraj Sreenivasan
-30 Mar 2026
-
 ## My FastAPI - A FastAPI learning project
+Sreeraj Sreenivasan - 30 Mar 2026
 
 ### Create a python project using UV (Assuming UV is already installed)
 - uv init my-fastapi
@@ -27,8 +24,10 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.get("/")
+
 async def root():
-    return {"message": "Hello World!"}
+
+        return {"message": "Hello World!"}
 
 ### Run FastAPI
 - uv run fastapi dev
