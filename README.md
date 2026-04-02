@@ -296,3 +296,33 @@ http://127.0.0.1:8000/checkDBConnection
 ```bash
 {"detail":"Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
 ```
+
+### Adding log support 
+
+- Modified main.py with FastAPI default logging mechanism
+
+```bash
+import logging
+
+from fastapi import FastAPI
+from app.api import welcome
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+app = FastAPI()
+
+@app.on_event("startup")
+def on_startup():
+    logger.info("FastAPI starting...")
+
+app.include_router(welcome.router)
+
+@app.on_event("shutdown")
+def on_shutdown():
+    logger.info("FastAPI stopping...")
+```
