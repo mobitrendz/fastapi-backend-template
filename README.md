@@ -131,7 +131,7 @@ uv add --dev pytest-cov
 
 - Run test with coverage
 
-#### Basic coverage
+- Basic coverage
 
 ```bash
 uv run pytest --cov=tests
