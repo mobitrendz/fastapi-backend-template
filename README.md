@@ -144,7 +144,7 @@ uv run pytest --cov=tests --cov-report=term-missing
 ```
 
 - Permanent configuration
-To avoid typing --cov every time, add the following to pyproject.toml
+- To avoid typing --cov every time, add the following to pyproject.toml
 
 ```bash
 [tool.pytest.ini_options]
