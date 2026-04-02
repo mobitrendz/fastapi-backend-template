@@ -86,6 +86,36 @@ app = FastAPI()
 app.include_router(welcome.router)
 ```
 
+### Adding log support 
+
+- Modified main.py with FastAPI default logging mechanism
+
+```bash
+import logging
+
+from fastapi import FastAPI
+from app.api import welcome
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+app = FastAPI()
+
+@app.on_event("startup")
+def on_startup():
+    logger.info("FastAPI starting...")
+
+app.include_router(welcome.router)
+
+@app.on_event("shutdown")
+def on_shutdown():
+    logger.info("FastAPI stopping...")
+```
+
 ### Adding pytest
 
 - Make sure virtual environment is active before installing pytest 
@@ -297,32 +327,91 @@ http://127.0.0.1:8000/checkDBConnection
 {"detail":"Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
 ```
 
-### Adding log support 
+### Adding Alembic
 
-- Modified main.py with FastAPI default logging mechanism
+- Install Alembic dependency
 
 ```bash
-import logging
+uv add alembic
+```
 
-from fastapi import FastAPI
-from app.api import welcome
+- Initialize Alembic
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+```bash
+uv run alembic init migrations
+```
 
-logger = logging.getLogger(__name__)
+- Create folder named models in the app folder
 
-app = FastAPI()
+- Create users.py inside app/models folder and add
 
-@app.on_event("startup")
-def on_startup():
-    logger.info("FastAPI starting...")
+```bash
+from sqlmodel import SQLModel, Field
 
-app.include_router(welcome.router)
+class UserBase(SQLModel):
+    name: str
+    email: str
+    password: str
 
-@app.on_event("shutdown")
-def on_shutdown():
-    logger.info("FastAPI stopping...")
+class User(UserBase, table=True):
+    id: int = Field(default=None, nullable=False, primary_key=True)
+
+class UserCreate(UserBase):
+    pass
+```
+
+- Import SQLModel in migrations/script.py.mako
+
+```bash
+from alembic import op
+import sqlalchemy as sa
+import sqlmodel
+```
+
+- Import SQLModel, User in migrations/env.py
+
+```bash
+from sqlalchemy import pool
+from sqlmodel import SQLModel
+
+from alembic import context
+
+from app.models.users import User
+```
+
+- Update target_metadata in  migrations/env.py
+
+```bash
+# add your model's MetaData object here
+# for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+target_metadata = SQLModel.metadata
+```
+
+- Update sqlalchemy.url in alembic.ini
+
+```bash
+# database URL.  This is consumed by the user-maintained env.py script only.
+# other means of configuring database URLs may be customized within the env.py
+# file.
+sqlalchemy.url = postgresql://postgres:admin@localhost:5432/my_fastapi
+```
+
+- Run alembic revision 
+
+```bash
+uv run alembic revision --autogenerate -m "create user"
+```
+
+- Apply migration
+
+```bash
+uv run alembic upgrade head
+```
+
+- Expected output
+
+```bash
+user table will be created in postgreSQL my_fastapi database.
 ```

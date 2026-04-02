@@ -7,16 +7,19 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-
 logger = logging.getLogger(__name__)
 
+
 app = FastAPI()
+
 
 @app.on_event("startup")
 def on_startup():
     logger.info("FastAPI starting...")
 
+
 app.include_router(welcome.router)
+
 
 @app.on_event("shutdown")
 def on_shutdown():
