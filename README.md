@@ -96,7 +96,7 @@ uv add pytest --dev
 
 - Create folders tests, tests/api in the root folder
 
-- Add __init__.py to all new folders
+- Create `__init__.py` file in all the new folders
 
 - Create test_welcome.py in test/api and add testing code
 
