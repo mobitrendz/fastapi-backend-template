@@ -122,3 +122,33 @@ def test_get_welcome_message_user():
 ```bash
 pytest
 ```
+
+### Adding pytest coverage
+
+```bash
+uv add --dev pytest-cov
+```
+
+- Run test with coverage
+
+- Basic coverage
+
+```bash
+uv run pytest --cov=tests
+```
+
+- Detailed report
+
+```bash
+uv run pytest --cov=tests --cov-report=term-missing
+```
+
+- Permanent configuration
+To avoid typing --cov every time, add the following to pyproject.toml
+
+```bash
+[tool.pytest.ini_options]
+addopts = "--cov=tests --cov-report=term-missing"
+```
+
+- Ignore the deprecated warning as it is backward compatible. Now coverage will run with pytest command
