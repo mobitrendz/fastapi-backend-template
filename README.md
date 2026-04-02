@@ -152,3 +152,69 @@ addopts = "--cov=tests --cov-report=term-missing"
 ```
 
 - Ignore the deprecated warning as it is backward compatible. Now coverage will run with pytest command
+
+### Adding .env environment variables settings file
+
+- Install dependencies - We need pydantic settings package to enable .env file support.
+
+```bash
+uv add pydantic-settings
+
+- Create .env file in the project root folder and add
+
+```bash
+# Environment: local, staging, production
+ENVIRONMENT=local
+```
+
+- Create folder named core inside app folder
+
+- Add `__init__.py` file whenever a new folder is created
+
+- Create config.py inside core folder and add
+
+```bash
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+class Settings(BaseSettings):
+    environment: str
+
+    model_config = SettingsConfigDict(env_file=".env")
+
+settings = Settings()  # ty:ignore[missing-argument]
+```
+
+- Modify welcome.py 
+
+```bash
+from fastapi import APIRouter
+from app.core.config import settings
+
+router = APIRouter(prefix="", tags=["welcome"])
+
+@router.get("/getEnvironment")
+def get_env_settings():
+    return {"Environment": settings.environment}
+
+@router.get("/{user_name}")
+def get_welcome_message_user(user_name: str):
+    return {"message": "Welcome " + user_name + "!"}
+
+@router.get("/")
+def get_welcome_message():
+    return {"message": "Welcome User!"}
+```
+
+- Run fastapi
+
+```bash
+uv run fastapi dev
+```
+
+- Open a browser and enter URL
+
+```bash
+http://127.0.0.1:8000/getEnvironment
+```
+
+- Expected result is: {"Environment":"local"}
