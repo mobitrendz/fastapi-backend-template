@@ -8,7 +8,7 @@ def get_env_settings():
     return {"Environment": settings.environment}
 
 @router.get("/{user_name}")
-def get_welcome_message_user(user_name: str):
+def get_custom_welcome_message(user_name: str):
     return {"message": "Welcome " + user_name + "!"}
 
 @router.get("/")
