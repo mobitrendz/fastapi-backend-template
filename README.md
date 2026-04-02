@@ -86,3 +86,39 @@ app = FastAPI()
 app.include_router(welcome.router)
 ```
 
+### Adding pytest
+
+- Make sure virtual environment is active before installing pytest 
+
+```bash
+uv add pytest --dev
+```
+
+- Create folders tests, tests/api in the root folder
+
+- Add __init__.py to all new folders
+
+- Create test_welcome.py in test/api and add testing code
+
+```bash
+from fastapi.testclient import TestClient
+from app.main import app
+
+client = TestClient(app)
+
+def test_get_welcome_message():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Welcome User!"}
+
+def test_get_welcome_message_user():
+    response = client.get("/Sreeraj")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Welcome Sreeraj!"}
+```
+
+- Run test
+
+```bash
+pytest
+```
