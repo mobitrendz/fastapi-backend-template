@@ -159,6 +159,7 @@ addopts = "--cov=tests --cov-report=term-missing"
 
 ```bash
 uv add pydantic-settings
+```
 
 - Create .env file in the project root folder and add
 
