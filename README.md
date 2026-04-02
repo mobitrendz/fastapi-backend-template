@@ -343,7 +343,7 @@ uv run alembic init migrations
 
 - Create folder named models in the app folder
 
-- Create users.py inside app/models folder and add
+- Create user.py inside app/models folder and add
 
 ```bash
 from sqlmodel import SQLModel, Field
@@ -376,7 +376,7 @@ from sqlmodel import SQLModel
 
 from alembic import context
 
-from app.models.users import User
+from app.models.user import User
 ```
 
 - Update target_metadata in  migrations/env.py
@@ -415,3 +415,186 @@ uv run alembic upgrade head
 ```bash
 user table will be created in postgreSQL my_fastapi database.
 ```
+
+### Adding first super user details to user table on startup
+
+- Add tenacity dependencies 
+
+```bash
+uv add tenacity
+```
+
+- Add super user details in .env settings file
+
+```bash
+SUPER_USER_NAME="Sreeraj Sreenivasan"
+SUPER_USER_EMAIL="sreerajs@hotmail.com"
+SUPER_USER_PASSWORD="admin"
+```
+
+- Update config.py by adding super user variables
+
+```bash
+SUPER_USER_NAME: str
+SUPER_USER_EMAIL: str
+SUPER_USER_PASSWORD: str
+```
+
+- Create folder named services inside app folder
+
+- Create user_service.py in app/services folder and add
+
+```bash
+from sqlmodel import Session
+
+from app.models.user import User, UserCreate
+
+def create_user(*, session: Session, user_create: UserCreate) -> User:
+    db_user = User.model_validate(user_create)
+    
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+    
+    return db_user
+```
+
+- Update app/core/database.py
+
+```bash
+from sqlmodel import create_engine, Session, select
+
+from app.core.config import settings 
+from app.models.user import User, UserCreate
+from app.services import user_service
+
+database_url = settings.POSTGRES_URL
+engine = create_engine(database_url, echo=True)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+def init_db(session: Session) -> None:
+    # Tables should be created with Alembic migrations
+    # But if you don't want to use migrations, create
+    # the tables un-commenting the next lines
+    # from sqlmodel import SQLModel
+
+    # This works because the models are already imported and registered from app.models
+    # SQLModel.metadata.create_all(engine)
+
+    user = session.exec(
+        select(User).where(User.email == settings.SUPER_USER_EMAIL)
+    ).first()
+    if not user:
+        user_in = UserCreate(
+            name=settings.SUPER_USER_NAME,
+            email=settings.SUPER_USER_EMAIL,
+            password=settings.SUPER_USER_PASSWORD,
+            is_superuser=True
+        )
+        user = user_service.create_user(session=session, user_create=user_in)
+```
+
+- Create file backend_pre_start.py inside app folder and add
+
+```bash
+import logging
+
+from sqlalchemy import Engine
+from sqlmodel import Session, select
+from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
+
+from app.core.database import engine
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+max_tries = 60 * 5  # 5 minutes
+wait_seconds = 1
+
+
+@retry(
+    stop=stop_after_attempt(max_tries),
+    wait=wait_fixed(wait_seconds),
+    before=before_log(logger, logging.INFO),
+    after=after_log(logger, logging.WARN),
+)
+def init(db_engine: Engine) -> None:
+    try:
+        with Session(db_engine) as session:
+            # Try to create session to check if DB is awake
+            session.exec(select(1))
+    except Exception as e:
+        logger.error(e)
+        raise e
+
+
+def main() -> None:
+    logger.info("Initializing service")
+    init(engine)
+    logger.info("Service finished initializing")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+- Create file initial_data.py inside app folder and add
+
+```bash
+import logging
+
+from sqlmodel import Session
+from app.core.database import engine, init_db
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def init() -> None:
+    with Session(engine) as session:
+        init_db(session)
+
+def main() -> None:
+    logger.info("Creating initial data")
+    init()
+    logger.info("Initial data created")
+
+if __name__ == "__main__":
+    main()
+```
+
+- Create folder named scripts in the project root folder
+
+- Create prestart.sh in scripts folder
+
+```bash
+#! /usr/bin/env bash
+
+set -e
+set -x
+
+# Let the DB start
+python app/backend_pre_start.py
+
+# Run migrations
+alembic upgrade head
+
+# Create initial data in DB
+python app/initial_data.py
+```
+
+- Modify main.py to call backend_pre_start, initial data on application startup(instead of running the above shell script, will configure the shell script later in docker)
+
+```bash
+from app import initial_data, backend_pre_start
+
+@app.on_event("startup")
+def on_startup():
+    logger.info("FastAPI starting...")
+    backend_pre_start.main()
+    initial_data.main()
+```
+
+- Run the application and check the user table for super user details

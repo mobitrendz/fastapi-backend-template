@@ -16,7 +16,7 @@ def check_database_connection(session: Session = Depends(get_session)):
 
 @router.get("/getEnvironment")
 def get_env_settings():
-    return {"Environment": settings.environment}
+    return {"Environment": settings.ENVIRONMENT}
 
 @router.get("/{user_name}")
 def get_custom_welcome_message(user_name: str):
