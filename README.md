@@ -59,7 +59,7 @@ uv run fastapi dev
 
 - Create `__init__.py` file in all the new folders
 
-- Create welcome.py in app/api folder
+- Create welcome.py in app/api folder and add
 
 ```bash
 from fastapi import APIRouter
@@ -75,7 +75,7 @@ def get_welcome_message_user(user_name: str):
     return {"message": "Welcome " + user_name + "!"}
 ```
 
-- Move and modify main.py to app folder
+- Modify and move main.py to app folder
 
 ```bash
 from fastapi import FastAPI
