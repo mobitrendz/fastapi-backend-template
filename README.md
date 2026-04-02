@@ -327,7 +327,7 @@ http://127.0.0.1:8000/checkDBConnection
 {"detail":"Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
 ```
 
-### Adding Alembic
+### Creating database table using Alembic
 
 - Install Alembic dependency
 
