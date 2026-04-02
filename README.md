@@ -170,7 +170,7 @@ ENVIRONMENT=local
 
 - Create folder named core inside app folder
 
-- Add `__init__.py` file whenever a new folder is created
+- Add `__init__.py` file whenever a new folder is created for .py files
 
 - Create config.py inside core folder and add
 
@@ -219,3 +219,80 @@ http://127.0.0.1:8000/getEnvironment
 ```
 
 - Expected result is: {"Environment":"local"}
+
+### Adding Postgres DB connection using SQLModel 
+
+- Install PostgreSQL and create a database named my_fastapi
+
+- Install SQLModel dependencies
+
+```bash
+uv add sqlmodel psycopg2-binary
+```
+
+- Modify .evn file,  add 
+
+```bash
+POSTGRES_URL="postgresql://postgres:admin@localhost:5432/my_fastapi"
+```
+
+- Update config.py by adding “postgres_url: str”
+
+```bash
+class Settings(BaseSettings):
+    environment: str
+    postgres_url: str
+```
+
+- Create database.py file in core folder and add
+
+```bash
+from sqlmodel import create_engine, Session
+
+from app.core.config import settings 
+
+database_url = settings.postgres_url
+engine = create_engine(database_url, echo=True)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+```
+
+- Update welcome.py by adding one more function to check database connection
+
+```bash
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, text
+
+from app.core.config import settings
+from app.core.database import get_session
+
+router = APIRouter(prefix="", tags=["welcome"])
+
+@router.get("/checkDBConnection")
+def check_database_connection(session: Session = Depends(get_session)):
+    try:
+        session.exec(text("SELECT 1"))  # ty:ignore[no-matching-overload]
+        return {"status": "ok", "database": "connected"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}") 
+```
+
+- Restart the server and check
+
+```bash
+http://127.0.0.1:8000/checkDBConnection
+```
+
+- Expected output on connection success
+
+```bash
+{"status":"ok","database":"connected"}
+```
+
+- Expected output on connection fail (modify POSTGRES_URL in .env file with wrong values)
+
+```bash
+{"detail":"Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
+```
