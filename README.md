@@ -585,7 +585,7 @@ alembic upgrade head
 python app/initial_data.py
 ```
 
-- Modify main.py to call backend_pre_start, initial data on application startup(instead of running the above shell script, will configure the shell script later in docker)
+- Modify main.py to call backend_pre_start, initial_data on application startup(instead of running the above shell script, will configure the shell script later in docker compose)
 
 ```bash
 from app import initial_data, backend_pre_start
