@@ -6,17 +6,17 @@ from fastapi import FastAPI
 from app.api import welcome
 
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+# )
 logger = logging.getLogger(__name__)
 
 
 app = FastAPI()
 
 
-@app.on_event("startup")
+@app.on_event("startup")  # ty:ignore[deprecated]
 def on_startup():
     logger.info("FastAPI starting...")
     backend_pre_start.main()
@@ -26,6 +26,6 @@ def on_startup():
 app.include_router(welcome.router)
 
 
-@app.on_event("shutdown")
+@app.on_event("shutdown")  # ty:ignore[deprecated]
 def on_shutdown():
     logger.info("FastAPI stopping...")
