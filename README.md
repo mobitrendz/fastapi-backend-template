@@ -598,3 +598,175 @@ def on_startup():
 ```
 
 - Run the application and check the user table for super user details
+
+### Creating CRUD api endpoints for User
+
+- Update app.models.user.py
+
+```bash
+from typing import Optional
+from sqlmodel import SQLModel, Field
+
+
+class UserBase(SQLModel):
+    name: str
+    email: str    
+    is_active: bool = True
+    is_superuser: bool = False
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class UserUpdate(SQLModel):
+    name: Optional[str] = None
+    email: Optional[str] = None
+    is_active: Optional[bool] = None
+
+
+class User(UserBase, table=True):
+    id: int = Field(default=None, nullable=False, primary_key=True)
+    password: str
+```
+
+- Update app.services.user_service.py
+
+```bash
+import logging
+from typing import List
+from sqlmodel import Session, select
+
+from app.models.user import User, UserCreate, UserUpdate
+
+logger = logging.getLogger(__name__)
+
+
+def create_user(*, session: Session, user_create: UserCreate) -> User:
+    user = User.model_validate(user_create)
+    
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return user
+
+
+def get_users(*, session: Session) -> List[User]:
+    statement = select(User)
+    return session.exec(statement).all()  # ty:ignore[invalid-return-type]
+
+
+def get_user_by_id(*, session: Session, id: int) -> User | None:
+    statement = select(User).where(User.id == id)
+    return session.exec(statement).first()
+
+
+def get_user_by_email(*, session: Session, email: str) -> User | None:
+    statement = select(User).where(User.email == email)
+    return session.exec(statement).first()
+
+     
+def update_user(*, session: Session, id:int, user_update: UserUpdate) -> User | None:
+    user = get_user_by_id(session=session, id=id)
+    
+    if not user:
+        return None
+
+    user.sqlmodel_update(user_update)
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return user
+
+def delete_user(*, session: Session, id:int) -> bool:
+    user = get_user_by_id(session=session, id=id)
+    
+    if not user:
+        return False
+
+    session.delete(user)
+    session.commit()
+    
+    return True
+```
+
+- Create a file users.py inside app/api folder and add
+
+```bash
+from app.models.user import UserCreate, UserUpdate
+from fastapi import APIRouter, HTTPException, Response, status
+
+from app.core.database import SessionDep
+from app.services import user_service
+
+router = APIRouter(prefix="/users", tags=["Users"])
+
+
+@router.post("/")
+def create_user(session: SessionDep, user_create: UserCreate):
+    return user_service.create_user(session=session, user_create=user_create)
+
+
+@router.get("/")
+def get_users(session: SessionDep):
+    return user_service.get_users(session=session)
+
+
+@router.get("/{id}")
+def get_user_by_id(session: SessionDep, id: int):
+    return user_service.get_user_by_id(session=session, id=id)
+
+
+@router.get("/{email}")
+def get_user_by_email(session: SessionDep, email: str):
+    return user_service.get_user_by_email(session=session, email=email)
+
+
+@router.patch("/{id}")
+def update_user(session: SessionDep, id: int, user_update: UserUpdate):
+    return user_service.update_user(session=session, id=id, user_update=user_update)
+
+
+@router.delete("/{id}")
+def delete_user(session: SessionDep, id: int):
+    deleted = user_service.delete_user(session=session, id=id)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+```
+
+- Add include router in main.py
+
+```bash
+app.include_router(welcome.router)
+app.include_router(users.router)
+```
+
+- Modify api/core/database.py - SessionDep added
+
+```bash
+from fastapi import Depends
+from collections.abc import Generator
+from typing import Annotated
+
+from sqlmodel import create_engine, Session
+
+from app.core.config import settings 
+
+
+database_url = settings.POSTGRES_URL
+engine = create_engine(database_url, echo=True)
+
+def get_session() -> Generator[Session, None, None]:
+    with Session(engine) as session:
+        yield session
+
+SessionDep = Annotated[Session, Depends(get_session)]        
+```
+
+- Moved init_db from api/core/database.py to app/initial_data.py(Refer source code)
