@@ -1,6 +1,8 @@
-from app.models.user import UserCreate, UserUpdate, UserRead
-from fastapi import APIRouter, HTTPException, Response, status
 
+from fastapi import APIRouter, HTTPException
+
+from app.models.generic import Message
+from app.models.user import UserCreate, UserUpdate, UserRead
 from app.core.database import SessionDep
 from app.services import user_service
 
@@ -39,4 +41,4 @@ def delete_user(session: SessionDep, id: int):
     if not deleted:
         raise HTTPException(status_code=404, detail="User not found")
     
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    return Message(message="User deleted successfully")
