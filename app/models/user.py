@@ -13,6 +13,10 @@ class UserCreate(UserBase):
     password: str
 
 
+class UserRead(UserBase):
+    id: int
+
+
 class UserUpdate(SQLModel):
     name: Optional[str] = None
     email: Optional[str] = None
@@ -22,4 +26,3 @@ class UserUpdate(SQLModel):
 class User(UserBase, table=True):
     id: int = Field(default=None, nullable=False, primary_key=True)
     password: str
-
