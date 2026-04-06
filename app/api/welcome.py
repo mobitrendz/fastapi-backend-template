@@ -1,13 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session, text
+from fastapi import APIRouter, HTTPException
+from sqlmodel import text
 
 from app.core.config import settings
-from app.core.database import get_session
+from app.core.database import SessionDep
 
 router = APIRouter(prefix="", tags=["welcome"])
 
 @router.get("/checkDBConnection")
-def check_database_connection(session: Session = Depends(get_session)):
+def check_database_connection(session: SessionDep):
     try:
         session.exec(text("SELECT 1"))  # ty:ignore[no-matching-overload]
         return {"status": "ok", "database": "connected"}
