@@ -1,8 +1,8 @@
 """create user
 
-Revision ID: 282c7449af42
+Revision ID: 41512b9ac8c2
 Revises: 
-Create Date: 2026-04-08 00:58:27.265561
+Create Date: 2026-04-08 04:14:05.333121
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = '282c7449af42'
+revision: str = '41512b9ac8c2'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,10 +25,10 @@ def upgrade() -> None:
     op.create_table('user',
     sa.Column('full_name', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=True),
     sa.Column('email', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False),
-    sa.Column('is_active', sa.Boolean(), nullable=False),
-    sa.Column('is_superuser', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Uuid(), nullable=False),
     sa.Column('hashed_password', sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('is_superuser', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )

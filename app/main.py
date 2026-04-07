@@ -1,9 +1,10 @@
+from app.api.login import login_access_token
 import logging
 
 from app.core import initial_data, backend_pre_start
 
 from fastapi import FastAPI
-from app.api import welcome, users
+from app.api import welcome, users, login
 
 
 # logging.basicConfig(
@@ -24,6 +25,7 @@ def on_startup():
     
 app.include_router(welcome.router)
 app.include_router(users.router)
+app.include_router(login.router)
 
 
 @app.on_event("shutdown")  # ty:ignore[deprecated]

@@ -700,39 +700,39 @@ from fastapi import APIRouter, HTTPException
 
 from app.models.generic import Message
 from app.models.user import UserCreate, UserUpdate, UserRead
-from app.core.database import SessionDep
+from app.core.database import SessionDependency
 from app.services import user_service
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.post("/", response_model=UserRead)
-def create_user(session: SessionDep, user_create: UserCreate):
+def create_user(session: SessionDependency, user_create: UserCreate):
     return user_service.create_user(session=session, user_create=user_create)
 
 
 @router.get("/", response_model=list[UserRead])
-def get_users(session: SessionDep):
+def get_users(session: SessionDependency):
      return user_service.get_users(session=session)
 
 
 @router.get("/{id}", response_model=UserRead)
-def get_user_by_id(session: SessionDep, id: int):
+def get_user_by_id(session: SessionDependency, id: int):
     return user_service.get_user_by_id(session=session, id=id)
 
 
 @router.get("/{email}", response_model=UserRead)
-def get_user_by_email(session: SessionDep, email: str):
+def get_user_by_email(session: SessionDependency, email: str):
     return user_service.get_user_by_email(session=session, email=email)
 
 
 @router.patch("/{id}", response_model=UserRead)
-def update_user(session: SessionDep, id: int, user_update: UserUpdate):
+def update_user(session: SessionDependency, id: int, user_update: UserUpdate):
     return user_service.update_user(session=session, id=id, user_update=user_update)
 
 
 @router.delete("/{id}", response_model=Message)
-def delete_user(session: SessionDep, id: int):
+def delete_user(session: SessionDependency, id: int):
     deleted = user_service.delete_user(session=session, id=id)
 
     if not deleted:
@@ -748,7 +748,7 @@ app.include_router(welcome.router)
 app.include_router(users.router)
 ```
 
-- Modify api/core/database.py - SessionDep added
+- Modify api/core/database.py - SessionDependency added
 
 ```bash
 from fastapi import Depends
@@ -767,7 +767,7 @@ def get_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
 
-SessionDep = Annotated[Session, Depends(get_session)]        
+SessionDependency = Annotated[Session, Depends(get_session)]        
 ```
 
 - Create a file `generic.py` inside api/models folder and add
@@ -942,3 +942,174 @@ New user table will be created in postgreSQL my_fastapi database.
 ```bash
 uv run fastapi dev
 ```
+
+### Implement OAuth2 JWT Token authentication
+
+- Add JWT dependencies 
+
+```bash
+uv add pyjwt
+```
+
+- Update .evn file
+
+```bash
+# Secret key for JWT token generation
+SECRET_KEY=ZBkomvC1HvBIXCrZOSMdub3yRkFDfZOhzSj43r91co8
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+- Update app.core.config.py
+
+```bash
+SECRET_KEY: str
+ALGORITHM: str 
+ACCESS_TOKEN_EXPIRE_MINUTES: int
+```
+
+- Update app/core/security.py with below lines
+
+```bash
+from datetime import datetime, timedelta
+from typing import Any, Dict, Optional
+
+import jwt
+from argon2 import PasswordHasher
+from argon2.exceptions import Argon2Error
+
+from app.core.config import settings
+
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+
+pwd_hasher = PasswordHasher(
+    time_cost=2,
+    memory_cost=102400,
+    parallelism=8,
+    hash_len=32,
+    salt_len=16,
+)
+
+def hash_password(password: str) -> str:
+    """Hash a password using Argon2 with a random salt."""
+    if not password:
+        raise ValueError("Password must not be empty")
+
+    return pwd_hasher.hash(password)
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    """Validate a plaintext password against an Argon2 hash."""
+    try:
+        return pwd_hasher.verify(hashed_password, password)
+    except Argon2Error:
+        return False
+
+def create_access_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:
+    """Create a JWT access token for a subject (typically a user id or email)."""
+    if expires_delta is None:
+        expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    now = datetime.utcnow()  # ty:ignore[deprecated]
+    payload: Dict[str, Any] = {
+        "sub": subject,
+        "iat": now,
+        "exp": now + expires_delta,
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+
+def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
+    """Decode and validate a JWT access token."""
+    try:
+        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.PyJWTError:
+        return None
+```
+
+- Update app.core.generic.py add below lines
+
+```bash
+# JSON payload containing access token
+class Token(SQLModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+# Contents of JWT token
+class TokenPayload(SQLModel):
+    sub: str | None = None
+```
+
+- Update app/services/user_services.py
+
+```bash
+# Dummy hash to use for timing attack prevention when user is not found
+# This is an Argon2 hash of a random password, used to ensure constant-time comparison
+DUMMY_HASH = "$argon2id$v=19$m=65536,t=3,p=4$MjQyZWE1MzBjYjJlZTI0Yw$YTU4NGM5ZTZmYjE2NzZlZjY0ZWY3ZGRkY2U2OWFjNjk"
+
+def authenticate_user(*, session: Session, email: str, password: str) -> User | None:
+    db_user = get_user_by_email(session=session, email=email)
+    if not db_user:
+        # Prevent timing attacks by running password verification even when user doesn't exist
+        # This ensures the response time is similar whether or not the email exists
+        verify_password(password, DUMMY_HASH)
+        return None
+    verified = verify_password(password, db_user.hashed_password)
+    if not verified:
+        return None
+    else:
+        return db_user
+```
+
+- Create file login.py in app/api folder and add
+
+```bash
+from datetime import timedelta
+
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException
+
+from app.core.database import SessionDependency
+from app.core import security
+from app.core.config import settings
+from  app.services.user_service import authenticate_user
+from app.models.generic import Token
+
+router = APIRouter(prefix="/login", tags=["Login"])
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/access-token")
+
+@router.post("/access-token", response_model=Token)
+def login_access_token(session: SessionDependency, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
+
+    """
+    OAuth2 compatible token login, get an access token for future requests
+    """
+
+    user = authenticate_user(session=session, email=form_data.username, password=form_data.password)
+
+    if not user:
+        raise HTTPException(status_code=400, detail="Incorrect email or password")
+    elif not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    return Token(access_token=security.create_access_token(str(user.id), expires_delta=access_token_expires))
+
+@router.get("/secure-data")
+def read_secure(token: str = Depends(oauth2_scheme)):
+    # This endpoint will show a lock icon in Swagger
+    return {"token": token}
+```
+
+- Update app/main.py
+
+```bash
+app.include_router(welcome.router)
+app.include_router(users.router)
+app.include_router(login.router)
+```
+

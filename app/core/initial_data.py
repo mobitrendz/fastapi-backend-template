@@ -1,7 +1,7 @@
 from sqlmodel import Session, select
 
 from app.core.config import settings
-from app.models.user import User, UserCreate
+from app.models.user import User, SuperUserCreate
 from app.services import user_service
 from app.core.database import engine
 
@@ -41,13 +41,12 @@ def init_db(session: Session) -> None:
     ).first()
     
     if not user:
-        user_in = UserCreate(
+        user_in = SuperUserCreate(
             full_name=settings.SUPER_USER_NAME,
             email=settings.SUPER_USER_EMAIL,
-            password=settings.SUPER_USER_PASSWORD,
-            is_superuser=True
+            password=settings.SUPER_USER_PASSWORD
         )
-        user = user_service.create_user(session=session, user_create=user_in)
+        user = user_service.create_super_user(session=session, user_create=user_in)
         logger.info("Initial data created")
     else:
         logger.info("Initial data already present")
