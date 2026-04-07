@@ -266,12 +266,12 @@ uv add sqlmodel psycopg2-binary
 POSTGRES_URL="postgresql://postgres:admin@localhost:5432/my_fastapi"
 ```
 
-- Update config.py by adding “postgres_url: str”
+- Update config.py by adding POSTGRES_URL: str”
 
 ```bash
 class Settings(BaseSettings):
-    environment: str
-    postgres_url: str
+    ENVIRONMENT: str
+    POSTGRES_URL: str
 ```
 
 - Create database.py file in core folder and add
@@ -281,7 +281,7 @@ from sqlmodel import create_engine, Session
 
 from app.core.config import settings 
 
-database_url = settings.postgres_url
+database_url = settings.POSTGRES_URL
 engine = create_engine(database_url, echo=True)
 
 def get_session():
@@ -338,7 +338,7 @@ uv add alembic
 - Initialize Alembic
 
 ```bash
-uv run alembic init migrations
+uv run alembic init app/alembic
 ```
 
 - Create folder named models in the app folder
@@ -360,7 +360,7 @@ class UserCreate(UserBase):
     pass
 ```
 
-- Import SQLModel in migrations/script.py.mako
+- Import SQLModel in app/alembic/script.py.mako
 
 ```bash
 from alembic import op
@@ -368,7 +368,7 @@ import sqlalchemy as sa
 import sqlmodel
 ```
 
-- Import SQLModel, User in migrations/env.py
+- Import SQLModel, User in app/alembic/env.py
 
 ```bash
 from sqlalchemy import pool
@@ -731,7 +731,7 @@ def update_user(session: SessionDep, id: int, user_update: UserUpdate):
     return user_service.update_user(session=session, id=id, user_update=user_update)
 
 
-@router.delete("/{id}")
+@router.delete("/{id}", response_model=Message)
 def delete_user(session: SessionDep, id: int):
     deleted = user_service.delete_user(session=session, id=id)
 
@@ -781,4 +781,164 @@ class Message(SQLModel):
     message: str
 ```
 
-- Moved init_db from api/core/database.py to app/initial_data.py(Refer source code)
+- Moved init_db function from api/core/database.py to app/initial_data.py(Refer source code)
+
+### Implement Password hashing and UUID 
+
+- Add pwdlib with Argon2 support, jwt dependencies 
+
+```bash
+uv add "pwdlib[argon2]"
+```
+
+- Create security.py in app/core folder and add
+
+```bash
+from argon2 import PasswordHasher
+from argon2.exceptions import Argon2Error
+
+pwd_hasher = PasswordHasher(
+    time_cost=2,
+    memory_cost=102400,
+    parallelism=8,
+    hash_len=32,
+    salt_len=16,
+)
+
+def hash_password(password: str) -> str:
+    """Hash a password using Argon2 with a random salt."""
+    if not password:
+        raise ValueError("Password must not be empty")
+
+    return pwd_hasher.hash(password)
+
+def verify_password(password: str, hashed_password: str) -> bool:
+    """Validate a plaintext password against an Argon2 hash."""
+    try:
+        return pwd_hasher.verify(hashed_password, password)
+    except Argon2Error:
+        return False
+```
+
+- Modify app/models/user.py
+
+```bash
+import uuid
+from pydantic import EmailStr
+from datetime import datetime, timezone
+from sqlmodel import SQLModel, Field
+from sqlalchemy import DateTime
+
+def get_datetime_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+class UserBase(SQLModel):
+    full_name: str | None = Field(default=None, max_length=255)
+    email: EmailStr = Field(unique=True, index=True, max_length=255)  
+    is_active: bool = True
+    is_superuser: bool = False
+
+class UserCreate(UserBase):
+    password: str = Field(min_length=8, max_length=128)
+
+class UserUpdate(SQLModel):
+    email: EmailStr | None = Field(default=None, max_length=255)
+    password: str | None = Field(default=None, min_length=8, max_length=128)
+
+class User(UserBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    hashed_password: str
+    created_at: datetime | None = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+class UserRead(UserBase):
+    id: uuid.UUID
+    created_at: datetime | None
+```
+
+- Modify create_user function in user_service.py
+
+```bash
+from app.core.security import hash_password
+
+def create_user(*, session: Session, user_create: UserCreate) -> User:
+    user = User.model_validate(user_create, update={"hashed_password": hash_password(user_create.password)})
+    
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return user
+```
+
+- Run alembic revision and upgrade to make all the model changes to reflect in the database.
+
+```bash
+uv run alembic revision --autogenerate -m “modify user table”
+uv run alembic upgrade head
+```
+
+- As we modified the user table structure completely, I got some errors while alembic migration and I removed the alembic(app/alembic folder, alembic.ini file) from the project and dropped alembic_version and user table manually and repeated the alembic initialization steps again.
+
+```bash
+uv run alembic init app/alembic
+```
+
+- Import SQLModel in app/alembic/script.py.mako
+
+```bash
+from alembic import op
+import sqlalchemy as sa
+import sqlmodel
+```
+
+- Import SQLModel, User in app/alembic/env.py
+
+```bash
+from sqlalchemy import pool
+from sqlmodel import SQLModel
+
+from alembic import context
+
+from app.models.user import User
+```
+
+- Update target_metadata in  migrations/env.py
+
+```bash
+# add your model's MetaData object here
+# for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+target_metadata = SQLModel.metadata
+```
+
+- Update sqlalchemy.url in alembic.ini
+
+```bash
+# database URL.  This is consumed by the user-maintained env.py script only.
+# other means of configuring database URLs may be customized within the env.py
+# file.
+sqlalchemy.url = postgresql://postgres:admin@localhost:5432/my_fastapi
+```
+
+- Run alembic revision and apply migration
+
+```bash
+uv run alembic revision --autogenerate -m "create user"
+uv run alembic upgrade head
+```
+
+- Expected output
+
+```bash
+New user table will be created in postgreSQL my_fastapi database.
+```
+
+- Restart server and check for the new user data with hashed_password 
+
+```bash
+uv run fastapi dev
+```
