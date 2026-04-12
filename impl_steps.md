@@ -5,15 +5,15 @@ Sreeraj Sreenivasan - 30 Mar 2026
 * [Create and run a new FastAPI project](#Create-and-run-a-new-FastAPI-project)
 * [Create Project folders](#Create-Project-folders)
 * [Implement log support](#Implement-log-support)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
-* [Introduction](#introduction)
+* [Add pytest](#Add-pytest)
+* [Add pytest coverage](#Add-pytest-coverage)
+* [Create .env configuration file](#Create-.env-configuration-file)
+* [Create PostgreSQL session using SQLModel](#Create-PostgreSQL-session-using-SQLModel)
+* [Create database table using Alembic](#Create-database-table-using-Alembic)
+* [Add first Super User details to user table on startup](#Add-first-Super-User-details-to-user-table-on-startup)
+* [Create CRUD API endpoints for User ](#Create-CRUD-API-endpoints-for-User )
+* [ Implement Argon2 Password hashing and UUID](#Implement-Argon2-Password-hashing-and-UUID)
+* [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
 
 ### Create and run a new FastAPI project
 
@@ -196,7 +196,7 @@ addopts = "--cov=tests --cov-report=term-missing"
 
 - Ignore the deprecated warning as it is backward compatible. Now coverage will run with pytest command
 
-### Create .env configuration file for storing environment variable
+### Create .env configuration file
 
 - Install dependencies - We need pydantic settings package to enable .env file support.
 
