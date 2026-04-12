@@ -39,15 +39,15 @@ Update the following variables in .env file:
 
 **Database Connection**
 
-[!IMPORTANT]
-Ensure PostgreSQL is running locally with an empty database created.
+**[!IMPORTANT] - Ensure PostgreSQL is running locally with an empty database created.**
 
 ```bash
 POSTGRES_URL="postgresql://username:password@localhost:5432/dbname"
 ```
 
 **Security & Superuser**
-Generate a secure SECRET_KEY for JWT tokens (e.g., using JWT Secret Key Generator).
+
+Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generator](https://jwtsecretkeygenerator.com/)).
 ```bash
 SECRET_KEY="your-generated-hs256-key"
 
