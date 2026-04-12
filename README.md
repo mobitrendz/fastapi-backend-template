@@ -51,10 +51,10 @@ Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generat
 ```bash
 SECRET_KEY="your-generated-hs256-key"
 
-# Superuser details (Password must be min. 8 characters)
+# Superuser details 
 SUPER_USER_NAME="admin"
 SUPER_USER_EMAIL="admin@example.com"
-SUPER_USER_PASSWORD="securepassword"
+SUPER_USER_PASSWORD="securepassword"      #Password must be min. 8 characters
 ```
 
 ## 🗄️ Database Migrations
