@@ -4,7 +4,7 @@ from sqlmodel import text
 from app.core.config import settings
 from app.core.database import SessionDependency
 
-router = APIRouter(prefix="", tags=["welcome"])
+router = APIRouter(prefix="", tags=["Welcome"])
 
 @router.get("/checkDBConnection")
 def check_database_connection(session: SessionDependency):

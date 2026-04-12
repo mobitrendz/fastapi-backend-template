@@ -1,4 +1,3 @@
-from app.api.login import login_access_token
 import logging
 
 from app.core import initial_data, backend_pre_start
