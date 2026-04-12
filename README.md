@@ -35,12 +35,13 @@ source .venv/bin/activate
 ```
 
 ### 3. Environment Configuration
-Create a .env file in the root directory and update the following variables:
+Update the following variables in .env file:
+
 **Database Connection**
-```
+
 [!IMPORTANT]
 Ensure PostgreSQL is running locally with an empty database created.
-```
+
 ```bash
 POSTGRES_URL="postgresql://username:password@localhost:5432/dbname"
 ```
