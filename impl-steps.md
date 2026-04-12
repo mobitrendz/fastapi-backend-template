@@ -7,7 +7,7 @@ Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement log support](#Implement-log-support)
 * [Add pytest](#Add-pytest)
 * [Add pytest coverage](#Add-pytest-coverage)
-* [Create .env configuration file](#Create-.env-configuration-file)
+* [Create env configuration file](#Create-env-configuration-file)
 * [Create PostgreSQL session using SQLModel](#Create-PostgreSQL-session-using-SQLModel)
 * [Create database table using Alembic](#Create-database-table-using-Alembic)
 * [Add first Super User details to user table on startup](#Add-first-Super-User-details-to-user-table-on-startup)
@@ -196,7 +196,7 @@ addopts = "--cov=tests --cov-report=term-missing"
 
 - Ignore the deprecated warning as it is backward compatible. Now coverage will run with pytest command
 
-### Create .env configuration file
+### Create env configuration file
 
 - Install dependencies - We need pydantic settings package to enable .env file support.
 
