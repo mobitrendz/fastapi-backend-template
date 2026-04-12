@@ -1,16 +1,8 @@
 # FastApi Backend Template
 
 ### Clone the repository and navigate to the folder:
-
-**using ssh**
 ``` bash
-git clone git@github.com:mobitrendz/fastapi-backend-template.git
-
-or
-
-**using https**
 git clone https://github.com/mobitrendz/fastapi-backend-template.git
-
 cd fastapi-backend-template
 ```
 
