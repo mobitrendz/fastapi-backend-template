@@ -47,7 +47,7 @@ POSTGRES_URL="postgresql://username:password@localhost:5432/dbname"
 
 **Security & Superuser**
 
-Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generator](https://jwtsecretkeygenerator.com/){:target="_blank"}).
+Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generator](https://jwtsecretkeygenerator.com)).
 ```bash
 SECRET_KEY="your-generated-hs256-key"
 
