@@ -1,49 +1,81 @@
-# FastApi Backend Template
+# FastAPI Backend Template
 
-### Clone the repository and navigate to the folder:
-``` bash
+A professional, production-ready template for building scalable backends with **FastAPI**, **SQLModel**, and **Alembic**. This project is configured for modern Python development using uv for lightning-fast dependency management.
+
+## 🚀 Features
+- **FastAPI**: Modern, high-performance web framework.
+- **SQLModel**: Seamless integration between SQL databases and Pydantic models.
+- **Alembic**: Robust database migrations.
+- **JWT Authentication**: Secure token-based auth (PyJWT + pwdlib).
+- **Settings Management**: Pydantic-settings for environment-based configuration.
+- **Developer Friendly**: Pre-configured with pytest and coverage reporting.
+
+## 🛠️ Tech Stack
+- **Language**: Python >= 3.14
+- **Database**: PostgreSQL (psycopg2)
+- **Migrations**: Alembic
+- **Async Support**: Standard FastAPI ASGI
+
+## 🏁 Getting Started
+### 1. Clone the Repository
+```bash
 git clone https://github.com/mobitrendz/fastapi-backend-template.git
 cd fastapi-backend-template
 ```
 
-### Initialize the environment & install dependencies:
-``` bash
-uv sync
-```
+### 2. Install Dependencies
+This project uses uv for dependency management. If you don't have it, install it here.
 
-### Activate virtual environment 
-``` bash
+```bash
+# Sync environment and install dependencies
+uv sync
+
+# Activate the virtual environment
 source .venv/bin/activate
 ```
 
-### Update with Your PostgreSQL Database details(username, password, dbname) in .env
-**Assuming postgresql is already running locally with an empty database**
-``` bash
+### 3. Environment Configuration
+Create a .env file in the root directory and update the following variables:
+**Database Connection**
+```
+[!IMPORTANT]
+Ensure PostgreSQL is running locally with an empty database created.
+```
+```bash
 POSTGRES_URL="postgresql://username:password@localhost:5432/dbname"
 ```
 
-### Update Super User credentials in .env
-**required minimum 8 characters for password**
-``` bash
-SUPER_USER_NAME=""
-SUPER_USER_EMAIL=""
-SUPER_USER_PASSWORD=""    
+**Security & Superuser**
+Generate a secure SECRET_KEY for JWT tokens (e.g., using JWT Secret Key Generator).
+```bash
+SECRET_KEY="your-generated-hs256-key"
+
+# Superuser details (Password must be min. 8 characters)
+SUPER_USER_NAME="admin"
+SUPER_USER_EMAIL="admin@example.com"
+SUPER_USER_PASSWORD="securepassword"
 ```
 
-### Generate an HS256 Secret key and update it in .env (used for JWT token generation)
-**Don't know how to generate? Try this: https://jwtsecretkeygenerator.com/**
-``` bash
-SECRET_KEY=
-```
-
-### Create all predefined database tables in PostgreSQL
-``` bash
+## 🗄️ Database Migrations
+Apply the predefined database schema to your PostgreSQL instance:
+```bash
 uv run alembic upgrade head
 ```
 
-### Verify the framework by navigating to the following URLs.
+## 🏃 Running the Application
+Start the FastAPI development server:
+```bash
+uv run fastapi dev
+```
 
-http://127.0.0.1:8000/Harry%20Potter
+### Verify Installation
+Once the server is running, you can access:
+- **Interactive API Docs**: http://127.0.0.1:8000/docs
+- **Health Check/Demo**: http://127.0.0.1:8000/Harry%20Potter
 
-http://127.0.0.1:8000/docs
+## 🧪 Testing
+Run the test suite with coverage reporting:
+```bash
+uv run pytest
+```
 
