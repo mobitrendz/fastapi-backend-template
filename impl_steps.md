@@ -2,6 +2,19 @@
 A step by step guide by 
 Sreeraj Sreenivasan - 30 Mar 2026
 
+* [Create and run a new FastAPI project](#Create-and-run-a-new-FastAPI-project)
+* [Create Project folders](#Create-Project-folders)
+* [Implement log support](#Implement-log-support)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+* [Introduction](#introduction)
+
 ### Create and run a new FastAPI project
 
 - Create a python project using UV (Assuming UV is already installed)
@@ -53,7 +66,7 @@ async def root():
 uv run fastapi dev
 ```
 
-### Start creating project folders
+### Create Project folders
 
 - Create folders app, app/api
 
@@ -86,7 +99,7 @@ app = FastAPI()
 app.include_router(welcome.router)
 ```
 
-### Adding log support 
+### Implement log support 
 
 - Modified main.py with FastAPI default logging mechanism
 
@@ -116,7 +129,7 @@ def on_shutdown():
     logger.info("FastAPI stopping...")
 ```
 
-### Adding pytest
+### Add pytest
 
 - Make sure virtual environment is active before installing pytest 
 
@@ -153,7 +166,7 @@ def test_get_welcome_message_user():
 pytest
 ```
 
-### Adding pytest coverage
+### Add pytest coverage
 
 ```bash
 uv add --dev pytest-cov
@@ -183,7 +196,7 @@ addopts = "--cov=tests --cov-report=term-missing"
 
 - Ignore the deprecated warning as it is backward compatible. Now coverage will run with pytest command
 
-### Adding .env environment variables settings file
+### Create .env configuration file for storing environment variable
 
 - Install dependencies - We need pydantic settings package to enable .env file support.
 
@@ -250,7 +263,7 @@ http://127.0.0.1:8000/getEnvironment
 
 - Expected result is: {"Environment":"local"}
 
-### Adding Postgres DB connection using SQLModel 
+### Create PostgreSQL session using SQLModel 
 
 - Install PostgreSQL and create a database named my_fastapi
 
@@ -327,7 +340,7 @@ http://127.0.0.1:8000/checkDBConnection
 {"detail":"Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
 ```
 
-### Creating database table using Alembic
+### Create database table using Alembic
 
 - Install Alembic dependency
 
@@ -416,7 +429,7 @@ uv run alembic upgrade head
 user table will get created in postgreSQL my_fastapi database.
 ```
 
-### Adding first super user details to user table on startup
+### Add first Super User details to user table on startup
 
 - Add tenacity dependencies 
 
@@ -599,7 +612,7 @@ def on_startup():
 
 - Run the application and check the user table for super user details
 
-### Creating CRUD api endpoints for User
+### Create CRUD API endpoints for User
 
 - Update app.models.user.py
 
@@ -783,7 +796,7 @@ class Message(SQLModel):
 
 - Moved init_db function from api/core/database.py to app/initial_data.py(Refer source code)
 
-### Implement Password hashing and UUID 
+### Implement Argon2 Password hashing and UUID 
 
 - Add pwdlib with Argon2 support, jwt dependencies 
 
