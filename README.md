@@ -1,6 +1,6 @@
 # FastAPI Backend Template
 
-A professional, production-ready template for building scalable backends with **FastAPI**, **SQLModel**, and **Alembic**. This project is configured for modern Python development using uv for lightning-fast dependency management.
+A professional template for building scalable backends with **FastAPI**, **SQLModel**, and **Alembic**. This project is configured for modern Python development using uv for lightning-fast dependency management.
 
 ## 🚀 Features
 - **FastAPI**: Modern, high-performance web framework.
