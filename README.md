@@ -12,7 +12,7 @@ A professional template for building scalable backends with **FastAPI**, **SQLMo
 
 ## 🛠️ Tech Stack
 - **Language**: Python >= 3.14
-- **Database**: PostgreSQL (psycopg2)
+- **Database**: PostgreSQL (psycopg3)
 - **Migrations**: Alembic
 - **Async Support**: Standard FastAPI ASGI
 
@@ -42,7 +42,7 @@ Update the following variables in .env file:
 **[!IMPORTANT] - Ensure PostgreSQL is running locally with an empty database created.**
 
 ```bash
-POSTGRES_URL="postgresql://username:password@localhost:5432/dbname"
+POSTGRES_URL="postgresql+psycopg://username:password@localhost:5432/dbname"
 ```
 
 **Security & Superuser**

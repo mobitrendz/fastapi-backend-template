@@ -12,10 +12,11 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Create env configuration file](#Create-env-configuration-file)
 * [Create PostgreSQL session using SQLModel](#Create-PostgreSQL-session-using-SQLModel)
 * [Create database table using Alembic](#Create-database-table-using-Alembic)
-* [Add first Super User details to user table on startup](#Add-first-Super-User-details-to-user-table-on-startup)
+* [Add first Super User details to User table on startup](#Add-first-Super-User-details-to-User-table-on-startup)
 * [Create CRUD API endpoints for User ](#Create-CRUD-API-endpoints-for-User )
 * [ Implement Argon2 Password hashing and UUID](#Implement-Argon2-Password-hashing-and-UUID)
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
+* [Upgrade psycopg2 to psycopg3](#Upgrade-psycopg2-to-psycopg3)
 
 ### Prerequisites
 
@@ -279,13 +280,13 @@ http://127.0.0.1:8000/getEnvironment
 - Install SQLModel dependencies
 
 ```bash
-uv add sqlmodel psycopg2-binary
+uv add sqlmodel "psycopg[binary]"
 ```
 
 - Modify .evn file,  add 
 
 ```bash
-POSTGRES_URL="postgresql://postgres:admin@localhost:5432/my_fastapi"
+POSTGRES_URL="postgresql+psycopg://postgres+:admin@localhost:5432/my_fastapi"
 ```
 
 - Update config.py by adding POSTGRES_URL: str”
@@ -346,7 +347,7 @@ http://127.0.0.1:8000/checkDBConnection
 - Expected output on connection fail (modify POSTGRES_URL in .env file with wrong values)
 
 ```bash
-{"detail":"Database connection failed: (psycopg2.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
+{"detail":"Database connection failed: (psycopg3.OperationalError) connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  database \"my_fastap\" does not exist\n\n(Background on this error at: https://sqlalche.me/e/20/e3q8)"}
 ```
 
 ### Create database table using Alembic
@@ -417,7 +418,7 @@ target_metadata = SQLModel.metadata
 # database URL.  This is consumed by the user-maintained env.py script only.
 # other means of configuring database URLs may be customized within the env.py
 # file.
-sqlalchemy.url = postgresql://postgres:admin@localhost:5432/my_fastapi
+sqlalchemy.url = postgresql+psycopg://postgres:admin@localhost:5432/my_fastapi
 ```
 
 - Run alembic revision 
@@ -438,7 +439,7 @@ uv run alembic upgrade head
 user table will get created in postgreSQL my_fastapi database.
 ```
 
-### Add first Super User details to user table on startup
+### Add first Super User details to User table on startup
 
 - Add tenacity dependencies 
 
@@ -943,7 +944,7 @@ target_metadata = SQLModel.metadata
 # database URL.  This is consumed by the user-maintained env.py script only.
 # other means of configuring database URLs may be customized within the env.py
 # file.
-sqlalchemy.url = postgresql://postgres:admin@localhost:5432/my_fastapi
+sqlalchemy.url = postgresql+psycopg://postgres:admin@localhost:5432/my_fastapi
 ```
 
 - Run alembic revision and apply migration
@@ -1134,4 +1135,3 @@ app.include_router(welcome.router)
 app.include_router(users.router)
 app.include_router(login.router)
 ```
-
