@@ -7,7 +7,7 @@ from sqlmodel import create_engine, Session
 from app.core.config import settings 
 
 
-database_url = settings.POSTGRES_URL
+database_url = str(settings.SQLALCHEMY_DATABASE_URI)
 engine = create_engine(database_url, echo=True)
 
 def get_session() -> Generator[Session, None, None]:

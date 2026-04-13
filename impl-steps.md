@@ -16,7 +16,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Create CRUD API endpoints for User ](#Create-CRUD-API-endpoints-for-User )
 * [ Implement Argon2 Password hashing and UUID](#Implement-Argon2-Password-hashing-and-UUID)
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
-* [Upgrade psycopg2 to psycopg3](#Upgrade-psycopg2-to-psycopg3)
+
 
 ### Prerequisites
 
