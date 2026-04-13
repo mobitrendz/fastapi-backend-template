@@ -26,11 +26,13 @@ cd fastapi-backend-template
 ### 2. Install Dependencies
 This project uses uv for dependency management. If you don't have it, install it here.
 
+**Sync environment and install dependencies**
 ```bash
-# Sync environment and install dependencies
 uv sync
+```
 
-# Activate the virtual environment
+**Activate the virtual environment**
+```bash
 source .venv/bin/activate
 ```
 
