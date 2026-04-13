@@ -38,6 +38,7 @@ fastapi-backend-template/
 ├── .env.example                # Template for environment variables
 ├── alembic.ini                 # Alembic configuration
 ├── pyproject.toml              # Dependency management (uv/pip)
+├── pytest.ini                  # Pytest configuration
 └── README.md                   # Project documentation
 ```
 
