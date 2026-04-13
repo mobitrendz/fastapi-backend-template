@@ -90,7 +90,16 @@ Update the following variables in .env file:
 **[!IMPORTANT] - Ensure PostgreSQL is running locally with an empty database created.**
 
 ```bash
-POSTGRES_URL="postgresql+psycopg://username:password@localhost:5432/dbname"
+# Postgres Connection Settings
+POSTGRES_SERVER=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=database          # change to your db name
+POSTGRES_USER=username        # change to your db username
+POSTGRES_PASSWORD=password    # change to your db password
+
+# The app will construct the URL as: 
+# postgresql+psycopg://postgres:admin@localhost:5432/my_fastapi
+# postgresql+asyncpg://username:password@localhost:5432/database
 ```
 
 **Security & Superuser**
