@@ -48,7 +48,6 @@ This project is built on a **Modular Service-Oriented Architecture**, specifical
 ### Core Architectural Pillars
 
 - API & Versioning (app/api/v1)
-
 Decouples the interface from the logic. By versioning the API, we ensure that new feature rollouts do not break existing client integrations.
 
 - Business Logic Separation (app/services)
