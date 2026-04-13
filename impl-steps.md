@@ -1,6 +1,14 @@
-## My FastAPI - A FastAPI learning project
-A step by step guide by 
-Sreeraj Sreenivasan - 30 Mar 2026
+# FastAPI Backend Template - Step by step implementation details
+Developer: Sreeraj Sreenivasan - 30 Mar 2026
+
+### Prerequisites
+
+* Python >=3.14
+* PostgreSQL 18
+* git 
+* uv 
+
+### Table of Contents
 
 * [Create and run a new FastAPI project](#Create-and-run-a-new-FastAPI-project)
 * [Create Project folders](#Create-Project-folders)
