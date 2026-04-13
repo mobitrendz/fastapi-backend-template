@@ -19,7 +19,7 @@ A professional template for building scalable backends with **FastAPI**, **SQLMo
 ## 🏁 Getting Started
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/mobitrendz/fastapi-backend-template.git
+git clone -b develop git@github.com:mobitrendz/my-fastapi.git
 cd fastapi-backend-template
 ```
 
