@@ -6,9 +6,7 @@ from sqlmodel import create_engine, Session
 
 from app.core.config import settings 
 
-
-database_url = str(settings.SQLALCHEMY_DATABASE_URI)
-engine = create_engine(database_url, echo=True)
+engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
 
 def get_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
