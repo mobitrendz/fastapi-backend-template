@@ -1,9 +1,10 @@
 import logging
 
-from app.core import initial_data, backend_pre_start
+from app.db import initial_data, backend_pre_start
 
 from fastapi import FastAPI
-from app.api import welcome, users, login
+
+from app.api.v1.router import api_router as v1_router
 
 
 # logging.basicConfig(
@@ -22,9 +23,8 @@ def on_startup():
     backend_pre_start.main()
     initial_data.main()
     
-app.include_router(welcome.router)
-app.include_router(users.router)
-app.include_router(login.router)
+
+app.include_router(v1_router, prefix="/api/v1")
 
 
 @app.on_event("shutdown")  # ty:ignore[deprecated]

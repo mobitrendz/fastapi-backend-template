@@ -16,6 +16,57 @@ A professional template for building scalable backends with **FastAPI**, **SQLMo
 - **Migrations**: Alembic
 - **Async Support**: Standard FastAPI ASGI
 
+## 📂 Project Structure
+
+```
+fastapi-backend-template/
+├── app/                        # Main Application Logic
+│   ├── alembic/                # Database migrations and environment setup
+│   ├── api/                    # API Entry points
+│   │   └── v1/                 # API Versioning
+│   │       ├── endpoints/      # Individual route handlers (e.g., users.py)
+│   │       └── router.py       # Main router merging all v1 endpoints
+│   ├── core/                   # Global configuration and security (JWT, Auth)
+│   ├── crud/                   # Reusable database CRUD operations
+│   ├── db/                     # Connection engine, session, and seed data
+│   ├── models/                 # SQLModels, Tables, and DTOs (Data Transfer Objects)
+│   ├── services/               # Complex business logic and external integrations
+│   └── main.py                 # FastAPI application initialization
+├── scripts/                    # Shell scripts for deployment and startup
+├── tests/                      # Pytest suite for unit and integration testing
+├── .env                        # Environment variables (Internal)
+├── .env.example                # Template for environment variables
+├── alembic.ini                 # Alembic configuration
+├── pyproject.toml              # Dependency management (uv/pip)
+└── README.md                   # Project documentation
+```
+
+## 📝 Project Description
+
+This project is built on a **Modular Service-Oriented Architecture**, specifically designed to handle enterprise-level scale while remaining developer-friendly.
+
+### Core Architectural Pillars
+
+- API & Versioning (app/api/v1)
+
+Decouples the interface from the logic. By versioning the API, we ensure that new feature rollouts do not break existing client integrations.
+
+- Business Logic Separation (app/services)
+
+Unlike basic templates, this structure separates **Services** from **CRUD**. While crud/ handles direct database interactions, services/ contains complex business rules, calculations, and third-party API calls, ensuring the code remains DRY (Don't Repeat Yourself).
+
+- Data Integrity (app/models & app/db)
+
+Leverages **SQLModel** to unify Pydantic validation and SQLAlchemy ORM. The db/ module manages the lifecycle of the asynchronous database engine and handles automated data seeding on startup.
+
+- Infrastructure & Automation (scripts/)
+
+Includes dedicated shell scripts to streamline container startup, database wait-checks, and migration application, making the project **Docker-ready** out of the box.
+
+- Security First (app/core)
+
+Centralizes sensitive logic, including **OAuth2 with Password flow, JWT token generation**, and **Argon2 password hashing**, ensuring a consistent security posture across the entire application.
+
 ## 🏁 Getting Started
 ### 1. Clone the Repository
 ```bash

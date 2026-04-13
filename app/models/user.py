@@ -29,6 +29,11 @@ class UserUpdate(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)  
 
 
+class UserRead(UserBase):
+    id: uuid.UUID
+    created_at: datetime | None
+
+
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
@@ -38,8 +43,3 @@ class User(UserBase, table=True):
         default_factory=get_datetime_utc,
         sa_type=DateTime(timezone=True),  # type: ignore
     )
-
-
-class UserRead(UserBase):
-    id: uuid.UUID
-    created_at: datetime | None

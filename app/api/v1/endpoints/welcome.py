@@ -2,9 +2,9 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import text
 
 from app.core.config import settings
-from app.core.database import SessionDependency
+from app.db.database import SessionDependency
 
-router = APIRouter(prefix="", tags=["Welcome"])
+router = APIRouter()
 
 @router.get("/checkDBConnection")
 def check_database_connection(session: SessionDependency):

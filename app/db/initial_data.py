@@ -2,8 +2,8 @@ from sqlmodel import Session, select
 
 from app.core.config import settings
 from app.models.user import User, SuperUserCreate
-from app.services import user_service
-from app.core.database import engine
+from app.crud import user as user_crud
+from app.db.database import engine
 
 import logging
 
@@ -46,7 +46,7 @@ def init_db(session: Session) -> None:
             email=settings.SUPER_USER_EMAIL,
             password=settings.SUPER_USER_PASSWORD
         )
-        user = user_service.create_super_user(session=session, user_create=user_in)
+        user = user_crud.create_super_user(session=session, user_create=user_in)
         logger.info("Initial data created")
     else:
         logger.info("Initial data already present")

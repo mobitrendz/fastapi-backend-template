@@ -16,6 +16,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Create CRUD API endpoints for User ](#Create-CRUD-API-endpoints-for-User )
 * [ Implement Argon2 Password hashing and UUID](#Implement-Argon2-Password-hashing-and-UUID)
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
+* [Reorganise project folder structure](#Reorganise-project-folder-structure)
 
 
 ### Prerequisites
@@ -319,7 +320,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, text
 
 from app.core.config import settings
-from app.core.database import get_session
+from app.db.database import get_session
 
 router = APIRouter(prefix="", tags=["welcome"])
 
@@ -463,9 +464,9 @@ SUPER_USER_EMAIL: str
 SUPER_USER_PASSWORD: str
 ```
 
-- Create folder named services inside app folder
+- Create folders named services, db inside app folder
 
-- Create user_service.py in app/services folder and add
+- Create user.py in app/services folder and add
 
 ```bash
 from sqlmodel import Session
@@ -489,7 +490,7 @@ from sqlmodel import create_engine, Session, select
 
 from app.core.config import settings 
 from app.models.user import User, UserCreate
-from app.services import user_service
+from app.crud import user as user_crud
 
 database_url = settings.POSTGRES_URL
 engine = create_engine(database_url, echo=True)
@@ -517,10 +518,10 @@ def init_db(session: Session) -> None:
             password=settings.SUPER_USER_PASSWORD,
             is_superuser=True
         )
-        user = user_service.create_user(session=session, user_create=user_in)
+        user = user.create_user(session=session, user_create=user_in)
 ```
 
-- Create file backend_pre_start.py inside app folder and add
+- Create file backend_pre_start.py inside app/db folder and add
 
 ```bash
 import logging
@@ -529,7 +530,7 @@ from sqlalchemy import Engine
 from sqlmodel import Session, select
 from tenacity import after_log, before_log, retry, stop_after_attempt, wait_fixed
 
-from app.core.database import engine
+from app.db.database import engine
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -564,13 +565,13 @@ if __name__ == "__main__":
     main()
 ```
 
-- Create file initial_data.py inside app folder and add
+- Create file initial_data.py inside app/db folder and add
 
 ```bash
 import logging
 
 from sqlmodel import Session
-from app.core.database import engine, init_db
+from app.db.database import engine, init_db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -611,7 +612,7 @@ python app/initial_data.py
 - Modify main.py to call backend_pre_start, initial_data on application startup(instead of running the above shell script, will configure the shell script later in docker compose)
 
 ```bash
-from app import initial_data, backend_pre_start
+from app.db import initial_data, backend_pre_start
 
 @app.on_event("startup")
 def on_startup():
@@ -653,7 +654,7 @@ class User(UserBase, table=True):
     password: str
 ```
 
-- Update app.services.user_service.py
+- Update app.crud.user.py
 
 ```bash
 import logging
@@ -723,40 +724,40 @@ from fastapi import APIRouter, HTTPException
 
 from app.models.generic import Message
 from app.models.user import UserCreate, UserUpdate, UserRead
-from app.core.database import SessionDependency
-from app.services import user_service
+from app.db.database import SessionDependency
+from app.crud import user as user_crud
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.post("/", response_model=UserRead)
 def create_user(session: SessionDependency, user_create: UserCreate):
-    return user_service.create_user(session=session, user_create=user_create)
+    return user.create_user(session=session, user_create=user_create)
 
 
 @router.get("/", response_model=list[UserRead])
 def get_users(session: SessionDependency):
-     return user_service.get_users(session=session)
+     return user.get_users(session=session)
 
 
 @router.get("/{id}", response_model=UserRead)
 def get_user_by_id(session: SessionDependency, id: int):
-    return user_service.get_user_by_id(session=session, id=id)
+    return user.get_user_by_id(session=session, id=id)
 
 
 @router.get("/{email}", response_model=UserRead)
 def get_user_by_email(session: SessionDependency, email: str):
-    return user_service.get_user_by_email(session=session, email=email)
+    return user.get_user_by_email(session=session, email=email)
 
 
 @router.patch("/{id}", response_model=UserRead)
 def update_user(session: SessionDependency, id: int, user_update: UserUpdate):
-    return user_service.update_user(session=session, id=id, user_update=user_update)
+    return user.update_user(session=session, id=id, user_update=user_update)
 
 
 @router.delete("/{id}", response_model=Message)
 def delete_user(session: SessionDependency, id: int):
-    deleted = user_service.delete_user(session=session, id=id)
+    deleted = user.delete_user(session=session, id=id)
 
     if not deleted:
         raise HTTPException(status_code=404, detail="User not found")
@@ -881,7 +882,7 @@ class UserRead(UserBase):
     created_at: datetime | None
 ```
 
-- Modify create_user function in user_service.py
+- Modify create_user function in user.py
 
 ```bash
 from app.core.security import hash_password
@@ -1064,7 +1065,7 @@ class TokenPayload(SQLModel):
     sub: str | None = None
 ```
 
-- Update app/services/user_services.py
+- Update app/crud/user.py
 
 ```bash
 # Dummy hash to use for timing attack prevention when user is not found
@@ -1095,10 +1096,10 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.database import SessionDependency
+from app.db.database import SessionDependency
 from app.core import security
 from app.core.config import settings
-from  app.services.user_service import authenticate_user
+from  app.crud.user import authenticate_user
 from app.models.generic import Token
 
 router = APIRouter(prefix="/login", tags=["Login"])
@@ -1134,4 +1135,47 @@ def read_secure(token: str = Depends(oauth2_scheme)):
 app.include_router(welcome.router)
 app.include_router(users.router)
 app.include_router(login.router)
+```
+
+### Reorganise project folder structure
+
+```
+Project root 
+fastapi-backend-template
+
+Application
+fastapi-backend-template/app
+
+Alembic
+fastapi-backend-template/app/alembic
+
+API
+fastapi-backend-template/app/api
+
+API/Version 1
+fastapi-backend-template/app/api/v1
+
+API/Version 1/endpoints - All the v1 api endpoints
+fastapi-backend-template/app/api/v1/endpoints
+
+Core - Configuration, Security 
+fastapi-backend-template/app/core
+
+CRUD - All the database CRUD operations
+fastapi-backend-template/app/crud
+
+Database - Engine, Session, Loading initial data on startup
+fastapi-backend-template/app/db
+
+Models - SQLModel’s, DTO’s, Tables
+fastapi-backend-template/app/models
+
+Services - Business logics 
+fastapi-backend-template/app/services
+
+Shell scripts - Shell scripts to run on startup
+fastapi-backend-template/scripts
+
+Tests - All the unit test codes
+fastapi-backend-template/tests
 ```

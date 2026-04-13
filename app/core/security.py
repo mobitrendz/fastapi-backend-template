@@ -13,10 +13,10 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login/access-token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
 TokenDependency = Annotated[str, Depends(oauth2_scheme)]
 
-pwd_hasher = PasswordHasher(
+password_hash = PasswordHasher(
     time_cost=2,
     memory_cost=102400,
     parallelism=8,
@@ -30,13 +30,13 @@ def hash_password(password: str) -> str:
     if not password:
         raise ValueError("Password must not be empty")
 
-    return pwd_hasher.hash(password)
+    return password_hash.hash(password)
 
 
 def verify_password(password: str, hashed_password: str) -> bool:
     """Validate a plaintext password against an Argon2 hash."""
     try:
-        return pwd_hasher.verify(hashed_password, password)
+        return password_hash.verify(hashed_password, password)
     except Argon2Error:
         return False
 

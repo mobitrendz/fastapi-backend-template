@@ -1,4 +1,4 @@
-from app.core.database import SessionDependency
+from app.db.database import SessionDependency
 from pydantic import ValidationError
 from jwt.exceptions import InvalidTokenError
 from app.models.generic import TokenPayload

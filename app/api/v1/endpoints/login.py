@@ -8,13 +8,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.database import SessionDependency
+from app.db.database import SessionDependency
 from app.core import security
 from app.core.config import settings
-from  app.services import user_service 
+from  app.crud import user as user_crud 
 from app.models.generic import Token
 
-router = APIRouter(prefix="/login", tags=["Login"])
+router = APIRouter()
 
 @router.post("/access-token", response_model=Token)
 def login_access_token(session: SessionDependency, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
@@ -23,7 +23,7 @@ def login_access_token(session: SessionDependency, form_data: Annotated[OAuth2Pa
     OAuth2 compatible token login, get an access token for future requests
     """
 
-    user = user_service.authenticate_user(session=session, email=form_data.username, password=form_data.password)
+    user = user_crud.authenticate_user(session=session, email=form_data.username, password=form_data.password)
 
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
@@ -41,5 +41,5 @@ def read_secure(token: str = Depends(oauth2_scheme)):
 
 @router.get("/current-user", response_model=UserRead)
 def get_current_user(session: SessionDependency, token: TokenDependency):
-    user = user_service.get_current_user(session=session, token=token)
+    user = user_crud.get_current_user(session=session, token=token)
     return user
