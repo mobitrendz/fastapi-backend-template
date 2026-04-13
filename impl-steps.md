@@ -1,15 +1,9 @@
-# FastAPI Backend Template - Step by step implementation details
+# FastAPI Backend Template - Step by Step Implementation Details
 Developer: Sreeraj Sreenivasan - 30 Mar 2026
-
-### Prerequisites
-
-* Python >=3.14
-* PostgreSQL 18
-* git 
-* uv 
 
 ### Table of Contents
 
+* [Prerequisites](#Prerequisites)
 * [Create and run a new FastAPI project](#Create-and-run-a-new-FastAPI-project)
 * [Create Project folders](#Create-Project-folders)
 * [Implement log support](#Implement-log-support)
@@ -22,6 +16,13 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Create CRUD API endpoints for User ](#Create-CRUD-API-endpoints-for-User )
 * [ Implement Argon2 Password hashing and UUID](#Implement-Argon2-Password-hashing-and-UUID)
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
+
+### Prerequisites
+
+* Python >=3.14
+* PostgreSQL 18
+* git 
+* uv 
 
 ### Create and run a new FastAPI project
 
