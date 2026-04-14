@@ -18,7 +18,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
 * [Reorganise project folder structure](#Reorganise-project-folder-structure)
 * [Implement Docker](#Implement-Docker)
-
+* [Docker Compose All Apps ](#Docker-Compose-All-Apps )
 
 ### Prerequisites
 
@@ -363,7 +363,7 @@ uv add alembic
 - Initialize Alembic
 
 ```bash
-uv run alembic init app/alembic
+uv run alembic init alembic
 ```
 
 - Create folder named models in the app folder
@@ -385,7 +385,7 @@ class UserCreate(UserBase):
     pass
 ```
 
-- Import SQLModel in app/alembic/script.py.mako
+- Import SQLModel in alembic/script.py.mako
 
 ```bash
 from alembic import op
@@ -393,7 +393,7 @@ import sqlalchemy as sa
 import sqlmodel
 ```
 
-- Import SQLModel, User in app/alembic/env.py
+- Import SQLModel, User in alembic/env.py
 
 ```bash
 from sqlalchemy import pool
@@ -905,13 +905,13 @@ uv run alembic revision --autogenerate -m “modify user table”
 uv run alembic upgrade head
 ```
 
-- As we modified the user table structure completely, I got some errors while alembic migration and I removed the alembic(app/alembic folder, alembic.ini file) from the project and dropped alembic_version and user table manually and repeated the alembic initialization steps again.
+- As we modified the user table structure completely, I got some errors while alembic migration and I removed the alembic(alembic folder, alembic.ini file) from the project and dropped alembic_version and user table manually and repeated the alembic initialization steps again.
 
 ```bash
-uv run alembic init app/alembic
+uv run alembic init alembic
 ```
 
-- Import SQLModel in app/alembic/script.py.mako
+- Import SQLModel in alembic/script.py.mako
 
 ```bash
 from alembic import op
@@ -919,7 +919,7 @@ import sqlalchemy as sa
 import sqlmodel
 ```
 
-- Import SQLModel, User in app/alembic/env.py
+- Import SQLModel, User in alembic/env.py
 
 ```bash
 from sqlalchemy import pool
@@ -1231,4 +1231,156 @@ docker run -p 8000:8000 --env-file .env fastapi-backend-template
 **5, Test swagger on browser**
 ```bash
 http://127.0.0.1:8000/docs
+```
+
+### Docker Compose All Apps 
+
+**Docker Compose FastApi, PostgreSQL, pgAdmin and seeder**
+
+**1, Update Dockerfile**
+```bash
+# Stage 1: Build dependencies
+FROM python:3.14-slim-bookworm AS builder
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+
+COPY pyproject.toml uv.lock ./
+
+RUN uv sync --frozen --no-install-project --no-dev
+
+# Stage 2: Runtime
+FROM python:3.14-slim-bookworm
+
+WORKDIR /app
+
+# Install curl for the health check and libpq for Postgres compatibility
+RUN apt-get update && apt-get install -y --no-install-recommends curl libpq5 && rm -rf /var/lib/apt/lists/*
+
+# Set environment paths
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/app/.venv/bin:$PATH"
+
+# Copy virtual env from builder
+COPY --from=builder /app/.venv /app/.venv
+
+# Copy project files
+COPY app/ ./app/
+COPY alembic/ ./alembic/
+COPY scripts/ ./scripts/
+COPY alembic.ini .env ./
+
+# Ensure the script is executable
+RUN chmod +x /app/scripts/prestart.sh
+
+# Default command starts the API
+CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+**2, Create docker-compose.yaml in the root folder and add**
+
+```bash
+services:
+  db:
+    image: postgres:18
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-fastapi_backend_template}
+      # FORCE Postgres to use the mounted path
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fastapi_backend_template"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: .
+    container_name: fastapi_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment: &api_env
+      - PYTHONPATH=/app
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      # Requires a @app.get("/health") route in your FastAPI main.py
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  seeder:
+    build: .
+    container_name: fastapi_seeder
+    # Absolute path to the script in the container
+    entrypoint: ["/app/scripts/prestart.sh"]
+    env_file:
+      - .env
+    environment: *api_env
+    depends_on:
+      api:
+        condition: service_healthy
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_ui
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+```
+
+**3, Modify scripts/prestart.sh**
+
+```bash
+#! /usr/bin/env bash
+
+set -e
+set -x
+
+# Let the DB start
+python app/db/backend_pre_start.py
+
+echo "--- RUNNING MIGRATIONS ---"
+alembic upgrade head
+
+# Create initial data in DB
+python app/db/initial_data.py
+```
+
+**4, Update app/main.py**
+```bash
+@app.get("/health", tags=["Health Check"])
+async def health():
+    return {"status": "ok"}
+```
+
+**5, Update .env file**
+```bash
+# pgAdmin settings
+PGADMIN_DEFAULT_EMAIL=admin@example.com
+PGADMIN_DEFAULT_PASSWORD=admin
 ```

@@ -1,31 +1,40 @@
-# 1. Use official python 3.14 (or slim) image
-FROM python:3.14-slim-bookworm
+# Stage 1: Build dependencies
+FROM python:3.14-slim-bookworm AS builder
 
-# 2. Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-
-# 3. Setup environment
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV UV_LINK_MODE=copy
 
 WORKDIR /app
 
-# 4. Install dependencies
-# Using --mount=type=cache speeds up builds by caching uv packages
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
+
 COPY pyproject.toml uv.lock ./
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev --no-install-project
 
-# 5. Copy application and .env
-COPY . .
+RUN uv sync --frozen --no-install-project --no-dev
 
-# 6. Install project itself (if package mode is enabled)
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+# Stage 2: Runtime
+FROM python:3.14-slim-bookworm
 
-# 7. Add .venv to PATH
-ENV PATH="/app/.venv/bin:$PATH"
+WORKDIR /app
 
-# 8. Run Alembic and Uvicorn
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+# Install curl for the health check and libpq for Postgres compatibility
+RUN apt-get update && apt-get install -y --no-install-recommends curl libpq5 && rm -rf /var/lib/apt/lists/*
+
+# Set environment paths
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/app/.venv/bin:$PATH"
+
+# Copy virtual env from builder
+COPY --from=builder /app/.venv /app/.venv
+
+# Copy project files
+COPY app/ ./app/
+COPY alembic/ ./alembic/
+COPY scripts/ ./scripts/
+COPY alembic.ini .env ./
+
+# Ensure the script is executable
+RUN chmod +x /app/scripts/prestart.sh
+
+# Default command starts the API
+CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
