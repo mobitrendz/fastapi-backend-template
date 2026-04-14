@@ -1168,7 +1168,7 @@ fastapi-backend-template/
 
 **Implementing docker to run only this fastapi project(no database or other apps)**
 
-**1, Modify .env (as PostgreSQL is running on different docker image in my local machine)**
+**1, Modify .env (as PostgreSQL is running on different docker container in my local machine)**
 ```bash
 # Postgres
 POSTGRES_SERVER=host.docker.internal
