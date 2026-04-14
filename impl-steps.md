@@ -18,7 +18,8 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
 * [Reorganise project folder structure](#Reorganise-project-folder-structure)
 * [Implement Docker](#Implement-Docker)
-* [Docker Compose All Apps ](#Docker-Compose-All-Apps )
+* [Docker Compose All Apps ](#Docker-Compose-All-Apps)
+* [Docker Compose Override for dev env](#Docker-Compose-Override-for-dev-env)
 
 ### Prerequisites
 
@@ -1383,4 +1384,34 @@ async def health():
 # pgAdmin settings
 PGADMIN_DEFAULT_EMAIL=admin@example.com
 PGADMIN_DEFAULT_PASSWORD=admin
+```
+
+## Docker Compose Override for dev env
+
+**Create docker-compose.override.yml(dev env settings) in the root folder**
+- This will enable **HOT RELOAD** on dev environment
+```bash
+services:
+  api:
+    # Enable Hot Reload by mounting local source code
+    volumes:
+      - ./app:/app/app
+      - ./scripts:/app/scripts
+      - ./alembic:/app/alembic
+    # Override production 'run' with development 'dev'
+    command: ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - WATCHFILES_FORCE_POLLING=true
+      - DEBUG=True
+
+  pgadmin:
+    # You might only want pgadmin visible during development
+    ports:
+      - "5050:80"
+```
+
+**Restart the server**
+
+```bash
+Docker compose up —build
 ```

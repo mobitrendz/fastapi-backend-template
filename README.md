@@ -37,28 +37,29 @@ The project utilises a multi-container architecture managed via `docker-compose.
 
 ```
 fastapi-backend-template/
-├── app/                        # Main Application Logic
-│   ├── api/                    # API Entry points
-│   │   └── v1/                 # API Versioning
-│   │       ├── endpoints/      # Individual route handlers (e.g., users.py)
-│   │       └── router.py       # Main router merging all v1 endpoints
-│   ├── core/                   # Global configuration and security (JWT, Auth)
-│   ├── crud/                   # Reusable database CRUD operations
-│   ├── db/                     # Connection engine, session, and seed data
-│   ├── models/                 # SQLModels, Tables, and DTOs (Data Transfer Objects)
-│   ├── services/               # Complex business logic and external integrations
-│   └── main.py                 # FastAPI application initialization
-├── alembic/                    # Database migrations and environment setup
-├── scripts/                    # Shell scripts for deployment and startup
-├── tests/                      # Pytest suite for unit and integration testing
-├── .env                        # Environment variables (Internal)
-├── .env.example                # Template for environment variables
-├── alembic.ini                 # Alembic configuration
-├── docker-compose.yaml         # Container Orchestration Manifest
-├── Dockerfile                  # Multi-stage, non-root Production Build
-├── pyproject.toml              # Dependency management (uv/pip)
-├── pytest.ini                  # Pytest configuration
-└── README.md                   # Project documentation
+├── app/                           # Main Application Logic
+│   ├── api/                       # API Entry points
+│   │   └── v1/                    # API Versioning
+│   │       ├── endpoints/         # Individual route handlers (e.g., users.py)
+│   │       └── router.py          # Main router merging all v1 endpoints
+│   ├── core/                      # Global configuration and security (JWT, Auth)
+│   ├── crud/                      # Reusable database CRUD operations
+│   ├── db/                        # Connection engine, session, and seed data
+│   ├── models/                    # SQLModels, Tables, and DTOs (Data Transfer Objects)
+│   ├── services/                  # Complex business logic and external integrations
+│   └── main.py                    # FastAPI application initialization
+├── alembic/                       # Database migrations and environment setup
+├── scripts/                       # Shell scripts for deployment and startup
+├── tests/                         # Pytest suite for unit and integration testing
+├── .env                           # Environment variables (Internal)
+├── .env.example                   # Template for environment variables
+├── alembic.ini                    # Alembic configuration
+├── docker-compose.override.yml    # Container Orchestration Manifest for dev env with hot reload
+├── docker-compose.yaml            # Container Orchestration Manifest
+├── Dockerfile                     # Multi-stage, non-root Production Build
+├── pyproject.toml                 # Dependency management (uv/pip)
+├── pytest.ini                     # Pytest configuration
+└── README.md                      # Project documentation
 ```
 
 ### 📝 Project Description

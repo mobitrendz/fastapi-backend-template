@@ -1,0 +1,17 @@
+services:
+  api:
+    # Enable Hot Reload by mounting local source code
+    volumes:
+      - ./app:/app/app
+      - ./scripts:/app/scripts
+      - ./alembic:/app/alembic
+    # Override production 'run' with development 'dev'
+    command: ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      - WATCHFILES_FORCE_POLLING=true
+      - DEBUG=True
+
+  pgadmin:
+    # You might only want pgadmin visible during development
+    ports:
+      - "5050:80"

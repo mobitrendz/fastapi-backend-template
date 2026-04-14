@@ -35,4 +35,4 @@ def on_shutdown():
 
 @app.get("/health", tags=["Health Check"])
 async def health():
-    return {"status": "ok"}
+    return {"status": "okk"}
