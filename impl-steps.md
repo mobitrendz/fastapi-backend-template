@@ -17,6 +17,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [ Implement Argon2 Password hashing and UUID](#Implement-Argon2-Password-hashing-and-UUID)
 * [Implement OAuth2 JWT Token authentication](#Implement-OAuth2-JWT-Token-authentication)
 * [Reorganise project folder structure](#Reorganise-project-folder-structure)
+* [Implement Docker](#Implement-Docker)
 
 
 ### Prerequisites
@@ -1140,42 +1141,94 @@ app.include_router(login.router)
 ### Reorganise project folder structure
 
 ```
-Project root 
-fastapi-backend-template
+fastapi-backend-template/
+├── app/                        # Main Application Logic
+│   ├── alembic/                # Database migrations and environment setup
+│   ├── api/                    # API Entry points
+│   │   └── v1/                 # API Versioning
+│   │       ├── endpoints/      # Individual route handlers (e.g., users.py)
+│   │       └── router.py       # Main router merging all v1 endpoints
+│   ├── core/                   # Global configuration and security (JWT, Auth)
+│   ├── crud/                   # Reusable database CRUD operations
+│   ├── db/                     # Connection engine, session, and seed data
+│   ├── models/                 # SQLModels, Tables, and DTOs (Data Transfer Objects)
+│   ├── services/               # Complex business logic and external integrations
+│   └── main.py                 # FastAPI application initialization
+├── scripts/                    # Shell scripts for deployment and startup
+├── tests/                      # Pytest suite for unit and integration testing
+├── .env                        # Environment variables (Internal)
+├── .env.example                # Template for environment variables
+├── alembic.ini                 # Alembic configuration
+├── pyproject.toml              # Dependency management (uv/pip)
+├── pytest.ini                  # Pytest configuration
+└── README.md                   # Project documentation
+```
 
-Application
-fastapi-backend-template/app
+### Implement Docker
 
-Alembic
-fastapi-backend-template/app/alembic
+**Implementing docker to run only this fastapi project(no database or other apps)**
 
-API
-fastapi-backend-template/app/api
+**1, Modify .env (as PostgreSQL is running on different docker image in my local machine)**
+```bash
+# Postgres
+POSTGRES_SERVER=host.docker.internal
+```
 
-API/Version 1
-fastapi-backend-template/app/api/v1
+**2, Create a file named `Dockerfile` in the root folder and add the below line**
+```bash
+# 1. Use official python 3.14 (or slim) image
+FROM python:3.14-slim-bookworm
 
-API/Version 1/endpoints - All the v1 api endpoints
-fastapi-backend-template/app/api/v1/endpoints
+# 2. Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-Core - Configuration, Security 
-fastapi-backend-template/app/core
+# 3. Setup environment
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV UV_LINK_MODE=copy
 
-CRUD - All the database CRUD operations
-fastapi-backend-template/app/crud
+WORKDIR /app
 
-Database - Engine, Session, Loading initial data on startup
-fastapi-backend-template/app/db
+# 4. Install dependencies
+# Using --mount=type=cache speeds up builds by caching uv packages
+COPY pyproject.toml uv.lock ./
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev --no-install-project
 
-Models - SQLModel’s, DTO’s, Tables
-fastapi-backend-template/app/models
+# 5. Copy application and .env
+COPY . .
 
-Services - Business logics 
-fastapi-backend-template/app/services
+# 6. Install project itself (if package mode is enabled)
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-dev
 
-Shell scripts - Shell scripts to run on startup
-fastapi-backend-template/scripts
+# 7. Add .venv to PATH
+ENV PATH="/app/.venv/bin:$PATH"
 
-Tests - All the unit test codes
-fastapi-backend-template/tests
+# 8. Run Alembic and Uvicorn
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+```
+
+**3, Create a file named `.dockerignore` in the root folder and add the below line**
+```bash
+.venv
+.git
+__pycache__
+.env
+*.pyc
+```
+
+**4, Build Docker Image**
+``bash
+docker build -t fastapi-backend-template .
+```
+
+**4, Run Docker Image**
+``bash
+docker run -p 8000:8000 --env-file .env fastapi-backend-template
+```
+
+**5, Test swagger on browser**
+```bash
+http://127.0.0.1:8000/docs
 ```
