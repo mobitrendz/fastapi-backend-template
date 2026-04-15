@@ -6,10 +6,15 @@ services:
       - ./scripts:/app/scripts
       - ./alembic:/app/alembic
     # Override production 'run' with development 'dev'
+    ports:
+      - "8000:8000"
     command: ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+    env_file:
+      - .env
     environment:
       - WATCHFILES_FORCE_POLLING=true
       - DEBUG=True
+      - POSTGRES_SERVER=db
 
   pgadmin:
     # You might only want pgadmin visible during development

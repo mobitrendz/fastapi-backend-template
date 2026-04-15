@@ -28,6 +28,7 @@ services:
       - .env
     environment: &api_env
       - PYTHONPATH=/app
+      - POSTGRES_SERVER=db
     depends_on:
       db:
         condition: service_healthy

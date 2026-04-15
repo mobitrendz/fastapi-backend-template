@@ -20,6 +20,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement Docker](#Implement-Docker)
 * [Docker Compose All Apps ](#Docker-Compose-All-Apps)
 * [Docker Compose Override for dev env](#Docker-Compose-Override-for-dev-env)
+* [Debug App using debugpy](#Debug-App-using-debugpy)
 
 ### Prerequisites
 
@@ -1143,26 +1144,29 @@ app.include_router(login.router)
 
 ```
 fastapi-backend-template/
-├── app/                        # Main Application Logic
-│   ├── alembic/                # Database migrations and environment setup
-│   ├── api/                    # API Entry points
-│   │   └── v1/                 # API Versioning
-│   │       ├── endpoints/      # Individual route handlers (e.g., users.py)
-│   │       └── router.py       # Main router merging all v1 endpoints
-│   ├── core/                   # Global configuration and security (JWT, Auth)
-│   ├── crud/                   # Reusable database CRUD operations
-│   ├── db/                     # Connection engine, session, and seed data
-│   ├── models/                 # SQLModels, Tables, and DTOs (Data Transfer Objects)
-│   ├── services/               # Complex business logic and external integrations
-│   └── main.py                 # FastAPI application initialization
-├── scripts/                    # Shell scripts for deployment and startup
-├── tests/                      # Pytest suite for unit and integration testing
-├── .env                        # Environment variables (Internal)
-├── .env.example                # Template for environment variables
-├── alembic.ini                 # Alembic configuration
-├── pyproject.toml              # Dependency management (uv/pip)
-├── pytest.ini                  # Pytest configuration
-└── README.md                   # Project documentation
+├── app/                           # Main Application Logic
+│   ├── api/                       # API Entry points
+│   │   └── v1/                    # API Versioning
+│   │       ├── endpoints/         # Individual route handlers (e.g., users.py)
+│   │       └── router.py          # Main router merging all v1 endpoints
+│   ├── core/                      # Global configuration and security (JWT, Auth)
+│   ├── crud/                      # Reusable database CRUD operations
+│   ├── db/                        # Connection engine, session, and seed data
+│   ├── models/                    # SQLModels, Tables, and DTOs (Data Transfer Objects)
+│   ├── services/                  # Complex business logic and external integrations
+│   └── main.py                    # FastAPI application initialization
+├── alembic/                       # Database migrations and environment setup
+├── scripts/                       # Shell scripts for deployment and startup
+├── tests/                         # Pytest suite for unit and integration testing
+├── .env                           # Environment variables (Internal)
+├── .env.example                   # Template for environment variables
+├── alembic.ini                    # Alembic configuration
+├── docker-compose.override.yml    # Container Orchestration Manifest for dev env with hot reload
+├── docker-compose.yaml            # Container Orchestration Manifest
+├── Dockerfile                     # Multi-stage, non-root Production Build
+├── pyproject.toml                 # Dependency management (uv/pip)
+├── pytest.ini                     # Pytest configuration
+└── README.md                      # Project documentation
 ```
 
 ### Implement Docker
@@ -1414,4 +1418,42 @@ services:
 
 ```bash
 Docker compose up —build
+```
+
+## Debug App using debugpy (Local env only - not in Docker)
+
+**install **debugpy** (the debugger)**
+```bash
+uv sync
+
+source .venv/bin/activate
+
+uv add debugpy
+```
+
+**Create .vscode folder in root and create launch.json inside it**
+
+```bash
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "FastAPI: Local Debug",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "fastapi",
+            "args": [
+                "dev",
+                "app/main.py",
+                "--port",
+                "8000"
+            ],
+            "envFile": "${workspaceFolder}/.env",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}"
+            },
+            "showReturnValue": true
+        }
+    ]
+}
 ```
