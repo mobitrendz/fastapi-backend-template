@@ -1,38 +1,38 @@
-from websockets.version import tag
+from app.db.initial_data import init
+from contextlib import asynccontextmanager
 import logging
-
 #from app.db import initial_data, backend_pre_start
-
 from fastapi import FastAPI
-
 from app.api.v1.router import api_router as v1_router
 
-
-# logging.basicConfig(
-#     level=logging.INFO,
-#     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-# )
 logger = logging.getLogger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # --- STARTUP LOGIC ---
+    print("--- SYSTEM STARTUP ---")
+    
+    # 1. Run migrations (Optional: see note below)
+    # 2. Seed initial data
+    try:
+        await init()
+        print("--- SEEDING COMPLETE ---")
+    except Exception as e:
+        print(f"Seeding failed: {e}")
+    
+    yield  # The app is now running and "healthy"
+    
+    # --- SHUTDOWN LOGIC ---
+    print("--- SYSTEM SHUTDOWN ---")
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
-
-@app.on_event("startup")  # ty:ignore[deprecated]
-def on_startup():
-    logger.info("FastAPI starting...")
-#    backend_pre_start.main()
-#    initial_data.main()
     
 
 app.include_router(v1_router, prefix="/api/v1")
 
 
-@app.on_event("shutdown")  # ty:ignore[deprecated]
-def on_shutdown():
-    logger.info("FastAPI stopping...")
-
 
 @app.get("/health", tags=["Health Check"])
 async def health():
-    return {"status": "okk"}
+    return {"status": "ok"}

@@ -11,7 +11,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def init_db(session: Session) -> None:
+async def init_db(session: Session) -> None:
     # Tables should be created with Alembic migrations
     # But if you don't want to use migrations, create
     # the tables un-commenting the next lines
@@ -38,14 +38,14 @@ def init_db(session: Session) -> None:
         logger.info("Initial data already present")
 
 
-def init() -> None:
+async def init() -> None:
     with Session(engine) as session:
-        init_db(session)
+        await init_db(session)
 
 
-def main() -> None:    
-    init()
+async def main() -> None:    
+    await init()
     
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

@@ -21,6 +21,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Docker Compose All Apps ](#Docker-Compose-All-Apps)
 * [Docker Compose Override for dev env](#Docker-Compose-Override-for-dev-env)
 * [Debug App using debugpy](#Debug-App-using-debugpy)
+* [Implement FastAPI Lifespan](#Implement-FastAPI-Lifespan)
 
 ### Prerequisites
 
@@ -1420,7 +1421,9 @@ services:
 Docker compose up —build
 ```
 
-## Debug App using debugpy (Local env only - not in Docker)
+## Debug App using debugpy
+
+(Local env only - not in Docker)
 
 **install **debugpy** (the debugger)**
 ```bash
@@ -1456,4 +1459,33 @@ uv add debugpy
         }
     ]
 }
+```
+
+## Implement FastApi Lifespan
+
+**Modify app/main.py**
+
+```bash
+from app.db.initial_data import init
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # --- STARTUP LOGIC ---
+    print("--- SYSTEM STARTUP ---")
+    
+    # 1. Run migrations (Optional: see note below)
+    # 2. Seed initial data
+    try:
+        await init()
+        print("--- SEEDING COMPLETE ---")
+    except Exception as e:
+        print(f"Seeding failed: {e}")
+    
+    yield  # The app is now running and "healthy"
+    
+    # --- SHUTDOWN LOGIC ---
+    print("--- SYSTEM SHUTDOWN ---")
+
+app = FastAPI(lifespan=lifespan)
 ```
