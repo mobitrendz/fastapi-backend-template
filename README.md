@@ -37,6 +37,7 @@ The project utilises a multi-container architecture managed via `docker-compose.
 
 ```
 fastapi-backend-template/
+├── .vscode/                       # Debugging env configuration(launch.json)
 ├── app/                           # Main Application Logic
 │   ├── api/                       # API Entry points
 │   │   └── v1/                    # API Versioning

@@ -1145,6 +1145,7 @@ app.include_router(login.router)
 
 ```
 fastapi-backend-template/
+├── .vscode/                       # Debugging env configuration(launch.json)
 ├── app/                           # Main Application Logic
 │   ├── api/                       # API Entry points
 │   │   └── v1/                    # API Versioning
