@@ -143,6 +143,18 @@ This triggers the following automated sequence:
 
 3, Lifecycle Task (Seeder): Once the API is healthy, the seeder container runs alembic upgrade head and populates the database with initial administrative credentials.
 
+**The Log Noise Fix (Detached Mode)**
+
+In an enterprise setup, you typically don't want pgAdmin logs cluttering your terminal while you are coding the API. Run the stack in detached mode and only "follow" the logs for your FastAPI app:
+
+```bash
+# Start everything in the background
+docker compose up -d
+
+# Only watch your API logs
+docker compose logs -f api
+```
+
 ### 4. Application Entry Points
 - API Documentation: http://localhost:8000/docs
 - Database Management: http://localhost:5050
