@@ -1,4 +1,4 @@
-from app.db.initial_data import init
+from app.db import initial_data
 from contextlib import asynccontextmanager
 import logging
 #from app.db import initial_data, backend_pre_start
@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
     # 1. Run migrations (Optional: see note below)
     # 2. Seed initial data
     try:
-        await init()
+        await initial_data.init()
         print("--- SEEDING COMPLETE ---")
     except Exception as e:
         print(f"Seeding failed: {e}")
