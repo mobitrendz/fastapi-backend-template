@@ -4,21 +4,45 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 
 ## 🌟 Key Features
 
+*   **AI-Driven Development**: Optimized for **Gemini CLI** for autonomous engineering, refactoring, and feature implementation.
 *   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Modern Dependency Management**: Powered by [uv](https://astral.sh) for lightning-fast, reproducible builds.
 *   **Full-Stack Orchestration**: Integrated **PostgreSQL 18** and **pgAdmin 4** services.
 *   **Automated Lifecycle Management**: Integrated shell orchestration for schema migrations and data idempotent seeding.
 *   **Asynchronous Database Core**: Built on **SQLModel** with **psycopg3** (v3) for high-concurrency database interactions.
-*   **Enterprise Security**: Centralised OAuth2, JWT implementation, and Argon2-based hashing.
+*   **Enterprise Security**: Centralised OAuth2, JWT implementation via `pyjwt`, and Argon2-based hashing via `pwdlib`.
 *   **Robust Health Monitoring**: Integrated Docker health checks ensuring zero-downtime dependency readiness.
 
 ## 🛠️ Tech Stack
 - **Language**: Python >= 3.14
-- **Database**: PostgreSQL (psycopg3)
+- **Framework**: FastAPI (standard)
+- **Database**: PostgreSQL 18 (psycopg3)
+- **ORM/Schema**: SQLModel
 - **Migrations**: Alembic
-- **Async Support**: Standard FastAPI ASGI
-- **Containers**: Docker
-- **Database Management**: pgAdmin 4
+- **Security**: pwdlib (Argon2), PyJWT
+- **Validation**: Pydantic v2 (Settings, Email)
+- **Resilience**: Tenacity (Retry logic)
+- **Dependency Manager**: uv
+- **Containers**: Docker & Docker Compose
+- **Quality Assurance**: Pytest, Pytest-cov, Ruff, Mypy
+
+## 🤖 Gemini CLI AI-Driven Development
+
+This project is built and maintained using **Gemini CLI**, an advanced AI agent for software engineering. 
+
+### Core Benefits:
+- **Autonomous Engineering**: Gemini CLI can research the codebase, plan complex changes, and execute them surgically.
+- **Context Awareness**: Leverages the `GEMINI.md` mandates to ensure all AI-generated code adheres to project-specific architectural standards.
+- **Automated Validation**: Integrated workflow for running tests and linters immediately after code modifications.
+
+To interact with this project using Gemini CLI:
+```bash
+# Start an interactive session
+gemini
+
+# Example directive
+> "Add a new CRUD endpoint for 'Products' following the existing user pattern"
+```
 
 ## 🛠️ Infrastructure & Orchestration
 
