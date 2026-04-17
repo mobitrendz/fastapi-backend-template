@@ -1,4 +1,4 @@
-# FastAPI Enterprise Backend Template
+# FastAPI AI-Optimized Enterprise Backend Template
 
 A production-ready foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**. This template is engineered for high-performance Python 3.14+ environments, utilizing **uv** for deterministic dependency management and **Docker Compose** for full-stack orchestration.
 
