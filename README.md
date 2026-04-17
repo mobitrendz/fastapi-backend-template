@@ -6,11 +6,11 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 
 *   **AI-Driven Development**: Optimized for **Gemini CLI** for autonomous engineering, refactoring, and feature implementation.
 *   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
+*   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
+*   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
 *   **Modern Dependency Management**: Powered by [uv](https://astral.sh) for lightning-fast, reproducible builds.
 *   **Full-Stack Orchestration**: Integrated **PostgreSQL 18** and **pgAdmin 4** services.
-*   **Automated Lifecycle Management**: Integrated shell orchestration for schema migrations and data idempotent seeding.
-*   **Asynchronous Database Core**: Built on **SQLModel** with **psycopg3** (v3) for high-concurrency database interactions.
-*   **Enterprise Security**: Centralised OAuth2, JWT implementation via `pyjwt`, and Argon2-based hashing via `pwdlib`.
+*   **Enterprise Security**: Centralised OAuth2, JWT implementation, Argon2-based hashing, and automated **Security Scanning** via Bandit.
 *   **Robust Health Monitoring**: Integrated Docker health checks ensuring zero-downtime dependency readiness.
 
 ## 🛠️ Tech Stack
@@ -19,12 +19,13 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 - **Database**: PostgreSQL 18 (psycopg3)
 - **ORM/Schema**: SQLModel
 - **Migrations**: Alembic
-- **Security**: pwdlib (Argon2), PyJWT
+- **Observability**: Structlog, Prometheus Instrumentator
+- **Security**: pwdlib (Argon2), PyJWT, SlowAPI (Rate Limiting), Bandit
 - **Validation**: Pydantic v2 (Settings, Email)
+- **Standardization**: FastAPI-Pagination
 - **Resilience**: Tenacity (Retry logic)
 - **Dependency Manager**: uv
-- **Containers**: Docker & Docker Compose
-- **Quality Assurance**: Pytest, Pytest-cov, Ruff, Mypy
+- **Quality Assurance**: Pytest, Pytest-cov, Ruff (Strict), Mypy (Strict)
 
 ## 🤖 Gemini CLI AI-Driven Development
 

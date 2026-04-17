@@ -14,6 +14,10 @@ dependencies = [
     "pyjwt>=2.12.1",
     "sqlmodel>=0.0.37",
     "tenacity>=9.1.4",
+    "structlog>=25.1.0",
+    "prometheus-fastapi-instrumentator>=7.0.2",
+    "slowapi>=0.1.9",
+    "fastapi-pagination>=0.12.34",
 ]
 
 [dependency-groups]
@@ -23,4 +27,35 @@ dev = [
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.11",
+    "bandit>=1.8.3",
+    "pre-commit>=4.1.0",
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+lint.select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "ARG001", # unused arguments
+    "S",    # bandit security
+]
+lint.ignore = ["E501"] # Line too long (handled by formatter)
+
+[tool.mypy]
+strict = true
+exclude = ["alembic"]
+
+[[tool.mypy.overrides]]
+module = "sqlmodel.*"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "--cov=app --cov-report=term-missing"
+testpaths = ["tests"]
+python_files = "test_*.py"
