@@ -1494,9 +1494,9 @@ app = FastAPI(lifespan=lifespan)
 
 ## Add Gemini CLI
 
-**Install Gemini**
+**Install Gemini globally**
 ```bash
-brew install gemini
+brew install gemini-cli
 ```
 
 **Run**
