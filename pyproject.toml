@@ -55,7 +55,7 @@ exclude = ["alembic"]
 module = "sqlmodel.*"
 ignore_missing_imports = true
 
-[tool.pytest.ini_options]
-addopts = "--cov=app --cov-report=term-missing"
+[tool.pytest]
+addopts = ["--cov=app", "--cov-report=term-missing"]
 testpaths = ["tests"]
-python_files = "test_*.py"
+python_files = ["test_*.py"]
