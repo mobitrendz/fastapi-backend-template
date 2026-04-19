@@ -25,7 +25,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Add Gemini CLI](#Add-Gemini-CLI )
 * [Implement Mypy](#Implement-Mypy)
 * [Implement Ruff](#Implement-Ruff)
-* [Implement Pre-commit](#Implement-Pre--commit)
+* [Implement Pre-commit](#Implement-Pre-commit)
 
 ### Prerequisites
 
