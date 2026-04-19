@@ -23,6 +23,9 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Debug App using debugpy](#Debug-App-using-debugpy)
 * [Implement FastAPI Lifespan](#Implement-FastAPI-Lifespan)
 * [Add Gemini CLI](#Add-Gemini-CLI )
+* [Implement Mypy](#Implement-Mypy)
+* [Implement Ruff](#Implement-Ruff)
+* [Implement Pre-commit](#Implement-Pre--commit)
 
 ### Prerequisites
 
@@ -1510,3 +1513,9 @@ gemini
 ```bash
 gemini --sandbox seatbelt 
 ```
+
+## Implement Mypy
+
+## Implement Ruff
+
+## Implement Pre-commit
