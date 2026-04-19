@@ -26,6 +26,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement Mypy](#Implement-Mypy)
 * [Implement Ruff](#Implement-Ruff)
 * [Implement Pre-commit](#Implement-Pre-commit)
+* [Upgrade from Psycopg2 to Psycopg3 Async](#Upgrade-from-Psycopg2-to-Psycopg3-Async )
 
 ### Prerequisites
 
@@ -1519,3 +1520,5 @@ gemini --sandbox seatbelt
 ## Implement Ruff
 
 ## Implement Pre-commit
+
+## Upgrade from Psycopg2 to Psycopg3 Async
