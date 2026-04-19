@@ -22,6 +22,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Docker Compose Override for dev env](#Docker-Compose-Override-for-dev-env)
 * [Debug App using debugpy](#Debug-App-using-debugpy)
 * [Implement FastAPI Lifespan](#Implement-FastAPI-Lifespan)
+* [Add Gemini CLI](#Add-Gemini-CLI )
 
 ### Prerequisites
 
@@ -1489,4 +1490,23 @@ async def lifespan(app: FastAPI):
     print("--- SYSTEM SHUTDOWN ---")
 
 app = FastAPI(lifespan=lifespan)
+```
+
+## Add Gemini CLI
+
+**Install Gemini**
+```bash
+brew install gemini
+```
+
+**Run**
+```bash
+gemini
+```
+
+**Sandbox**
+
+1, restrict the CLI's access strictly to your current project directory
+```bash
+gemini --sandbox seatbelt 
 ```
