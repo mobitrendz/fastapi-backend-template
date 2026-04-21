@@ -5,7 +5,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.v1.router import api_router as v1_router
-from app.db import initial_data
 
 logger = logging.getLogger(__name__)
 
@@ -14,11 +13,11 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # --- STARTUP LOGIC ---
     print("--- SYSTEM STARTUP ---")
+    print(app.summary)
 
     # 1. Run migrations (Optional: see note below)
     # 2. Seed initial data
     try:
-        await initial_data.init()
         print("--- SEEDING COMPLETE ---")
     except Exception as e:
         print(f"Seeding failed: {e}")
