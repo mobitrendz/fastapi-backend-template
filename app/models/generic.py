@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel
 
+
 # Generic message
 class Message(SQLModel):
     message: str
@@ -14,5 +15,3 @@ class Token(SQLModel):
 # Contents of JWT token
 class TokenPayload(SQLModel):
     sub: str | None = None
-
-    

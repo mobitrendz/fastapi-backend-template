@@ -2,10 +2,10 @@ import uuid
 
 from fastapi import APIRouter, HTTPException
 
-from app.models.generic import Message
-from app.models.user import UserCreate, UserUpdate, UserRead
-from app.db.database import SessionDependency
 from app.crud import user as user_crud
+from app.db.database import SessionDependency
+from app.models.generic import Message
+from app.models.user import UserCreate, UserRead, UserUpdate
 
 router = APIRouter()
 
@@ -17,7 +17,7 @@ def create_user(session: SessionDependency, user_create: UserCreate):
 
 @router.get("/", response_model=list[UserRead])
 def read_users(session: SessionDependency):
-     return user_crud.get_users(session=session)
+    return user_crud.get_users(session=session)
 
 
 @router.get("/byID/{id}", response_model=UserRead)
@@ -41,5 +41,5 @@ def delete_user(session: SessionDependency, id: uuid.UUID):
 
     if not deleted:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return Message(message="User deleted successfully")

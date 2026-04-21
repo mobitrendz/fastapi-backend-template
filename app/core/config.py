@@ -1,8 +1,8 @@
-from pydantic import computed_field, PostgresDsn
+from pydantic import PostgresDsn, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings(BaseSettings):
 
+class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
         env_ignore_empty=True,
@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     API_V1_STR: str
 
     SECRET_KEY: str
-    ALGORITHM: str 
+    ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
     SUPER_USER_NAME: str
@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
-    @computed_field  
+    @computed_field
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
         return PostgresDsn.build(
@@ -38,5 +38,6 @@ class Settings(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
+
 
 settings = Settings()  # ty:ignore[missing-argument]
