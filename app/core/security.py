@@ -1,11 +1,11 @@
-from fastapi import Depends
-from fastapi.security import OAuth2PasswordBearer
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Annotated
+from typing import Annotated, Any
 
 import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import Argon2Error
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
 
 from app.core.config import settings
 
@@ -13,7 +13,9 @@ SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/login/access-token")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl=f"{settings.API_V1_STR}/login/access-token"
+)
 TokenDependency = Annotated[str, Depends(oauth2_scheme)]
 
 password_hash = PasswordHasher(
@@ -41,13 +43,13 @@ def verify_password(password: str, hashed_password: str) -> bool:
         return False
 
 
-def create_access_token(subject: str, expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:
     """Create a JWT access token for a subject (typically a user id or email)."""
     if expires_delta is None:
         expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
     now = datetime.utcnow()  # ty:ignore[deprecated]
-    payload: Dict[str, Any] = {
+    payload: dict[str, Any] = {
         "sub": subject,
         "iat": now,
         "exp": now + expires_delta,
@@ -55,7 +57,7 @@ def create_access_token(subject: str, expires_delta: Optional[timedelta] = None)
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
+def decode_access_token(token: str) -> dict[str, Any] | None:
     """Decode and validate a JWT access token."""
     try:
         return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

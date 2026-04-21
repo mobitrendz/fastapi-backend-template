@@ -1,17 +1,18 @@
 import uuid
+from datetime import UTC, datetime
+
 from pydantic import EmailStr
-from datetime import datetime, timezone
-from sqlmodel import SQLModel, Field
 from sqlalchemy import DateTime
+from sqlmodel import Field, SQLModel
 
 
 def get_datetime_utc() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 class UserBase(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
-    email: EmailStr = Field(unique=True, index=True, max_length=255)  
+    email: EmailStr = Field(unique=True, index=True, max_length=255)
 
 
 class UserCreate(UserBase):
@@ -26,7 +27,7 @@ class SuperUserCreate(UserBase):
 
 class UserUpdate(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
-    email: EmailStr = Field(unique=True, index=True, max_length=255)  
+    email: EmailStr = Field(unique=True, index=True, max_length=255)
 
 
 class UserRead(UserBase):

@@ -1,15 +1,15 @@
+import logging
+
 from sqlmodel import Session, select
 
 from app.core.config import settings
-from app.models.user import User, SuperUserCreate
 from app.crud import user as user_crud
 from app.db.database import engine
-
-import logging
-
+from app.models.user import SuperUserCreate, User
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 async def init_db(session: Session) -> None:
     # Tables should be created with Alembic migrations
@@ -25,12 +25,12 @@ async def init_db(session: Session) -> None:
     user = session.exec(
         select(User).where(User.email == settings.SUPER_USER_EMAIL)
     ).first()
-    
+
     if not user:
         user_in = SuperUserCreate(
             full_name=settings.SUPER_USER_NAME,
             email=settings.SUPER_USER_EMAIL,
-            password=settings.SUPER_USER_PASSWORD
+            password=settings.SUPER_USER_PASSWORD,
         )
         user = user_crud.create_super_user(session=session, user_create=user_in)
         logger.info("Initial data created")
@@ -43,9 +43,9 @@ async def init() -> None:
         await init_db(session)
 
 
-async def main() -> None:    
+async def main() -> None:
     await init()
-    
+
 
 # if __name__ == "__main__":
 #     main()
