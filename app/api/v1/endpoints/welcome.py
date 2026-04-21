@@ -13,9 +13,9 @@ def check_database_connection(session: SessionDependency):
         session.exec(text("SELECT 1"))  # ty:ignore[no-matching-overload]
         return {"status": "ok", "database": "connected"}
     except Exception as e:
-        raise HTTPException(
+        raise HTTPException (
             status_code=500, detail=f"Database connection failed: {str(e)}"
-        )
+        ) from e
 
 
 @router.get("/getEnvironment")
