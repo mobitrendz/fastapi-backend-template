@@ -128,9 +128,9 @@ Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generat
 SECRET_KEY="your-generated-hs256-key"
 
 # Superuser details 
-SUPER_USER_NAME="admin"
-SUPER_USER_EMAIL="admin@example.com"
-SUPER_USER_PASSWORD="securepassword"      #Password must be min. 8 characters
+ADMIN_USER_NAME="admin"
+ADMIN_USER_EMAIL="admin@example.com"
+ADMIN_USER_PASSWORD="securepassword"      #Password must be min. 8 characters
 ```
 
 **Database Connection**

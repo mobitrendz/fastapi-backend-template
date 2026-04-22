@@ -1,13 +1,15 @@
-#! /usr/bin/env bash
+#!/bin/bash
 
+# Exit immediately if a command exits with a non-zero status
 set -e
-set -x
 
-# Let the DB start
-#python app/db/backend_pre_start.py
+echo "Running Alembic Migrations..."
 
-echo "--- RUNNING MIGRATIONS ---"
+# 1. Generate the initial migration (if it doesn't exist)
+# -m "init tables"
+alembic revision --autogenerate -m "init tables" || echo "Migration already exists or failed to generate"
+
+# 2. Apply migrations to the database
 alembic upgrade head
 
-# Create initial data in DB
-#python app/db/initial_data.py
+echo "Migrations complete. Starting FastAPI..."

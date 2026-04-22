@@ -27,6 +27,8 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement Ruff](#Implement-Ruff)
 * [Implement Pre-commit](#Implement-Pre-commit)
 * [Upgrade from Psycopg2 to Psycopg3 Async](#Upgrade-from-Psycopg2-to-Psycopg3-Async )
+* [Implement Role Based Access Control (RBAC)](#Implement-Role-Based-Access-Control-(RBAC))
+* [Reorganise the order of docker compose](#Reorganise-the-order-of-docker-compose)
 
 ### Prerequisites
 
@@ -460,17 +462,17 @@ uv add tenacity
 - Add super user details in .env settings file
 
 ```bash
-SUPER_USER_NAME="Sreeraj Sreenivasan"
-SUPER_USER_EMAIL="sreerajs@hotmail.com"
-SUPER_USER_PASSWORD="admin"
+ADMIN_USER_NAME="Sreeraj Sreenivasan"
+ADMIN_USER_EMAIL="sreerajs@hotmail.com"
+ADMIN_USER_PASSWORD="admin"
 ```
 
 - Update config.py by adding super user variables
 
 ```bash
-SUPER_USER_NAME: str
-SUPER_USER_EMAIL: str
-SUPER_USER_PASSWORD: str
+ADMIN_USER_NAME: str
+ADMIN_USER_EMAIL: str
+ADMIN_USER_PASSWORD: str
 ```
 
 - Create folders named services, db inside app folder
@@ -518,13 +520,13 @@ def init_db(session: Session) -> None:
     # SQLModel.metadata.create_all(engine)
 
     user = session.exec(
-        select(User).where(User.email == settings.SUPER_USER_EMAIL)
+        select(User).where(User.email == settings.ADMIN_USER_EMAIL)
     ).first()
     if not user:
         user_in = UserCreate(
-            name=settings.SUPER_USER_NAME,
-            email=settings.SUPER_USER_EMAIL,
-            password=settings.SUPER_USER_PASSWORD,
+            name=settings.ADMIN_USER_NAME,
+            email=settings.ADMIN_USER_EMAIL,
+            password=settings.ADMIN_USER_PASSWORD,
             is_superuser=True
         )
         user = user.create_user(session=session, user_create=user_in)

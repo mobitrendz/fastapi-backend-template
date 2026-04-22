@@ -5,20 +5,27 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.api.v1.router import api_router as v1_router
+from app.db import initial_data
 
 logger = logging.getLogger(__name__)
+
+
+# Main application setup using FastAPI. This module defines the main application instance and includes the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. The application also includes a health check endpoint to verify that the application is running and healthy.
+# The lifespan function is used to run startup and shutdown logic for the application. During startup, it seeds the initial data into the database, ensuring that necessary data is present before the application starts handling requests. The shutdown logic can be used to perform any necessary cleanup when the application is shutting down. The use of asynccontextmanager allows for asynchronous operations during startup and shutdown, making it suitable for tasks that may involve I/O operations, such as database interactions.
+# The application is organized to promote maintainability and scalability, with a clear separation of concerns between the main application setup, API routing, database interactions, and initial data seeding. This structure allows for easy extension of the application in the future, such as adding new API endpoints, additional database models, or more complex startup and shutdown logic as needed. The use of logging provides feedback on the application's startup process, making it easier to monitor and debug during development and production. Overall, this setup provides a solid foundation for building a robust and scalable FastAPI application.
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # --- STARTUP LOGIC ---
-    print("--- SYSTEM STARTUP ---")
+    print("--- START SEEDING INITIAL DATA ---")
     print(app.summary)
 
     # 1. Run migrations (Optional: see note below)
     # 2. Seed initial data
     try:
-        print("--- SEEDING COMPLETE ---")
+        await initial_data.init()
+        print("--- FINISH SEEDING INITIAL DATA ---")
     except Exception as e:
         print(f"Seeding failed: {e}")
 
@@ -31,9 +38,11 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
+# Include the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. This organizes the API endpoints under a common prefix (e.g., /api/v1) and allows for easy versioning of the API in the future.
 app.include_router(v1_router, prefix="/api/v1")
 
 
+# Health check endpoint to verify that the application is running and healthy. This endpoint can be used by monitoring tools or load balancers to check the health of the application and ensure that it is responding to requests as expected.
 @app.get("/health", tags=["Health Check"])
 async def health():
     return {"status": "ok"}

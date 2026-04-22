@@ -18,39 +18,7 @@ services:
       interval: 3s
       timeout: 3s
       retries: 5
-
-  api:
-    build: .
-    container_name: fastapi_api
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    environment: &api_env
-      - PYTHONPATH=/app
-      - POSTGRES_SERVER=db
-    depends_on:
-      db:
-        condition: service_healthy
-    healthcheck:
-      # Requires a @app.get("/health") route in your FastAPI main.py
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  seeder:
-    build: .
-    container_name: fastapi_seeder
-    # Absolute path to the script in the container
-    entrypoint: ["/app/scripts/prestart.sh"]
-    env_file:
-      - .env
-    environment: *api_env
-    depends_on:
-      api:
-        condition: service_healthy
-
+  
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin_ui
@@ -64,6 +32,44 @@ services:
       - "5050:80"
     depends_on:
       - db
+
+  prestart:
+    build: .
+    container_name: prestart_migrations
+    # Absolute path to the script in the container
+    entrypoint: ["/app/scripts/prestart.sh"]
+    env_file:
+      - .env
+    environment: 
+      - PYTHONPATH=/app
+      - POSTGRES_SERVER=db
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  backend:
+    build: .
+    container_name: fastapi_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment: 
+      - PYTHONPATH=/app
+      - POSTGRES_SERVER=db
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      prestart:
+        condition: service_completed_successfully
+    healthcheck:
+      # Requires a @app.get("/health") route in your FastAPI main.py
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
