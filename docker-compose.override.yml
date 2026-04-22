@@ -1,5 +1,5 @@
 services:
-  api:
+  backend:
     # Enable Hot Reload by mounting local source code
     volumes:
       - ./app:/app/app

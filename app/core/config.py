@@ -1,7 +1,10 @@
 from pydantic import PostgresDsn, computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# Application configuration settings using Pydantic's BaseSettings. This class defines all the necessary configuration parameters for the application, including database connection details, JWT settings, and superuser credentials. The settings are loaded from environment variables, allowing for easy configuration in different environments (development, testing, production).
+# The SQLALCHEMY_DATABASE_URI is computed based on the individual database connection parameters, providing a convenient way to access the full database URI for use in database connections. The use of BaseSettings allows for validation and type checking of the configuration parameters, ensuring that the application is configured correctly before it starts. The settings can be easily extended in the future to include additional configuration parameters as needed, and the use of environment variables allows for secure management of sensitive information like database credentials and secret keys without hardcoding them in the source code.
 
+# The Settings class is instantiated at the end of the module, creating a global settings object that can be imported and used throughout the application to access configuration values. This promotes a centralized and consistent way to manage configuration across the entire codebase.
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
