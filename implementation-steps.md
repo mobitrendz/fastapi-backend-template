@@ -35,8 +35,8 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 
 * Python >=3.14
 * PostgreSQL 18
-* git 
-* uv 
+* git
+* uv
 
 ### Create and run a new FastAPI project
 
@@ -71,7 +71,7 @@ which python
 uv add fastapi --extra standard
 ```
 
-- Modify main.py 
+- Modify main.py
 
 ```bash
 from fastapi import FastAPI
@@ -122,7 +122,7 @@ app = FastAPI()
 app.include_router(welcome.router)
 ```
 
-### Implement log support 
+### Implement log support
 
 - Modified main.py with FastAPI default logging mechanism
 
@@ -154,7 +154,7 @@ def on_shutdown():
 
 ### Add pytest
 
-- Make sure virtual environment is active before installing pytest 
+- Make sure virtual environment is active before installing pytest
 
 ```bash
 uv add pytest --dev
@@ -251,7 +251,7 @@ class Settings(BaseSettings):
 settings = Settings()  # ty:ignore[missing-argument]
 ```
 
-- Modify welcome.py 
+- Modify welcome.py
 
 ```bash
 from fastapi import APIRouter
@@ -286,7 +286,7 @@ http://127.0.0.1:8000/getEnvironment
 
 - Expected result is: {"Environment":"local"}
 
-### Create PostgreSQL session using SQLModel 
+### Create PostgreSQL session using SQLModel
 
 - Install PostgreSQL and create a database named my_fastapi
 
@@ -296,7 +296,7 @@ http://127.0.0.1:8000/getEnvironment
 uv add sqlmodel "psycopg[binary]"
 ```
 
-- Modify .evn file,  add 
+- Modify .evn file,  add
 
 ```bash
 POSTGRES_URL="postgresql+psycopg://postgres+:admin@localhost:5432/my_fastapi"
@@ -315,7 +315,7 @@ class Settings(BaseSettings):
 ```bash
 from sqlmodel import create_engine, Session
 
-from app.core.config import settings 
+from app.core.config import settings
 
 database_url = settings.POSTGRES_URL
 engine = create_engine(database_url, echo=True)
@@ -342,7 +342,7 @@ def check_database_connection(session: Session = Depends(get_session)):
         session.exec(text("SELECT 1"))  # ty:ignore[no-matching-overload]
         return {"status": "ok", "database": "connected"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}") 
+        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
 ```
 
 - Restart the server and check
@@ -434,7 +434,7 @@ target_metadata = SQLModel.metadata
 sqlalchemy.url = postgresql+psycopg://postgres:admin@localhost:5432/my_fastapi
 ```
 
-- Run alembic revision 
+- Run alembic revision
 
 ```bash
 uv run alembic revision --autogenerate -m "create user"
@@ -454,7 +454,7 @@ user table will get created in postgreSQL my_fastapi database.
 
 ### Add first Super User details to User table on startup
 
-- Add tenacity dependencies 
+- Add tenacity dependencies
 
 ```bash
 uv add tenacity
@@ -487,11 +487,11 @@ from app.models.user import User, UserCreate
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     db_user = User.model_validate(user_create)
-    
+
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
-    
+
     return db_user
 ```
 
@@ -500,7 +500,7 @@ def create_user(*, session: Session, user_create: UserCreate) -> User:
 ```bash
 from sqlmodel import create_engine, Session, select
 
-from app.core.config import settings 
+from app.core.config import settings
 from app.models.user import User, UserCreate
 from app.crud import user as user_crud
 
@@ -646,7 +646,7 @@ from sqlmodel import SQLModel, Field
 
 class UserBase(SQLModel):
     name: str
-    email: str    
+    email: str
     is_active: bool = True
     is_superuser: bool = False
 
@@ -680,7 +680,7 @@ logger = logging.getLogger(__name__)
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     user = User.model_validate(user_create)
-    
+
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -702,10 +702,10 @@ def get_user_by_email(*, session: Session, email: str) -> User | None:
     statement = select(User).where(User.email == email)
     return session.exec(statement).first()
 
-     
+
 def update_user(*, session: Session, id:int, user_update: UserUpdate) -> User | None:
     user = get_user_by_id(session=session, id=id)
-    
+
     if not user:
         return None
 
@@ -719,13 +719,13 @@ def update_user(*, session: Session, id:int, user_update: UserUpdate) -> User | 
 
 def delete_user(*, session: Session, id:int) -> bool:
     user = get_user_by_id(session=session, id=id)
-    
+
     if not user:
         return False
 
     session.delete(user)
     session.commit()
-    
+
     return True
 ```
 
@@ -773,7 +773,7 @@ def delete_user(session: SessionDependency, id: int):
 
     if not deleted:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return Message(message="User deleted successfully")
 ```
 
@@ -793,7 +793,7 @@ from typing import Annotated
 
 from sqlmodel import create_engine, Session
 
-from app.core.config import settings 
+from app.core.config import settings
 
 
 database_url = settings.POSTGRES_URL
@@ -803,7 +803,7 @@ def get_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
 
-SessionDependency = Annotated[Session, Depends(get_session)]        
+SessionDependency = Annotated[Session, Depends(get_session)]
 ```
 
 - Create a file `generic.py` inside api/models folder and add
@@ -819,9 +819,9 @@ class Message(SQLModel):
 
 - Moved init_db function from api/core/database.py to app/initial_data.py(Refer source code)
 
-### Implement Argon2 Password hashing and UUID 
+### Implement Argon2 Password hashing and UUID
 
-- Add pwdlib with Argon2 support, jwt dependencies 
+- Add pwdlib with Argon2 support, jwt dependencies
 
 ```bash
 uv add "pwdlib[argon2]"
@@ -870,7 +870,7 @@ def get_datetime_utc() -> datetime:
 
 class UserBase(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
-    email: EmailStr = Field(unique=True, index=True, max_length=255)  
+    email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
 
@@ -901,7 +901,7 @@ from app.core.security import hash_password
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     user = User.model_validate(user_create, update={"hashed_password": hash_password(user_create.password)})
-    
+
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -973,7 +973,7 @@ uv run alembic upgrade head
 New user table will be created in postgreSQL my_fastapi database.
 ```
 
-- Restart server and check for the new user data with hashed_password 
+- Restart server and check for the new user data with hashed_password
 
 ```bash
 uv run fastapi dev
@@ -981,7 +981,7 @@ uv run fastapi dev
 
 ### Implement OAuth2 JWT Token authentication
 
-- Add JWT dependencies 
+- Add JWT dependencies
 
 ```bash
 uv add pyjwt
@@ -1000,7 +1000,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 ```bash
 SECRET_KEY: str
-ALGORITHM: str 
+ALGORITHM: str
 ACCESS_TOKEN_EXPIRE_MINUTES: int
 ```
 
@@ -1248,7 +1248,7 @@ docker run -p 8000:8000 --env-file .env fastapi-backend-template
 http://127.0.0.1:8000/docs
 ```
 
-### Docker Compose All Apps 
+### Docker Compose All Apps
 
 **Docker Compose FastApi, PostgreSQL, pgAdmin and seeder**
 
@@ -1482,7 +1482,7 @@ from contextlib import asynccontextmanager
 async def lifespan(app: FastAPI):
     # --- STARTUP LOGIC ---
     print("--- SYSTEM STARTUP ---")
-    
+
     # 1. Run migrations (Optional: see note below)
     # 2. Seed initial data
     try:
@@ -1490,9 +1490,9 @@ async def lifespan(app: FastAPI):
         print("--- SEEDING COMPLETE ---")
     except Exception as e:
         print(f"Seeding failed: {e}")
-    
+
     yield  # The app is now running and "healthy"
-    
+
     # --- SHUTDOWN LOGIC ---
     print("--- SYSTEM SHUTDOWN ---")
 
@@ -1515,7 +1515,7 @@ gemini
 
 1, restrict the CLI's access strictly to your current project directory
 ```bash
-gemini --sandbox seatbelt 
+gemini --sandbox seatbelt
 ```
 
 ## Implement Mypy
@@ -1524,7 +1524,94 @@ gemini --sandbox seatbelt
 
 ## Implement Pre-commit
 
+- Install pre-commit dependency
+```bash
+uv add --dev pre-commit
+uv tool install pre-commit --with pre-commit-uv
+```
+
+- Link it to your current repository
+```bash
+uv run pre-commit install
+```
+
+- Create .pre-commit-config.yaml file in the root folder and add
+```bash
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  # Ruff: Handles both linting and formatting instantly
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.11
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+
+  # Mypy: Using the mirror ensures a clean environment
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.20.1
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-pyjwt>=1.7.1
+          - types-passlib>=1.7.7.20260211
+          - pydantic>=2.12.5
+          - sqlmodel>=0.0.37
+
+  # Bandit: Security-focused linting
+  - repo: https://github.com/pycqa/bandit
+    rev: 1.8.3
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+
+  # uv-lock: Ensures your lockfile is always synced with pyproject.toml
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.7
+    hooks:
+      - id: uv-lock
+```
+
+- Running your first check
+```bash
+uv run pre-commit run --all-files
+```
+
+- For fixing jwt.exceptions(jwt.*) import error
+```bash
+uv tool install ty@latest
+```
+
+**Still the error is showing, update pyproject.toml**
+```bash
+[tool.ty.environment]
+python = ".venv/bin/python"
+python-version = "3.14"
+# Add this to ensure ty looks in the site-packages where the stubs live
+extra-paths = [".venv/lib/python3.14/site-packages"]
+
+[tool.ty.analysis]
+# Just stop the error, but keep any types ty can find
+allowed-unresolved-imports = ["jwt.**"]
+```
+
+**Clear the Cache and run again**
+```bash
+pre-commit clean
+uv run pre-commit run --all-files
+```
+
 ## Upgrade from Psycopg2 to Psycopg3 Async
+
+
 
 ## Implement Role Based Access Control RBAC
 
@@ -1597,7 +1684,7 @@ services:
       interval: 3s
       timeout: 3s
       retries: 5
-  
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin_ui
@@ -1619,7 +1706,7 @@ services:
     entrypoint: ["/app/scripts/prestart.sh"]
     env_file:
       - .env
-    environment: 
+    environment:
       - PYTHONPATH=/app
       - POSTGRES_SERVER=db
     depends_on:
@@ -1634,7 +1721,7 @@ services:
       - "8000:8000"
     env_file:
       - .env
-    environment: 
+    environment:
       - PYTHONPATH=/app
       - POSTGRES_SERVER=db
     depends_on:

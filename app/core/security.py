@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Annotated, Any
 
 import jwt
@@ -33,6 +33,7 @@ password_hash = PasswordHasher(
 # The code is organized to separate concerns, with security-related functions and dependencies centralized in this module, making it easier to maintain and update security features as needed. This structure also promotes scalability, allowing for the addition of new security features or changes to existing ones without affecting other parts of the application.
 # The use of type annotations and Pydantic models for configuration and user data ensures that the code is type-safe and that input validation is handled effectively, reducing the likelihood of errors and improving the overall robustness of the application.
 
+
 # Function to hash a password using Argon2 with a random salt. This function takes a plaintext password as input and returns the hashed version of the password, which can be safely stored in the database. The use of Argon2 provides strong security against brute-force attacks, and the random salt ensures that even identical passwords will have different hashes.
 def hash_password(password: str) -> str:
     """Hash a password using Argon2 with a random salt."""
@@ -57,7 +58,7 @@ def create_access_token(subject: str, expires_delta: timedelta | None = None) ->
     if expires_delta is None:
         expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    now = datetime.utcnow()
+    now = datetime.now(UTC)
     payload: dict[str, Any] = {
         "sub": subject,
         "iat": now,

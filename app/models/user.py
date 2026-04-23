@@ -16,6 +16,7 @@ from app.crud import user as user_crud
 # The UserPublic model is used for API responses to ensure that only non-sensitive information is returned, while the UsersPublic model provides a structure for returning a list of users along with a count of the total number of users. The AllowAdmin, AllowUser, and AllowAdminAndUser dependencies can be used in API endpoints to enforce role-based access control based on the user's role.
 # The code is organized to separate concerns, with the User model handling database interactions and the related schemas and dependencies handling API input validation and access control. This structure promotes maintainability and scalability as the application grows.
 
+
 # Function to get the current UTC datetime, used for setting the created_at field in the User model. This ensures that all timestamps are stored in a consistent timezone (UTC) regardless of the server's local timezone.
 def get_datetime_utc() -> datetime:
     return datetime.now(UTC)
@@ -61,11 +62,11 @@ class UserPublic(UserBase):
     id: uuid.UUID
     created_at: datetime | None = None
 
+
 # Response model for returning a list of users along with the total count. This is used in the endpoint that retrieves all users, providing both the user data and metadata about the number of users returned.
 class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
-
 
 
 # Role-based access control dependencies
@@ -73,11 +74,13 @@ class RoleChecker:
     def __init__(self, allowed_roles: list[UserRole]):
         self.allowed_roles = allowed_roles
 
-    def __call__(self, current_user: Annotated[User, Depends(user_crud.get_current_user)]) -> User:
+    def __call__(
+        self, current_user: Annotated[User, Depends(user_crud.get_current_user)]
+    ) -> User:
         if current_user.role not in self.allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have the necessary permissions."
+                detail="You do not have the necessary permissions.",
             )
         return current_user
 

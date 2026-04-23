@@ -29,7 +29,7 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 
 ## 🤖 Gemini CLI AI-Driven Development
 
-This project is built and maintained using **Gemini CLI**, an advanced AI agent for software engineering. 
+This project is built and maintained using **Gemini CLI**, an advanced AI agent for software engineering.
 
 ### Core Benefits:
 - **Autonomous Engineering**: Gemini CLI can research the codebase, plan complex changes, and execute them surgically.
@@ -94,19 +94,19 @@ This project is built on a **Modular Service-Oriented Architecture**, specifical
 
 ### Core Architectural Pillars
 
-- **API & Versioning (app/api/v1)**  
+- **API & Versioning (app/api/v1)**
 Decouples the interface from the logic. By versioning the API, we ensure that new feature rollouts do not break existing client integrations.
 
-- **Business Logic Separation (app/services)**  
+- **Business Logic Separation (app/services)**
 Unlike basic templates, this structure separates **Services** from **CRUD**. While crud/ handles direct database interactions, services/ contains complex business rules, calculations, and third-party API calls, ensuring the code remains DRY (Don't Repeat Yourself).
 
-- **Data Integrity (app/models & app/db)**  
+- **Data Integrity (app/models & app/db)**
 Leverages **SQLModel** to unify Pydantic validation and SQLAlchemy ORM. The db/ module manages the lifecycle of the asynchronous database engine and handles automated data seeding on startup.
 
-- **Infrastructure & Automation (scripts/)**  
+- **Infrastructure & Automation (scripts/)**
 Includes dedicated shell scripts to streamline container startup, database wait-checks, and migration application, making the project **Docker-ready** out of the box.
 
-- **Security First (app/core)**  
+- **Security First (app/core)**
 Centralizes sensitive logic, including **OAuth2 with Password flow, JWT token generation**, and **Argon2 password hashing**, ensuring a consistent security posture across the entire application.
 
 ## 🏁 Getting Started
@@ -127,7 +127,7 @@ Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generat
 ```bash
 SECRET_KEY="your-generated-hs256-key"
 
-# Superuser details 
+# Superuser details
 ADMIN_USER_NAME="admin"
 ADMIN_USER_EMAIL="admin@example.com"
 ADMIN_USER_PASSWORD="securepassword"      #Password must be min. 8 characters
@@ -143,7 +143,7 @@ POSTGRES_DB=database                     # change it
 POSTGRES_USER=username                   # change it
 POSTGRES_PASSWORD=password               # change it
 
-# The app will construct the URL as: 
+# The app will construct the URL as:
 # postgresql+psycopg://username:password@localhost:5432/database
 ```
 
@@ -190,6 +190,9 @@ For native development, ensure you have the uv package manager installed:
 ```bash
 # Sync environment and dependencies
 uv sync
+
+# Activate Pre-commit hooks
+uv uv run pre-commit install
 
 # Activate virtual environment
 source .venv/bin/activate

@@ -25,22 +25,26 @@ dependencies = [
 
 [dependency-groups]
 lint = [
-    "ruff>=0.15.11", # For linting and code quality checks, providing a fast and comprehensive linter for Python code
-    "mypy>=1.20.1", # For static type checking, helping to catch type-related errors before runtime and improve code quality
-    "bandit>=1.8.3", # For security linting, identifying common security issues in Python code and helping to improve the security posture of the application   
+    "ruff>=0.15.11",   # Fast, all-in-one linter and formatter
+    "mypy>=1.20.1",   # Static type checking
+    "bandit>=1.8.3",   # Security-focused linting
 ]
+
 test = [
-    "pytest>=9.0.2", # For testing the application, providing a powerful and flexible testing framework for writing unit tests, integration tests, and more
-    "pytest-cov>=7.1.0", # For measuring test coverage, allowing for tracking how much of the codebase is covered by tests and identifying areas that may need additional testing
-    "pytest-asyncio>=1.3.0", # For testing asynchronous code with pytest, enabling the testing of async functions and features in the application
-    "httpx>=0.27.0", # For making HTTP requests in tests, useful for testing API endpoints and interactions with external services
+    "pytest>=9.0.2",
+    "pytest-cov>=7.1.0",
+    "pytest-asyncio>=1.3.0",
+    "httpx>=0.27.0",   # Required for testing FastAPI endpoints
 ]
+
 dev = [
     { include-group = "lint" },
     { include-group = "test" },
-    "debugpy>=1.8.20", # For debugging the application, providing a powerful debugger that can be used in various development environments
-    "pre-commit>=4.1.0", # For managing pre-commit hooks, allowing for automated code checks and formatting before commits to maintain code quality and consistency
-    "zensical>=0.0.34", # For managing secrets, providing a secure way to handle sensitive information like API keys and database credentials in development and production environments
+    "debugpy>=1.8.20",
+    "pre-commit>=4.1.0",
+    "types-pyjwt>=1.7.1",       # Type stubs for PyJWT (helps Mypy)
+    "types-passlib>=1.7.7.20260211",     # Type stubs for password hashing (helps Mypy)
+    "zensical>=0.0.34", # High-performance documentation generator (Rust-powered)
 ]
 
 [tool.ruff]
@@ -71,3 +75,14 @@ ignore_missing_imports = true
 addopts = ["--cov=app", "--cov-report=term-missing"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+
+[tool.ty.environment]
+python = ".venv/bin/python"
+python-version = "3.14"
+# Add this to ensure ty looks in the site-packages where the stubs live
+extra-paths = [".venv/lib/python3.14/site-packages"]
+
+[tool.ty.analysis]
+# PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
+# It ensures that 'ty' doesn't cause cascading errors in your auth/route logic.
+replace-imports-with-any = ["jwt.**", "fastapi.**"]

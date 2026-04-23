@@ -15,5 +15,6 @@ def get_session() -> Generator[Session]:
     with Session(engine) as session:
         yield session
 
+
 # The SessionDependency is an annotated type that can be used in API endpoints to inject the database session as a dependency, allowing for easy access to the database in CRUD operations and other interactions with the User model and related data. This promotes clean and efficient database management throughout the application, ensuring that resources are properly managed and that database connections are not left open unnecessarily.
 SessionDependency = Annotated[Session, Depends(get_session)]
