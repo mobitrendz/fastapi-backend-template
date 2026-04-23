@@ -1522,6 +1522,33 @@ gemini --sandbox seatbelt
 
 ## Implement Ruff
 
+## Implement Zensical
+
+- Install dependency
+```bash
+uv add --dev zensical
+```
+
+- Start New Project
+```bash
+uv run zensical new .
+```
+
+- Live Preview
+```bash
+uv run zensical serve
+```
+
+- Build for Deployment
+```bash
+uv run zensical build
+```
+
+- Check for Issues
+```bash
+uv run zensical --help
+```
+
 ## Implement Pre-commit
 
 - Install pre-commit dependency
@@ -1764,31 +1791,4 @@ services:
 
 volumes:
   postgres_data:
-```
-
-## Implement Zensical
-
-- Install dependency
-```bash
-uv add --dev zensical
-```
-
-- Start New Project
-```bash
-uv run zensical new .
-```
-
-- Live Preview
-```bash
-uv run zensical serve
-```
-
-- Build for Deployment
-```bash
-uv run zensical build
-```
-
-- Check for Issues
-```bash
-uv run zensical --help
 ```
