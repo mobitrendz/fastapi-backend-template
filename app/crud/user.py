@@ -17,7 +17,9 @@ from app.models.user import User, UserCreate, UsersPublic, UserUpdate
 # CRUD operations for User model
 # These functions interact with the database to perform create, read, and authentication operations for users.
 def create_user(*, session: Session, user_create: UserCreate) -> User:
-    user = User.model_validate(user_create, update={"hashed_password": hash_password(user_create.password)})
+    user = User.model_validate(
+        user_create, update={"hashed_password": hash_password(user_create.password)}
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -36,6 +38,7 @@ def get_user_by_id(*, session: Session, id: uuid.UUID) -> User | None:
     statement = select(User).where(User.id == id)
     return session.exec(statement).first()
 
+
 # Fetch a user by email, which is used for authentication. Returns the user or None if not found.
 def get_user_by_email(*, session: Session, email: str) -> User | None:
     statement = select(User).where(User.email == email)
@@ -43,7 +46,9 @@ def get_user_by_email(*, session: Session, email: str) -> User | None:
 
 
 # Update operation for users, allowing updates to the full name. Returns the updated user or None if not found.
-def update_user(*, session: Session, id: uuid.UUID, user_update: UserUpdate) -> User | None:
+def update_user(
+    *, session: Session, id: uuid.UUID, user_update: UserUpdate
+) -> User | None:
     user = get_user_by_id(session=session, id=id)
 
     if not user:

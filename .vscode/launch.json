@@ -15,7 +15,7 @@
             "envFile": "${workspaceFolder}/.env",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}",
-                "DEBUG": "True" 
+                "DEBUG": "True"
             },
             "showReturnValue": true
         }

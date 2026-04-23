@@ -12,9 +12,9 @@
 # Read more: https://zensical.org/docs/setup/basics/#version
 version = "0.1.0"
 
-# The address on which the development server will listen. 
+# The address on which the development server will listen.
 # This is not used in production, but it can be useful to set it to a specific value for development.
-dev_addr = "localhost:3000" 
+dev_addr = "localhost:3000"
 
 # The site_name is shown in the page header and the browser window title
 #

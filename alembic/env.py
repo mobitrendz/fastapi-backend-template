@@ -1,4 +1,3 @@
-import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
@@ -23,7 +22,6 @@ fileConfig(config.config_file_name)
 from sqlmodel import SQLModel  # noqa: E402
 
 from app.core.config import settings  # noqa
-from app.models.user import User  # noqa: E402
 
 target_metadata = SQLModel.metadata
 
