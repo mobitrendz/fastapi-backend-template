@@ -21,13 +21,21 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "debugpy>=1.8.20",
+lint = [
+    "ruff>=0.15.11",
     "mypy>=1.20.1",
+    "bandit>=1.8.3",
+]
+test = [
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
-    "ruff>=0.15.11",
-    "bandit>=1.8.3",
+    "pytest-asyncio",
+    "httpx",
+]
+dev = [
+    { include-group = "lint" },
+    { include-group = "test" },
+    "debugpy>=1.8.20",
     "pre-commit>=4.1.0",
 ]
 
