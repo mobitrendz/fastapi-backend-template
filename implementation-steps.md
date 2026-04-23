@@ -1604,20 +1604,6 @@ repos:
         always_run: true
 ```
 
-- Update pyproject.toml
-```bash
-[tool.ty.environment]
-python = ".venv/bin/python"
-python-version = "3.14"
-# Add this to ensure ty looks in the site-packages where the stubs live
-extra-paths = [".venv/lib/python3.14/site-packages"]
-
-[tool.ty.analysis]
-# PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
-# It ensures that 'ty' doesn't cause cascading errors in your auth/route logic.
-replace-imports-with-any = ["jwt.**", "fastapi.**"]
-```
-
 - Running your first check
 ```bash
 uv run pre-commit run --all-files
@@ -1637,8 +1623,9 @@ python-version = "3.14"
 extra-paths = [".venv/lib/python3.14/site-packages"]
 
 [tool.ty.analysis]
-# Just stop the error, but keep any types ty can find
-allowed-unresolved-imports = ["jwt.**"]
+# PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
+# It ensures that 'ty' doesn't cause cascading errors in your auth/route logic.
+replace-imports-with-any = ["jwt.**", "fastapi.**"]
 ```
 
 **Clear the Cache and run again**
