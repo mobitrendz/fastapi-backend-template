@@ -1542,7 +1542,9 @@ repos:
     rev: v5.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^site/
       - id: end-of-file-fixer
+        exclude: ^site/
       - id: check-yaml
       - id: check-added-large-files
 
@@ -1555,15 +1557,27 @@ repos:
       - id: ruff-format
 
   # Mypy: Using the mirror ensures a clean environment
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.1
+  # - repo: https://github.com/pre-commit/mirrors-mypy # or your ty hook
+  #   rev: v1.20.1
+  #   hooks:
+  #     - id: mypy
+  #       args: ["--config-file", "pyproject.toml"]
+  #       # THIS IS THE KEY: Pre-commit needs to 'see' these to resolve imports
+  #       additional_dependencies:
+  #         - types-pyjwt
+  #         - types-passlib
+  #         - fastapi
+  #         - pydantic-settings
+  #         - sqlmodel
+
+  - repo: local
     hooks:
-      - id: mypy
-        additional_dependencies:
-          - types-pyjwt>=1.7.1
-          - types-passlib>=1.7.7.20260211
-          - pydantic>=2.12.5
-          - sqlmodel>=0.0.37
+      - id: ty-check
+        name: ty check
+        entry: uv run ty check
+        language: system
+        pass_filenames: false
+        always_run: true
 
   # Bandit: Security-focused linting
   - repo: https://github.com/pycqa/bandit
@@ -1578,6 +1592,30 @@ repos:
     rev: 0.11.7
     hooks:
       - id: uv-lock
+
+  # Zensical: Build check for the documentation site
+  - repo: local
+    hooks:
+      - id: zensical-check
+        name: zensical build check
+        entry: uv run zensical build
+        language: system
+        pass_filenames: false
+        always_run: true
+```
+
+- Update pyproject.toml
+```bash
+[tool.ty.environment]
+python = ".venv/bin/python"
+python-version = "3.14"
+# Add this to ensure ty looks in the site-packages where the stubs live
+extra-paths = [".venv/lib/python3.14/site-packages"]
+
+[tool.ty.analysis]
+# PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
+# It ensures that 'ty' doesn't cause cascading errors in your auth/route logic.
+replace-imports-with-any = ["jwt.**", "fastapi.**"]
 ```
 
 - Running your first check
