@@ -27,7 +27,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement Ruff](#Implement-Ruff)
 * [Implement Pre-commit](#Implement-Pre-commit)
 * [Upgrade from Psycopg2 to Psycopg3 Async](#Upgrade-from-Psycopg2-to-Psycopg3-Async )
-* [Implement Role Based Access Control `RBAC`](#Implement-Role-Based-Access-Control-`RBAC`)
+* [Implement Role Based Access Control `RBAC`](#Implement-Role-Based-Access-Control-RBAC)
 * [Rearrange the order of docker compose](#Rearrange-the-order-of-docker-compose)
 
 ### Prerequisites
@@ -1525,7 +1525,7 @@ gemini --sandbox seatbelt
 
 ## Upgrade from Psycopg2 to Psycopg3 Async
 
-## Implement Role Based Access Control `RBAC`
+## Implement Role Based Access Control RBAC
 
 **Update app.model.user.py**
 - User roles for role-based access control
