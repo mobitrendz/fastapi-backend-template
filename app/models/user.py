@@ -1,5 +1,4 @@
 import uuid
-from cmath import e
 from datetime import UTC, datetime
 from enum import StrEnum
 from typing import Annotated

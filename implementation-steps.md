@@ -1524,3 +1524,131 @@ gemini --sandbox seatbelt
 ## Implement Pre-commit
 
 ## Upgrade from Psycopg2 to Psycopg3 Async
+
+## Implement Role Based Access Control (RBAC)
+
+**Update app.model.user.py**
+- User roles for role-based access control
+```bash
+class UserRole(StrEnum):
+    ADMIN = "admin"
+    USER = "user"
+    GUEST = "guest"
+```
+
+- Role-based access control dependencies
+```bash
+class RoleChecker:
+    def __init__(self, allowed_roles: list[UserRole]):
+        self.allowed_roles = allowed_roles
+
+    def __call__(self, current_user: Annotated[User, Depends(user_crud.get_current_user)]) -> User:
+        if current_user.role not in self.allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You do not have the necessary permissions."
+            )
+        return current_user
+```
+
+- Define access levels
+```bash
+ALLOW_ADMIN = RoleChecker([UserRole.ADMIN])
+ALLOW_USER = RoleChecker([UserRole.USER])
+ALLOW_ADMIN_AND_USER = RoleChecker([UserRole.ADMIN, UserRole.USER])
+```
+
+- Define a reusable type alias
+```bash
+AllowAdmin = Annotated[User, Depends(ALLOW_ADMIN)]
+AllowlUser = Annotated[User, Depends(ALLOW_USER)]
+AllowAdminAndUser = Annotated[User, Depends(ALLOW_ADMIN_AND_USER)]
+```
+
+**Allow role based access to api's by adding `allow_admin: AllowAdmin` in  app.api.v1.endpoints.users.pt endpoints**
+```bash
+@router.post("/", response_model=UserPublic)
+def create_user(session: SessionDependency, allow_admin: AllowAdmin, user_create: UserCreate):
+    return user_crud.create_user(session=session, user_create=user_create)
+```
+
+## Reorganise the order of docker compose
+
+**Modified docker-compose.yaml**
+```bash
+services:
+  db:
+    image: postgres:18
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-fastapi_db}
+      # FORCE Postgres to use the mounted path
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${POSTGRES_DB:-fastapi_db}"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_ui
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_SESSION_EXPIRATION: 720
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+  prestart:
+    build: .
+    container_name: prestart_migrations
+    # Absolute path to the script in the container
+    entrypoint: ["/app/scripts/prestart.sh"]
+    env_file:
+      - .env
+    environment: 
+      - PYTHONPATH=/app
+      - POSTGRES_SERVER=db
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  backend:
+    build: .
+    container_name: fastapi_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment: 
+      - PYTHONPATH=/app
+      - POSTGRES_SERVER=db
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      prestart:
+        condition: service_completed_successfully
+    healthcheck:
+      # Requires a @app.get("/health") route in your FastAPI main.py
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+```
