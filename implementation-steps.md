@@ -29,6 +29,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Upgrade from Psycopg2 to Psycopg3 Async](#Upgrade-from-Psycopg2-to-Psycopg3-Async )
 * [Implement Role Based Access Control `RBAC`](#Implement-Role-Based-Access-Control-RBAC)
 * [Rearrange the order of docker compose](#Rearrange-the-order-of-docker-compose)
+* [Implement Zensical](#Implement-Zensical)
 
 ### Prerequisites
 
@@ -1651,4 +1652,31 @@ services:
 
 volumes:
   postgres_data:
+```
+
+## Implement Zensical
+
+- Install dependency
+```bash
+uv add --dev zensical
+```
+
+- Start New Project
+```bash
+uv run zensical new .
+```
+
+- Live Preview
+```bash
+uv run zensical serve
+```
+
+- Build for Deployment
+```bash
+uv run zensical build
+```
+
+- Check for Issues
+```bash
+uv run zensical --help
 ```
