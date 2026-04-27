@@ -41,6 +41,9 @@ To interact with this project using Gemini CLI:
 # Start an interactive session
 gemini
 
+# Sandbox - restrict the CLI's access strictly to your current project directory
+gemini --sandbox seatbelt
+
 # Example directive
 > "Add a new CRUD endpoint for 'Products' following the existing user pattern"
 ```
