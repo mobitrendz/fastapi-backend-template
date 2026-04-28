@@ -76,6 +76,27 @@ async def update_user(
     return UserPublic.model_validate(user)
 
 
+# @router.patch("/me/password", response_model=Message)
+# def update_password_me(
+#     *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
+# ) -> Any:
+#     """
+#     Update own password.
+#     """
+#     verified, _ = verify_password(body.current_password, current_user.hashed_password)
+#     if not verified:
+#         raise HTTPException(status_code=400, detail="Incorrect password")
+#     if body.current_password == body.new_password:
+#         raise HTTPException(
+#             status_code=400, detail="New password cannot be the same as the current one"
+#         )
+#     hashed_password = get_password_hash(body.new_password)
+#     current_user.hashed_password = hashed_password
+#     session.add(current_user)
+#     session.commit()
+#     return Message(message="Password updated successfully")
+
+
 # Endpoint for deleting a user by ID. Only admin users can perform this operation. Returns a success message if the user is deleted, or a 404 error if the user is not found.
 @router.delete("/{id}", response_model=Message)
 async def delete_user(

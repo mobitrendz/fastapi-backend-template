@@ -43,6 +43,12 @@ class UserUpdate(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
 
 
+# UpdatePassword model for changing a user's password, including validation for the current and new passwords. This model is used in the password update endpoint to ensure that the user provides their current password and that the new password meets the specified length requirements.
+class UpdatePassword(SQLModel):
+    current_password: str = Field(min_length=8, max_length=128)
+    new_password: str = Field(min_length=8, max_length=128)
+
+
 # User model representing the database table, including fields for ID, hashed password, and creation timestamp. This model is used for database operations and includes validation and constraints.
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
