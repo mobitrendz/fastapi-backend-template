@@ -8,9 +8,9 @@ router = APIRouter()
 
 
 @router.get("/checkDBConnection", response_model=dict[str, str])
-def check_database_connection(session: SessionDependency) -> dict[str, str]:
+async def check_database_connection(session: SessionDependency) -> dict[str, str]:
     try:
-        session.exec(select(1))
+        await session.execute(select(1))
         return {"status": "ok", "database": "connected"}
     except Exception as e:
         raise HTTPException(

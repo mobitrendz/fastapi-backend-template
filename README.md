@@ -14,18 +14,41 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 *   **Robust Health Monitoring**: Integrated Docker health checks ensuring zero-downtime dependency readiness.
 
 ## 🛠️ Tech Stack
-- **Language**: Python >= 3.14
-- **Framework**: FastAPI (standard)
-- **Database**: PostgreSQL 18 (psycopg3)
-- **ORM/Schema**: SQLModel
-- **Migrations**: Alembic
-- **Observability**: Structlog, Prometheus Instrumentator
-- **Security**: pwdlib (Argon2), PyJWT, SlowAPI (Rate Limiting), Bandit
-- **Validation**: Pydantic v2 (Settings, Email)
-- **Standardization**: FastAPI-Pagination
-- **Resilience**: Tenacity (Retry logic)
-- **Dependency Manager**: uv
-- **Quality Assurance**: Pytest, Pytest-cov, Ruff (Strict), Mypy (Strict)
+
+### 🏗️ Core Architecture
+- 🐍 **Python 3.14+** — Latest high-performance interpreter with advanced language features.
+- ⚡ **FastAPI** — High-performance, production-ready web framework for building APIs.
+- 📐 **Pydantic v2** — Modern data validation and settings management using type hints.
+- 🔢 **FastAPI-Pagination** — Uniform pagination support for clean and consistent list responses.
+
+### 🗄️ Persistence & Data
+- 🐘 **PostgreSQL 18** — The world's most advanced open-source relational database.
+- 🧬 **SQLModel** — Elegant unification of SQLAlchemy and Pydantic for data modeling.
+- 🛠️ **Alembic** — Robust database migration management for versioned schema updates.
+- 🔌 **psycopg3** — Modern, high-performance PostgreSQL adapter for Python.
+
+### 🛡️ Security & Health
+- 🔑 **OAuth2 + JWT** — Industry-standard secure authentication and authorization.
+- 🔒 **Argon2** — State-of-the-art password hashing for maximum credential security.
+- 🚦 **SlowAPI** — Advanced rate limiting to protect endpoints from automated abuse.
+- 🛡️ **Bandit** — Automated security linting to identify and mitigate vulnerabilities.
+
+### 📊 Observability & Resilience
+- 🪵 **Structlog** — High-performance structured logging for deep system visibility.
+- 📈 **Prometheus** — Real-time metrics instrumentation for monitoring system health.
+- 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring.
+- 🔄 **Tenacity** — Sophisticated retry logic for handling transient operational failures.
+
+### 🛠️ Tooling & Infrastructure
+- 📦 **uv** — Next-generation, lightning-fast Python package and project manager.
+- 🐳 **Docker & Compose** — Full-stack container orchestration for environmental parity.
+- 🦀 **Zensical** — Ultra-fast, Rust-powered documentation generator for this project.
+- 🤖 **Gemini CLI** — AI-powered autonomous agent for rapid, surgical engineering.
+
+### 🧪 Quality Assurance
+- 🧪 **Pytest & Coverage** — Mature testing framework with detailed coverage reporting.
+- 🧹 **Ruff** — Extremely fast, all-in-one Python linter and code formatter.
+- 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
 
 ## 🤖 Gemini CLI AI-Driven Development
 
@@ -65,7 +88,7 @@ The project utilises a multi-container architecture managed via `docker-compose.
 
 ```
 fastapi-backend-template/
-├── .vscode/                       # Debugging env configuration(launch.json)
+├── .vscode/                       # Debugging env configuration (launch.json)
 ├── app/                           # Main Application Logic
 │   ├── api/                       # API Entry points
 │   │   └── v1/                    # API Versioning
@@ -78,16 +101,18 @@ fastapi-backend-template/
 │   ├── services/                  # Complex business logic and external integrations
 │   └── main.py                    # FastAPI application initialization
 ├── alembic/                       # Database migrations and environment setup
+├── docs/                          # Zensical documentation source (Markdown)
+├── site/                          # Generated Zensical static documentation
 ├── scripts/                       # Shell scripts for deployment and startup
 ├── tests/                         # Pytest suite for unit and integration testing
 ├── .env                           # Environment variables (Internal)
 ├── .env.example                   # Template for environment variables
 ├── alembic.ini                    # Alembic configuration
-├── docker-compose.override.yml    # Container Orchestration Manifest for dev env with hot reload
+├── docker-compose.override.yml    # Container Orchestration Manifest for dev env
 ├── docker-compose.yaml            # Container Orchestration Manifest
 ├── Dockerfile                     # Multi-stage, non-root Production Build
-├── pyproject.toml                 # Dependency management (uv/pip)
-├── pytest.ini                     # Pytest configuration
+├── pyproject.toml                 # Dependency management (uv)
+├── zensical.toml                  # Zensical documentation configuration
 └── README.md                      # Project documentation
 ```
 
@@ -208,9 +233,54 @@ uv run fastapi dev
 ```
 
 ### 6. 🧪 Quality Assurance
-Maintain system integrity with the integrated test suite:
+Maintain system integrity and code quality with the integrated toolchain:
 
+#### 🧹 Linting & Formatting (Ruff)
+Ruff is used for extremely fast linting and formatting.
 ```bash
-# Run unit and integration tests with coverage
+# Check for linting issues
+uv run ruff check .
+
+# Automatically fix fixable issues
+uv run ruff check --fix .
+
+# Format the code
+uv run ruff format .
+```
+
+#### 🔍 Static Type Checking (Mypy)
+Mypy ensures type safety throughout the application.
+```bash
+# Run strict type checking
+uv run mypy .
+```
+
+#### 🛡️ Security Analysis (Bandit)
+Bandit scans for common security vulnerabilities.
+```bash
+# Run security scan
+uv run bandit -c pyproject.toml -r app
+```
+
+#### ✅ Test Suite
+Run the full test suite with coverage reporting:
+```bash
+# Run unit and integration tests
 uv run pytest
+```
+
+### 7. 📚 Documentation (Zensical)
+The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator.
+
+#### Serve Documentation Locally
+To preview the documentation with hot-reloading:
+```bash
+uv run zensical serve
+```
+Access the local documentation at: http://localhost:3000
+
+#### Build Static Site
+To generate the static documentation site in the `site/` directory:
+```bash
+uv run zensical build
 ```

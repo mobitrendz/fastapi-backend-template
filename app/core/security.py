@@ -53,7 +53,7 @@ def verify_password(password: str, hashed_password: str) -> bool:
 
 
 # Function to create a JWT access token for a subject (typically a user id or email). The token includes the subject, issued at time, and expiration time. The token is signed using the secret key and algorithm specified in the settings, ensuring that it can be securely verified when decoded.
-def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:
+def create_access_token(subject: str, expires_delta: timedelta | None = None) -> bytes:
     """Create a JWT access token for a subject (typically a user id or email)."""
     if expires_delta is None:
         expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
