@@ -1,14 +1,10 @@
 import uuid
 from datetime import UTC, datetime
 from enum import StrEnum
-from typing import Annotated
 
-from fastapi import Depends, HTTPException, status
 from pydantic import EmailStr
 from sqlalchemy import DateTime
 from sqlmodel import Field, SQLModel
-
-from app.crud import user as user_crud
 
 # User model and related schemas for user management, including role-based access control dependencies. This module defines the User model for database interactions, as well as Pydantic models for user creation, updating, and public representation. It also includes role-based access control dependencies to enforce permissions on API endpoints.
 # The User model includes fields for ID, full name, email, hashed password, active status, role, and creation timestamp. The related schemas ensure that the necessary fields are provided for user creation and updating, and that sensitive information like the hashed password is not exposed in API responses. The role-based access control dependencies allow for fine-grained control over which users can access certain endpoints based on their assigned role (admin, user, guest).
@@ -67,31 +63,3 @@ class UserPublic(UserBase):
 class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
-
-
-# Role-based access control dependencies
-class RoleChecker:
-    def __init__(self, allowed_roles: list[UserRole]):
-        self.allowed_roles = allowed_roles
-
-    def __call__(
-        self, current_user: Annotated[User, Depends(user_crud.get_current_user)]
-    ) -> User:
-        if current_user.role not in self.allowed_roles:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You do not have the necessary permissions.",
-            )
-        return current_user
-
-
-# Define access levels
-ALLOW_ADMIN = RoleChecker([UserRole.ADMIN])
-ALLOW_USER = RoleChecker([UserRole.USER])
-ALLOW_ADMIN_AND_USER = RoleChecker([UserRole.ADMIN, UserRole.USER])
-
-
-# Define a reusable type alias
-AllowAdmin = Annotated[User, Depends(ALLOW_ADMIN)]
-AllowlUser = Annotated[User, Depends(ALLOW_USER)]
-AllowAdminAndUser = Annotated[User, Depends(ALLOW_ADMIN_AND_USER)]

@@ -3,11 +3,10 @@ import uuid
 from fastapi import APIRouter, HTTPException
 
 from app.crud import user as user_crud
+from app.crud.user import AllowAdmin, AllowAdminAndUser
 from app.db.database import SessionDependency
 from app.models.generic import Message
 from app.models.user import (
-    AllowAdmin,
-    AllowAdminAndUser,
     UserCreate,
     UserPublic,
     UsersPublic,
@@ -26,49 +25,63 @@ router = APIRouter()
 
 # Endpoint for creating a new user. Only admin users can perform this operation. Returns the created user if successful, or a 400 error if the email is already in use.
 @router.post("/", response_model=UserPublic)
-def create_user(
+async def create_user(
     session: SessionDependency, _allow_admin: AllowAdmin, user_create: UserCreate
-):
-    return user_crud.create_user(session=session, user_create=user_create)
+) -> UserPublic:
+    user = await user_crud.create_user(session=session, user_create=user_create)
+    return UserPublic.model_validate(user)
 
 
 # Endpoint for retrieving all users. Only admin users can perform this operation. Returns a list of users along with the total count.
 @router.get("/", response_model=UsersPublic)
-def read_users(session: SessionDependency, _allow_admin: AllowAdmin):
-    return user_crud.get_users(session=session)
+async def read_users(
+    session: SessionDependency, _allow_admin: AllowAdmin
+) -> UsersPublic:
+    return await user_crud.get_users(session=session)
 
 
 # Endpoint for retrieving a user by ID. Both admin and regular users can perform this operation, but regular users can only access their own information. Returns the user if found, or a 404 error if not found.
 @router.get("/byID/{id}", response_model=UserPublic)
-def read_user_by_id(
+async def read_user_by_id(
     session: SessionDependency, _allow_admin: AllowAdmin, id: uuid.UUID
-):
-    return user_crud.get_user_by_id(session=session, id=id)
+) -> UserPublic:
+    user = await user_crud.get_user_by_id(session=session, id=id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserPublic.model_validate(user)
 
 
 # Endpoint for retrieving a user by email. Only admin users can perform this operation. Returns the user if found, or a 404 error if not found.
 @router.get("/byEmail/{email}", response_model=UserPublic)
-def read_user_by_email(
+async def read_user_by_email(
     session: SessionDependency, _allow_admin: AllowAdmin, email: str
-):
-    return user_crud.get_user_by_email(session=session, email=email)
+) -> UserPublic:
+    user = await user_crud.get_user_by_email(session=session, email=email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserPublic.model_validate(user)
 
 
 # Endpoint for updating a user's information by ID. Both admin and regular users can perform this operation, but regular users can only update their own information. Returns the updated user or a 404 error if the user is not found.
 @router.patch("/{id}", response_model=UserPublic)
-def update_user(
+async def update_user(
     session: SessionDependency,
     _allow_admin_and_user: AllowAdminAndUser,
     id: uuid.UUID,
     user_update: UserUpdate,
-):
-    return user_crud.update_user(session=session, id=id, user_update=user_update)
+) -> UserPublic:
+    user = await user_crud.update_user(session=session, id=id, user_update=user_update)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserPublic.model_validate(user)
 
 
 # Endpoint for deleting a user by ID. Only admin users can perform this operation. Returns a success message if the user is deleted, or a 404 error if the user is not found.
 @router.delete("/{id}", response_model=Message)
-def delete_user(session: SessionDependency, _allow_admin: AllowAdmin, id: uuid.UUID):
-    deleted = user_crud.delete_user(session=session, id=id)
+async def delete_user(
+    session: SessionDependency, _allow_admin: AllowAdmin, id: uuid.UUID
+) -> Message:
+    deleted = await user_crud.delete_user(session=session, id=id)
 
     if not deleted:
         raise HTTPException(status_code=404, detail="User not found")

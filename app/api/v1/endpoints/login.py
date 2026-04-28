@@ -17,7 +17,7 @@ router = APIRouter()
 
 # This endpoint allows users to log in and receive an access token for authentication in future requests.
 @router.post("/access-token", response_model=Token)
-def login_access_token(
+async def login_access_token(
     session: SessionDependency,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
@@ -25,7 +25,7 @@ def login_access_token(
     OAuth2 compatible token login, get an access token for future requests
     """
 
-    user = user_crud.authenticate_user(
+    user = await user_crud.authenticate_user(
         session=session, email=form_data.username, password=form_data.password
     )
 
@@ -45,12 +45,14 @@ def login_access_token(
 
 # This endpoint allows authenticated users to retrieve their access token.
 @router.get("/secure-data")
-def read_secure(token: str = Depends(oauth2_scheme)):
+async def read_secure(token: str = Depends(oauth2_scheme)) -> dict[str, str]:
     return {"token": token}
 
 
 # This endpoint allows authenticated users to retrieve their own user information using the access token.
 @router.get("/current-user", response_model=UserPublic)
-def get_current_user(session: SessionDependency, token: TokenDependency):
-    user = user_crud.get_current_user(session=session, token=token)
-    return user
+async def get_current_user(
+    session: SessionDependency, token: TokenDependency
+) -> UserPublic:
+    user = await user_crud.get_current_user(session=session, token=token)
+    return UserPublic.model_validate(user)

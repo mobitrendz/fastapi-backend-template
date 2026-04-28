@@ -1,7 +1,9 @@
 import logging
-from contextlib import asynccontextmanager
 
 # from app.db import initial_data, backend_pre_start
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from app.api.v1.router import api_router as v1_router
@@ -16,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # noqa: UP043
     # --- STARTUP LOGIC ---
     print("--- START SEEDING INITIAL DATA ---")
     print(app.summary)
@@ -44,5 +46,5 @@ app.include_router(v1_router, prefix="/api/v1")
 
 # Health check endpoint to verify that the application is running and healthy. This endpoint can be used by monitoring tools or load balancers to check the health of the application and ensure that it is responding to requests as expected.
 @app.get("/health", tags=["Health Check"])
-async def health():
+async def health() -> dict[str, str]:
     return {"status": "ok"}

@@ -30,6 +30,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Implement Role Based Access Control `RBAC`](#Implement-Role-Based-Access-Control-RBAC)
 * [Rearrange the order of docker compose](#Rearrange-the-order-of-docker-compose)
 * [Implement Zensical](#Implement-Zensical)
+* [Implement async](#Implement-async)
 
 ### Prerequisites
 
@@ -1663,7 +1664,47 @@ uv run pre-commit run --all-files
 
 ## Upgrade from Psycopg2 to Psycopg3 Async
 
+**Update app/db/database.py**
+- Convert database session management to asynchronous using AsyncSession and create_async_engine.
+```python
+from typing import Annotated, AsyncGenerator
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+from fastapi import Depends
 
+engine = create_async_engine(str(settings.SQLALCHEMY_DATABASE_URI))
+async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    async with async_session_maker() as session:
+        yield session
+
+SessionDependency = Annotated[AsyncSession, Depends(get_session)]
+```
+
+**Update app/crud/user.py**
+- Convert all user CRUD operations to be asynchronous.
+```python
+async def create_user(*, session: AsyncSession, user_create: UserCreate) -> User:
+    ...
+    await session.commit()
+    await session.refresh(user)
+    return user
+
+async def get_users(*, session: AsyncSession) -> UsersPublic:
+    statement = select(User)
+    result = await session.execute(statement)
+    users = result.all()
+    return UsersPublic(data=users, count=len(users))
+```
+
+**Update app/api/v1/endpoints/users.py**
+- Update all user endpoints to be asynchronous and use await.
+```python
+@router.post("/", response_model=UserPublic)
+async def create_user(session: SessionDependency, allow_admin: AllowAdmin, user_create: UserCreate):
+    return await user_crud.create_user(session=session, user_create=user_create)
+```
 
 ## Implement Role Based Access Control RBAC
 
@@ -1708,8 +1749,8 @@ AllowAdminAndUser = Annotated[User, Depends(ALLOW_ADMIN_AND_USER)]
 **Allow role based access to api's by adding `allow_admin: AllowAdmin` in  app.api.v1.endpoints.users.pt endpoints**
 ```bash
 @router.post("/", response_model=UserPublic)
-def create_user(session: SessionDependency, allow_admin: AllowAdmin, user_create: UserCreate):
-    return user_crud.create_user(session=session, user_create=user_create)
+async def create_user(session: SessionDependency, allow_admin: AllowAdmin, user_create: UserCreate):
+    return await user_crud.create_user(session=session, user_create=user_create)
 ```
 
 ## Rearrange the order of docker compose
@@ -1792,3 +1833,5 @@ services:
 volumes:
   postgres_data:
 ```
+
+## Implement async

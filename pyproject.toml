@@ -66,15 +66,26 @@ lint.ignore = ["E501"] # Line too long (handled by formatter)
 [tool.mypy]
 strict = true
 exclude = ["alembic"]
+plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
 module = "sqlmodel.*"
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
 [tool.pytest]
-addopts = ["--cov=app", "--cov-report=term-missing"]
+addopts = [
+    "--cov=app",
+    "--cov-report=term-missing",
+]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+asyncio_mode = "strict"
+asyncio_default_test_loop_scope = "session"
+asyncio_default_fixture_loop_scope = "session"
 
 [tool.ty.environment]
 python = ".venv/bin/python"
@@ -86,3 +97,6 @@ extra-paths = [".venv/lib/python3.14/site-packages"]
 # PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
 # It ensures that 'ty' doesn't cause cascading errors in your auth/route logic.
 replace-imports-with-any = ["jwt.**", "fastapi.**"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/**/*.py" = ["S101"]
