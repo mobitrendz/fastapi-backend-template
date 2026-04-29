@@ -46,8 +46,9 @@ volumes:
 ```
 
 ## 🏗️ Production Build
-The `Dockerfile` uses a multi-stage build process:
-1.  **Builder**: Installs `uv`, syncs dependencies, and builds the application environment.
+The `Dockerfile` uses a multi-stage build process to ensure a lean and secure production image. It leverages `uv.lock` for deterministic, reproducible builds.
+
+1.  **Builder**: Installs `uv`, syncs dependencies from `uv.lock`, and builds the application environment.
 2.  **Runner**: A slim, non-root image optimized for production execution.
 
 ### Build Target

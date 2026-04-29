@@ -17,6 +17,25 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 *   **Modern Tooling**: Powered by [uv](https://astral.sh) for dependency management.
 *   **AI-Optimized**: Native support for **Gemini CLI** autonomous engineering.
 
+## 📁 Project Structure
+
+```text
+app/                     # Main Application Logic
+├── api/                 # API Entry points (v1)
+├── core/                # Global configuration & Security
+├── crud/                # Reusable database operations
+├── email-templates/     # MJML/HTML system emails
+├── models/              # SQLModels & DTOs
+└── services/            # Business logic orchestration
+alembic/                 # Database migrations
+docs/                    # Documentation source
+tests/                   # Pytest suite
+```
+
+## 🤖 AI-Driven Development
+
+This project is engineered for **Gemini CLI**, enabling autonomous refactoring, research, and implementation. By leveraging `GEMINI.md` mandates, the AI ensures all changes adhere to local architectural standards.
+
 ## 🚀 Quick Start
 
 ### 1. Prerequisites
