@@ -199,7 +199,7 @@ For native development, ensure you have the uv package manager installed:
 uv sync
 
 # Activate Pre-commit hooks
-uv uv run pre-commit install
+uv run pre-commit install
 
 # Activate virtual environment
 source .venv/bin/activate
