@@ -5,9 +5,13 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from pydantic import EmailStr
 
 from app.api.v1.router import api_router as v1_router
+from app.core.security import generate_test_email, send_email
+from app.crud.user import AllowAdmin
 from app.db import initial_data
+from app.models.generic import Message
 
 logger = logging.getLogger(__name__)
 
@@ -48,3 +52,14 @@ app.include_router(v1_router, prefix="/api/v1")
 @app.get("/health", tags=["Health Check"])
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.post("/test-email/", status_code=201)
+def test_email(email_to: EmailStr, _allow_admin: AllowAdmin) -> Message:
+    email_data = generate_test_email(email_to=email_to)
+    send_email(
+        email_to=email_to,
+        subject=email_data.subject,
+        html_content=email_data.html_content,
+    )
+    return Message(message="Test email sent")

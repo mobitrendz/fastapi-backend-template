@@ -1,4 +1,6 @@
-from pydantic import PostgresDsn, computed_field
+from typing import Self
+
+from pydantic import EmailStr, PostgresDsn, computed_field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Application configuration settings using Pydantic's BaseSettings. This class defines all the necessary configuration parameters for the application, including database connection details, JWT settings, and superuser credentials. The settings are loaded from environment variables, allowing for easy configuration in different environments (development, testing, production).
@@ -13,13 +15,39 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    FRONTEND_HOST: str
     ENVIRONMENT: str
+
+    PROJECT_NAME: str
+    STACK_NAME: str
 
     API_V1_STR: str
 
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
+
+    SMTP_TLS: bool = True
+    SMTP_SSL: bool = False
+    SMTP_PORT: int = 587
+    SMTP_HOST: str | None = None
+    SMTP_USER: str | None = None
+    SMTP_PASSWORD: str | None = None
+    EMAILS_FROM_EMAIL: EmailStr | None = None
+    EMAILS_FROM_NAME: str | None = None
+
+    @model_validator(mode="after")
+    def _set_default_emails_from(self) -> Self:
+        if not self.EMAILS_FROM_NAME:
+            self.EMAILS_FROM_NAME = self.PROJECT_NAME
+        return self
+
+    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def emails_enabled(self) -> bool:
+        return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
     SUPER_USER_NAME: str
     SUPER_USER_EMAIL: str
