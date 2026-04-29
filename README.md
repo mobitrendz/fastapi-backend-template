@@ -39,9 +39,15 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 - 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring.
 - 🔄 **Tenacity** — Sophisticated retry logic for handling transient operational failures.
 
+### 📧 Email & Templating
+- ✉️ **Emails** — Simplifies sending emails with custom headers and attachments.
+- 🎨 **Jinja2** — Modern and designer-friendly templating engine for Python.
+- 🔍 **Email-Validator** — Robust validation for email addresses to ensure data integrity.
+
 ### 🛠️ Tooling & Infrastructure
 - 📦 **uv** — Next-generation, lightning-fast Python package and project manager.
 - 🐳 **Docker & Compose** — Full-stack container orchestration for environmental parity.
+- 📥 **MailCatcher** — Instant SMTP server for capturing and inspecting emails during development.
 - 🦀 **Zensical** — Ultra-fast, Rust-powered documentation generator for this project.
 - 🤖 **Gemini CLI** — AI-powered autonomous agent for rapid, surgical engineering.
 
@@ -49,6 +55,7 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 - 🧪 **Pytest & Coverage** — Mature testing framework with detailed coverage reporting.
 - 🧹 **Ruff** — Extremely fast, all-in-one Python linter and code formatter.
 - 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
+- ⚓ **Prek** — Ultra-fast, Rust-powered Git hook manager for automated code quality checks.
 
 ## 🤖 Gemini CLI AI-Driven Development
 
@@ -82,6 +89,7 @@ The project utilises a multi-container architecture managed via `docker-compose.
 | **API** | FastAPI / Uvicorn | Primary application server with built-in health monitoring. |
 | **DB** | PostgreSQL 18 | Relational data store with persisted volume mapping. |
 | **pgAdmin** | pgAdmin 4 | Web-based database administration and query interface. |
+| **MailCatcher** | MailCatcher | Local SMTP server and web interface for email testing. |
 | **Seeder** | Python/Shell | Lifecycle service; executes migrations and populates initial system state. |
 
 ## 📂 Project Structure
@@ -190,6 +198,7 @@ docker compose logs -f api
 ### 4. Application Entry Points
 - API Documentation: http://localhost:8000/docs
 - Database Management: http://localhost:5050
+- MailCatcher UI: http://localhost:1080
 - Health Status: http://localhost:8000/health
 
 ### 5. 🛠️ Local Development
@@ -198,8 +207,8 @@ For native development, ensure you have the uv package manager installed:
 # Sync environment and dependencies
 uv sync
 
-# Activate Pre-commit hooks
-uv run pre-commit install
+# Activate Prek hooks
+uv run prek install
 
 # Activate virtual environment
 source .venv/bin/activate

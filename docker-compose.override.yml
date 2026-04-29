@@ -18,3 +18,9 @@ services:
     # You might only want pgadmin visible during development
     ports:
       - "5050:80"
+
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"

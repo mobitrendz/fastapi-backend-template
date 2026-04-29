@@ -15,6 +15,7 @@ The `docker-compose.yaml` defines several key services:
 | **API** | FastAPI / Uvicorn | The application server. |
 | **DB** | PostgreSQL 18 | The primary database. |
 | **pgAdmin** | pgAdmin 4 | Database administration interface. |
+| **MailCatcher** | MailCatcher | Local SMTP server for email testing (Development). |
 | **Seeder** | Python | Handles migrations and initial data. |
 
 ## 🚀 Deployment Steps

@@ -44,8 +44,7 @@ dev = [
     { include-group = "lint" },
     { include-group = "test" },
     "debugpy>=1.8.20",
-    "pre-commit>=4.1.0",
-    "types-pyjwt>=1.7.1",       # Type stubs for PyJWT (helps Mypy)
+    "prek",
     "types-passlib>=1.7.7.20260211",     # Type stubs for password hashing (helps Mypy)
     "zensical>=0.0.34", # High-performance documentation generator (Rust-powered)
 ]

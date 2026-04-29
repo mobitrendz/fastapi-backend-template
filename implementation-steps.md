@@ -1553,15 +1553,15 @@ uv run zensical --help
 
 ## Implement Pre-commit
 
-- Install pre-commit dependency
+- Install prek dependency
 ```bash
-uv add --dev pre-commit
-uv tool install pre-commit --with pre-commit-uv
+uv add --dev prek
+uv tool install prek --with prek-uv
 ```
 
 - Link it to your current repository
 ```bash
-uv run pre-commit install
+uv run prek install
 ```
 
 - Create .pre-commit-config.yaml file in the root folder and add
@@ -1635,7 +1635,7 @@ repos:
 
 - Running your first check
 ```bash
-uv run pre-commit run --all-files
+uv run prek run --all-files
 ```
 
 - For fixing jwt.exceptions(jwt.*) import error
@@ -1659,8 +1659,8 @@ replace-imports-with-any = ["jwt.**", "fastapi.**"]
 
 **Clear the Cache and run again**
 ```bash
-pre-commit clean
-uv run pre-commit run --all-files
+prek cache clean
+uv run prek run --all-files
 ```
 
 ## Upgrade from Psycopg2 to Psycopg3 Async

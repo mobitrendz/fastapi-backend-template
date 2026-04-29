@@ -9,7 +9,6 @@ from pydantic import EmailStr
 
 from app.api.v1.router import api_router as v1_router
 from app.core.security import generate_test_email, send_email
-from app.crud.user import AllowAdmin
 from app.db import initial_data
 from app.models.generic import Message
 
@@ -54,8 +53,8 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/test-email/", status_code=201)
-def test_email(email_to: EmailStr, _allow_admin: AllowAdmin) -> Message:
+@app.post("/test-email/", tags=["Test email"], status_code=201)
+def test_email(email_to: EmailStr) -> Message:
     email_data = generate_test_email(email_to=email_to)
     send_email(
         email_to=email_to,

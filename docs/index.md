@@ -12,6 +12,8 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 *   **Modular Architecture**: Clean separation of API, Services, CRUD, and Models.
 *   **Enterprise Security**: OAuth2 with JWT, Argon2 password hashing.
 *   **Observability**: Structured JSON logging with Structlog and Prometheus metrics.
+*   **Email Testing**: Integrated **MailCatcher** for capturing and inspecting outgoing emails locally.
+*   **Automated Quality**: Fast linting, formatting, and type-checking powered by **Ruff**, **Mypy**, and **Prek**.
 *   **Modern Tooling**: Powered by [uv](https://astral.sh) for dependency management.
 *   **AI-Optimized**: Native support for **Gemini CLI** autonomous engineering.
 
