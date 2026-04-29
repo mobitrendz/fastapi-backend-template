@@ -19,10 +19,10 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 uv sync
 ```
 
-### 3. Pre-commit Hooks
-Install pre-commit hooks to ensure code quality:
+### 3. Prek Hooks
+Install prek hooks to ensure code quality:
 ```bash
-uv run pre-commit install
+uv run prek install
 ```
 
 ## 🚀 Running the API Locally
@@ -46,6 +46,15 @@ uv run pytest
 ```bash
 uv run pytest --cov=app --cov-report=term-missing
 ```
+
+## 📧 Email Testing (MailCatcher)
+
+For local development and testing of password recovery or other email-related features, we use **MailCatcher**.
+
+- **SMTP Port**: `1025`
+- **Web Interface**: http://localhost:1080
+
+When running via Docker Compose, the backend is configured to route emails through the `mailcatcher` service. You can view all outgoing emails in the web interface.
 
 ## 🧹 Linting & Formatting
 

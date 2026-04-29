@@ -61,7 +61,7 @@ def verify_password(password: str, hashed_password: str) -> bool:
 
 
 # Function to create a JWT access token for a subject (typically a user id or email). The token includes the subject, issued at time, and expiration time. The token is signed using the secret key and algorithm specified in the settings, ensuring that it can be securely verified when decoded.
-def create_access_token(subject: str, expires_delta: timedelta | None = None) -> bytes:
+def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:
     """Create a JWT access token for a subject (typically a user id or email)."""
     if expires_delta is None:
         expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -94,7 +94,7 @@ def generate_password_reset_token(email: str) -> str:
         settings.SECRET_KEY,
         algorithm=settings.ALGORITHM,
     )
-    return encoded_jwt.decode("utf-8")
+    return encoded_jwt
 
 
 @dataclass
@@ -132,7 +132,7 @@ def generate_reset_password_email(email_to: str, email: str, token: str) -> Emai
 
 def render_email_template(*, template_name: str, context: dict[str, Any]) -> str:
     template_str = (
-        Path(__file__).parent / "email-templates" / "build" / template_name
+        Path(__file__).parent.parent / "email-templates" / "build" / template_name
     ).read_text()
     html_content = Template(template_str).render(context)
     return html_content
