@@ -20,7 +20,20 @@ graph TD
 ```
 
 ### 1. API Layer (`app/api/v1`)
-...
+- **Responsibility**: Request handling, validation, and response serialization.
+- **Routing**: Versioned endpoints using `APIRouter`.
+- **Logic**: Minimal. Delegates complex tasks to the Service Layer.
+
+### 2. Service Layer (`app/services`)
+- **Responsibility**: Business logic orchestration.
+- **Role**: Coordinates multiple CRUD operations, external API calls, and domain-specific rules.
+- **Email Integration**: Orchestrates the rendering of **MJML templates** from `app/email-templates` before sending via the configured SMTP provider.
+
+### 3. CRUD Layer (`app/crud`)
+- **Responsibility**: Atomic database operations.
+- **Role**: Reusable functions for Create, Read, Update, and Delete operations on specific models.
+- **Tooling**: Built on **SQLModel** and **SQLAlchemy**.
+
 ### 4. Model Layer (`app/models`)
 - **Responsibility**: Data definitions.
 - **Unified Models**: Uses `SQLModel` to define both Database Tables and Pydantic Schemas.

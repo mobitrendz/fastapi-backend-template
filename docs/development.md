@@ -20,7 +20,7 @@ uv sync
 ```
 
 ### 3. Prek Hooks
-Install prek hooks to ensure code quality:
+Install **Prek** hooks to ensure code quality. Prek is an ultra-fast, Rust-powered Git hook manager:
 ```bash
 uv run prek install
 ```
@@ -55,6 +55,14 @@ For local development and testing of password recovery or other email-related fe
 - **Web Interface**: http://localhost:1080
 
 When running via Docker Compose, the backend is configured to route emails through the `mailcatcher` service. You can view all outgoing emails in the web interface.
+
+## 🎨 Email Templates (MJML)
+
+Email templates are located in `app/email-templates`.
+- **`src/`**: Contains MJML source files for responsive email design.
+- **`build/`**: Contains the compiled HTML templates used by the application.
+
+To add or modify templates, update the MJML files and ensure they are rendered correctly via the `render_email_template` utility in `app.core.security`.
 
 ## 🧹 Linting & Formatting
 
