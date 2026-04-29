@@ -105,6 +105,7 @@ fastapi-backend-template/
 │   ├── core/                      # Global configuration and security (JWT, Auth)
 │   ├── crud/                      # Reusable database CRUD operations
 │   ├── db/                        # Connection engine, session, and seed data
+│   ├── email-templates/           # MJML/HTML templates for system emails
 │   ├── models/                    # SQLModels, Tables, and DTOs (Data Transfer Objects)
 │   ├── services/                  # Complex business logic and external integrations
 │   └── main.py                    # FastAPI application initialization
@@ -115,11 +116,14 @@ fastapi-backend-template/
 ├── tests/                         # Pytest suite for unit and integration testing
 ├── .env                           # Environment variables (Internal)
 ├── .env.example                   # Template for environment variables
+├── .pre-commit-config.yaml        # Prek/Pre-commit hook configuration
 ├── alembic.ini                    # Alembic configuration
 ├── docker-compose.override.yml    # Container Orchestration Manifest for dev env
 ├── docker-compose.yaml            # Container Orchestration Manifest
 ├── Dockerfile                     # Multi-stage, non-root Production Build
+├── GEMINI.md                      # AI mandates and architectural context
 ├── pyproject.toml                 # Dependency management (uv)
+├── uv.lock                        # Deterministic dependency lock file
 ├── zensical.toml                  # Zensical documentation configuration
 └── README.md                      # Project documentation
 ```
