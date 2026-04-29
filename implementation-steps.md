@@ -31,6 +31,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 * [Rearrange the order of docker compose](#Rearrange-the-order-of-docker-compose)
 * [Implement Zensical](#Implement-Zensical)
 * [Implement async](#Implement-async)
+* [Implement update password](#Implement-update-password)
 
 ### Prerequisites
 
@@ -1835,3 +1836,6 @@ volumes:
 ```
 
 ## Implement async
+
+## Implement update password
+Updated app/models/user.py, app/crud/user.py, app/api/v1/endpoints/users.py

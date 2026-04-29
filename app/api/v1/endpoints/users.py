@@ -3,10 +3,11 @@ import uuid
 from fastapi import APIRouter, HTTPException
 
 from app.crud import user as user_crud
-from app.crud.user import AllowAdmin, AllowAdminAndUser
+from app.crud.user import AllowAdmin, AllowAdminAndUser, CurrentUser
 from app.db.database import SessionDependency
 from app.models.generic import Message
 from app.models.user import (
+    UpdatePassword,
     UserCreate,
     UserPublic,
     UsersPublic,
@@ -62,6 +63,23 @@ async def read_user_by_email(
     return UserPublic.model_validate(user)
 
 
+# Endpoint for updating a user's password. Both admin and regular users can perform this operation, but regular users can only update their own password. Returns a success message if the password is updated, or a 400 error if the current password is incorrect or if the update fails.
+@router.patch("/password", response_model=Message)
+async def update_password(
+    session: SessionDependency,
+    _allow_admin_and_user: AllowAdminAndUser,
+    update_password: UpdatePassword,
+    current_user: CurrentUser,
+) -> Message:
+    password_updated = await user_crud.update_password(
+        session=session, updatePassword=update_password, current_user=current_user
+    )
+    if password_updated:
+        return Message(message="Password updated successfully")
+    else:
+        raise HTTPException(status_code=400, detail="Failed to update password")
+
+
 # Endpoint for updating a user's information by ID. Both admin and regular users can perform this operation, but regular users can only update their own information. Returns the updated user or a 404 error if the user is not found.
 @router.patch("/{id}", response_model=UserPublic)
 async def update_user(
@@ -74,27 +92,6 @@ async def update_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return UserPublic.model_validate(user)
-
-
-# @router.patch("/me/password", response_model=Message)
-# def update_password_me(
-#     *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
-# ) -> Any:
-#     """
-#     Update own password.
-#     """
-#     verified, _ = verify_password(body.current_password, current_user.hashed_password)
-#     if not verified:
-#         raise HTTPException(status_code=400, detail="Incorrect password")
-#     if body.current_password == body.new_password:
-#         raise HTTPException(
-#             status_code=400, detail="New password cannot be the same as the current one"
-#         )
-#     hashed_password = get_password_hash(body.new_password)
-#     current_user.hashed_password = hashed_password
-#     session.add(current_user)
-#     session.commit()
-#     return Message(message="Password updated successfully")
 
 
 # Endpoint for deleting a user by ID. Only admin users can perform this operation. Returns a success message if the user is deleted, or a 404 error if the user is not found.

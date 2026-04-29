@@ -13,6 +13,7 @@ from app.core.security import TokenDependency, hash_password, verify_password
 from app.db.database import SessionDependency
 from app.models.generic import TokenPayload
 from app.models.user import (
+    UpdatePassword,
     User,
     UserCreate,
     UserRole,
@@ -69,6 +70,30 @@ async def update_user(
     await session.refresh(user)
 
     return user
+
+
+# Update operation for changing a user's password, which requires verification of the current password. Returns a success message or raises an HTTP exception if verification fails.
+async def update_password(
+    *, session: AsyncSession, updatePassword: UpdatePassword, current_user: CurrentUser
+) -> bool:
+
+    verified = verify_password(
+        updatePassword.current_password, current_user.hashed_password
+    )
+
+    if not verified:
+        raise HTTPException(status_code=400, detail="Incorrect password")
+    if updatePassword.current_password == updatePassword.new_password:
+        raise HTTPException(
+            status_code=400, detail="New password cannot be the same as the current one"
+        )
+
+    hashed_password = hash_password(updatePassword.new_password)
+    current_user.hashed_password = hashed_password
+    session.add(current_user)
+    await session.commit()
+
+    return True
 
 
 # Delete operation for users, allowing deletion by ID. Returns a boolean indicating success or failure of the deletion.
@@ -128,7 +153,7 @@ async def get_current_user(session: SessionDependency, token: TokenDependency) -
     return user
 
 
-# Role-based access control dependencies
+# Role-based access control dependencies (RBAC)
 class RoleChecker:
     def __init__(self, allowed_roles: list[UserRole]):
         self.allowed_roles = allowed_roles
