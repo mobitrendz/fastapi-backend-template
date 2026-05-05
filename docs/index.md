@@ -80,6 +80,16 @@ This automatically runs migrations and seeds the initial data via the `prestart`
 
 Access the API at: http://localhost:8000/docs
 
+### 4. Quality Assurance
+Ensure the system is stable by running the test suite:
+```bash
+# Run all tests
+uv run pytest
+
+# Run tests with coverage report
+uv run pytest --cov=app --cov-report=term-missing
+```
+
 ## 📚 Documentation Sections
 
 - [**Architecture**](architecture.md): Understand the modular design and data flow.
