@@ -14,12 +14,16 @@ This project uses `uv` for lightning-fast dependency management.
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### 2. Sync Dependencies
+### 2. Install Docker & Docker Compose
+Used for full-stack orchestration and environmental parity.
+- [Install Docker Desktop](https://docs.docker.com/get-docker/)
+
+### 3. Sync Dependencies
 ```bash
 uv sync
 ```
 
-### 3. Prek Hooks
+### 4. Prek Hooks
 Install **Prek** hooks to ensure code quality. Prek is an ultra-fast, Rust-powered Git hook manager:
 ```bash
 uv run prek install

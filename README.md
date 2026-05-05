@@ -128,6 +128,29 @@ fastapi-backend-template/
 └── README.md                      # Project documentation
 ```
 
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+### 📦 uv (Fastest Python Package Manager)
+This project uses **uv** for high-performance dependency management.
+
+- **macOS/Linux**:
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+- **Windows**:
+  ```powershell
+  powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+  ```
+- **More info**: [uv Installation Guide](https://docs.astral.sh/uv/getting-started/installation/)
+
+### 🐳 Docker & Docker Compose
+Used for full-stack orchestration and environmental parity.
+
+- **Desktop (macOS/Windows/Linux)**: [Install Docker Desktop](https://docs.docker.com/get-docker/)
+- **Linux (Engine only)**: [Install Docker Engine](https://docs.docker.com/engine/install/)
+
 ## 🏁 Getting Started
 
 ### 1. Clone the Repository
