@@ -6,8 +6,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from pydantic import EmailStr
+from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router as v1_router
+from app.core.config import settings
 from app.core.security import generate_test_email, send_email
 from app.db import initial_data
 from app.models.generic import Message
@@ -40,11 +42,27 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # noqa: UP043
     print("--- SYSTEM SHUTDOWN ---")
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    lifespan=lifespan,
+    title=settings.PROJECT_NAME,
+    openapi_url="/openapi.json",
+)
+
+
+# Set all CORS enabled origins
+if settings.all_cors_origins:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.all_cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
 
 
 # Include the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. This organizes the API endpoints under a common prefix (e.g., /api/v1) and allows for easy versioning of the API in the future.
-app.include_router(v1_router, prefix="/api/v1")
+app.include_router(v1_router, prefix=settings.API_V1_STR)
 
 
 # Health check endpoint to verify that the application is running and healthy. This endpoint can be used by monitoring tools or load balancers to check the health of the application and ensure that it is responding to requests as expected.
