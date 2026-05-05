@@ -1,0 +1,15 @@
+services:
+  prestart:
+    build:
+      context: .
+      args:
+        UV_SYNC_ARGS: "--no-dev --group test"
+
+  backend:
+    build:
+      context: .
+      args:
+        UV_SYNC_ARGS: "--no-dev --group test"
+    command: ["pytest"]
+    environment:
+      - POSTGRES_SERVER=db
