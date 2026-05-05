@@ -39,9 +39,10 @@ This project is engineered for **Gemini CLI**, enabling autonomous refactoring, 
 ## 🚀 Quick Start
 
 ### 1. Prerequisites
-- Python 3.14+
-- [uv](https://astral.sh)
-- Docker & Docker Compose
+Ensure you have the following installed:
+- **Python 3.14+**
+- **[uv](https://astral.sh)**: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- **[Docker & Docker Compose](https://docs.docker.com/get-docker/)**
 
 ### 2. Setup
 ```bash
