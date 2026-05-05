@@ -56,5 +56,7 @@ async def main() -> None:
     await init()
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())

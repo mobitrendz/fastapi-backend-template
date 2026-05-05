@@ -58,12 +58,15 @@ cp .env.example .env
 
 ### 3. Run with Docker
 ```bash
+# Deploy full stack
 docker compose up --build
 ```
+This automatically runs migrations and seeds the initial data via the `prestart` service.
+
 Access the API at: http://localhost:8000/docs
 
 ## 📚 Documentation Sections
 
 - [**Architecture**](architecture.md): Understand the modular design and data flow.
-- [**Development**](development.md): Guide for local setup, testing, and linting.
+- [**Development**](development.md): Guide for local setup, testing, and migrations.
 - [**Deployment**](deployment.md): Production builds and infrastructure details.
