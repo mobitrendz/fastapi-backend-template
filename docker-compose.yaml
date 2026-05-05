@@ -3,6 +3,8 @@ services:
     image: postgres:18
     container_name: postgres_db
     restart: always
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
@@ -43,6 +45,9 @@ services:
     environment:
       - PYTHONPATH=/app
       - POSTGRES_SERVER=db
+    volumes:
+      - .:/app
+      - /app/.venv  # Anonymous volume to protect the container's .venv
     depends_on:
       db:
         condition: service_healthy
@@ -58,6 +63,9 @@ services:
     environment:
       - PYTHONPATH=/app
       - POSTGRES_SERVER=db
+    volumes:
+      - .:/app
+      - /app/.venv  # Anonymous volume to protect the container's .venv
     depends_on:
       db:
         condition: service_healthy

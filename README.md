@@ -90,7 +90,7 @@ The project utilises a multi-container architecture managed via `docker-compose.
 | **DB** | PostgreSQL 18 | Relational data store with persisted volume mapping. |
 | **pgAdmin** | pgAdmin 4 | Web-based database administration and query interface. |
 | **MailCatcher** | MailCatcher | Local SMTP server and web interface for email testing. |
-| **Seeder** | Python/Shell | Lifecycle service; executes migrations and populates initial system state. |
+| **Prestart** | Python/Alembic | Lifecycle service; executes migrations and populates initial system state. |
 
 ## 📂 Project Structure
 
@@ -138,7 +138,7 @@ cd fastapi-backend-template
 
 ### 2. Environment Configuration
 
-Update the following variables in .env file:
+Update the following variables in `.env` file:
 
 **Security & Super user**
 
@@ -147,9 +147,9 @@ Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generat
 SECRET_KEY="your-generated-hs256-key"
 
 # Superuser details
-ADMIN_USER_NAME="admin"
-ADMIN_USER_EMAIL="admin@example.com"
-ADMIN_USER_PASSWORD="securepassword"      #Password must be min. 8 characters
+SUPER_USER_NAME="Sreeraj Sreenivasan"
+SUPER_USER_EMAIL="sreeraj.dev@icloud.com"
+SUPER_USER_PASSWORD="admin123"      # Password must be min. 8 characters
 ```
 
 **Database Connection**
@@ -158,18 +158,18 @@ ADMIN_USER_PASSWORD="securepassword"      #Password must be min. 8 characters
 # Postgres Connection Settings
 POSTGRES_SERVER=localhost
 POSTGRES_PORT=5432
-POSTGRES_DB=database                     # change it
-POSTGRES_USER=username                   # change it
-POSTGRES_PASSWORD=password               # change it
+POSTGRES_DB=fastapi_template_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=admin
 
 # The app will construct the URL as:
-# postgresql+psycopg://username:password@localhost:5432/database
+# postgresql+psycopg://postgres:admin@localhost:5432/fastapi_template_db
 ```
 
 **pgAdmin settings**
 ```bash
-PGADMIN_DEFAULT_EMAIL=admin@example.com
-PGADMIN_DEFAULT_PASSWORD=admin
+PGADMIN_EMAIL=admin@example.com
+PGADMIN_PASSWORD=admin
 ```
 
 ### 3. Orchestration Launch
@@ -181,23 +181,11 @@ docker compose up --build
 
 This triggers the following automated sequence:
 
-1, Database Provisioning: Postgres 18 initialises with health checks.
+1. **Database Provisioning**: Postgres 18 initialises with health checks.
+2. **Migration & Seeding**: The `prestart` container runs `alembic upgrade head` and `app/db/initial_data.py`.
+3. **API Warm-up**: The FastAPI service starts only after `prestart` completes successfully.
 
-2, API Warm-up: The FastAPI service starts and waits for database readiness.
-
-3, Lifecycle Task (Seeder): Once the API is healthy, the seeder container runs alembic upgrade head and populates the database with initial administrative credentials.
-
-**The Log Noise Fix (Detached Mode)**
-
-In an enterprise setup, you typically don't want pgAdmin logs cluttering your terminal while you are coding the API. Run the stack in detached mode and only "follow" the logs for your FastAPI app:
-
-```bash
-# Start everything in the background
-docker compose up -d
-
-# Only watch your API logs
-docker compose logs -f api
-```
+**Development Note**: Migration files are synchronized between the host and container via Docker volumes.
 
 ### 4. Application Entry Points
 - API Documentation: http://localhost:8000/docs
@@ -206,7 +194,8 @@ docker compose logs -f api
 - Health Status: http://localhost:8000/health
 
 ### 5. 🛠️ Local Development
-For native development, ensure you have the uv package manager installed:
+For native development, ensure you have the [uv](https://astral.sh) package manager installed:
+
 ```bash
 # Sync environment and dependencies
 uv sync
@@ -217,10 +206,16 @@ uv run prek install
 # Activate virtual environment
 source .venv/bin/activate
 
-# Execute schema migrations
+# 1. Generate migrations (after making model changes)
+uv run alembic revision --autogenerate -m "description of changes"
+
+# 2. Execute schema migrations
 uv run alembic upgrade head
 
-# Start development server (Auto-reload enabled)
+# 3. Seed initial data (superuser, etc.)
+uv run python app/db/initial_data.py
+
+# 4. Start development server (Auto-reload enabled)
 uv run fastapi dev
 ```
 
@@ -228,7 +223,6 @@ uv run fastapi dev
 Maintain system integrity and code quality with the integrated toolchain:
 
 #### 🧹 Linting & Formatting (Ruff)
-Ruff is used for extremely fast linting and formatting.
 ```bash
 # Check for linting issues
 uv run ruff check .
@@ -241,21 +235,18 @@ uv run ruff format .
 ```
 
 #### 🔍 Static Type Checking (Mypy)
-Mypy ensures type safety throughout the application.
 ```bash
 # Run strict type checking
 uv run mypy .
 ```
 
 #### 🛡️ Security Analysis (Bandit)
-Bandit scans for common security vulnerabilities.
 ```bash
 # Run security scan
 uv run bandit -c pyproject.toml -r app
 ```
 
 #### ✅ Test Suite
-Run the full test suite with coverage reporting:
 ```bash
 # Run unit and integration tests
 uv run pytest
@@ -265,14 +256,12 @@ uv run pytest
 The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator.
 
 #### Serve Documentation Locally
-To preview the documentation with hot-reloading:
 ```bash
 uv run zensical serve
 ```
 Access the local documentation at: http://localhost:3000
 
 #### Build Static Site
-To generate the static documentation site in the `site/` directory:
 ```bash
 uv run zensical build
 ```

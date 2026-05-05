@@ -33,6 +33,28 @@ uv run fastapi dev
 ```
 The server will start with hot-reload enabled at http://localhost:8000.
 
+## 🗄️ Database Migrations & Seeding
+
+This project uses **Alembic** for migrations and a custom script for initial data seeding.
+
+### 1. Generate a New Migration
+Always generate migrations after making changes to your models in `app/models/`.
+```bash
+uv run alembic revision --autogenerate -m "describe your changes"
+```
+Verify the generated script in `alembic/versions/`.
+
+### 2. Apply Migrations
+```bash
+uv run alembic upgrade head
+```
+
+### 3. Seed Initial Data
+To create the initial superuser and system data:
+```bash
+uv run python app/db/initial_data.py
+```
+
 ## 🧪 Testing
 
 We use **Pytest** for our testing suite.

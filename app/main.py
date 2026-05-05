@@ -53,6 +53,7 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+# Test email endpoint to verify that the email sending functionality is working correctly. This endpoint accepts an email address as input and sends a test email to that address, returning a message indicating that the test email was sent successfully. This can be used to verify that the email configuration is correct and that emails are being sent as expected.
 @app.post("/test-email/", tags=["Test email"], status_code=201)
 def test_email(email_to: EmailStr) -> Message:
     email_data = generate_test_email(email_to=email_to)
