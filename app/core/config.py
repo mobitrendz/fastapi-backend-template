@@ -1,11 +1,24 @@
-from typing import Self
+from typing import Annotated, Any, Self
 
-from pydantic import EmailStr, PostgresDsn, computed_field, model_validator
+from pydantic import (
+    AnyUrl,
+    BeforeValidator,
+    EmailStr,
+    PostgresDsn,
+    computed_field,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Application configuration settings using Pydantic's BaseSettings. This class defines all the necessary configuration parameters for the application, including database connection details, JWT settings, and superuser credentials. The settings are loaded from environment variables, allowing for easy configuration in different environments (development, testing, production).
 # The SQLALCHEMY_DATABASE_URI is computed based on the individual database connection parameters, providing a convenient way to access the full database URI for use in database connections. The use of BaseSettings allows for validation and type checking of the configuration parameters, ensuring that the application is configured correctly before it starts. The settings can be easily extended in the future to include additional configuration parameters as needed, and the use of environment variables allows for secure management of sensitive information like database credentials and secret keys without hardcoding them in the source code.
 
+def parse_cors(v: Any) -> list[str] | str:
+    if isinstance(v, str) and not v.startswith("["):
+        return [i.strip() for i in v.split(",") if i.strip()]
+    elif isinstance(v, list | str):
+        return v
+    raise ValueError(v)
 
 # The Settings class is instantiated at the end of the module, creating a global settings object that can be imported and used throughout the application to access configuration values. This promotes a centralized and consistent way to manage configuration across the entire codebase.
 class Settings(BaseSettings):
@@ -22,6 +35,17 @@ class Settings(BaseSettings):
     STACK_NAME: str
 
     API_V1_STR: str
+
+    BACKEND_CORS_ORIGINS: Annotated[
+        list[AnyUrl] | str, BeforeValidator(parse_cors)
+    ] = []
+
+    @computed_field  # type: ignore[prop-decorator]
+    @property
+    def all_cors_origins(self) -> list[str]:
+        return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGINS] + [
+            self.FRONTEND_HOST
+        ]
 
     SECRET_KEY: str
     ALGORITHM: str
