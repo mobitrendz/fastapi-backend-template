@@ -20,16 +20,24 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 ## 📁 Project Structure
 
 ```text
-app/                     # Main Application Logic
-├── api/                 # API Entry points (v1)
-├── core/                # Global configuration & Security
-├── crud/                # Reusable database operations
-├── email-templates/     # MJML/HTML system emails
-├── models/              # SQLModels & DTOs
-└── services/            # Business logic orchestration
-alembic/                 # Database migrations
-docs/                    # Documentation source
-tests/                   # Pytest suite
+app/                       # Main Application Logic
+├── api/                   # API Entry points
+│   └── v1/                # API Versioning (Endpoints & Routers)
+├── core/                  # Global configuration, Security (JWT, Auth)
+├── crud/                  # Reusable database CRUD operations
+├── db/                    # Connection engine, session, and seed data
+├── email-templates/       # MJML/HTML templates for system emails
+├── models/                # SQLModels, Tables, and DTOs
+├── services/              # Complex business logic orchestration
+└── main.py                # FastAPI application initialization
+alembic/                   # Database migrations and environment setup
+docs/                      # Zensical documentation source (Markdown)
+scripts/                   # Shell scripts for deployment and startup
+tests/                     # Pytest suite for unit and integration testing
+pyproject.toml             # Dependency management (uv)
+docker-compose.yaml        # Container Orchestration Manifest
+Dockerfile                 # Multi-stage, non-root Production Build
+GEMINI.md                  # AI mandates and architectural context
 ```
 
 ## 🤖 AI-Driven Development
@@ -52,6 +60,12 @@ cd fastapi-backend-template
 
 # Sync dependencies
 uv sync
+
+# Install Prek hooks
+uv run prek install
+
+# Activate virtual environment
+source .venv/bin/activate
 
 # Create .env from example
 cp .env.example .env

@@ -9,7 +9,8 @@ ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 COPY pyproject.toml uv.lock ./
 
-RUN uv sync --frozen --no-install-project --no-dev
+ARG UV_SYNC_ARGS="--no-dev"
+RUN uv sync --frozen --no-install-project ${UV_SYNC_ARGS}
 
 # Stage 2: Runtime
 FROM python:3.14-slim-bookworm

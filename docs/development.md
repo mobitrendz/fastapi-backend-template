@@ -18,15 +18,16 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Used for full-stack orchestration and environmental parity.
 - [Install Docker Desktop](https://docs.docker.com/get-docker/)
 
-### 3. Sync Dependencies
+### 3. Sync & Setup Environment
 ```bash
+# Sync dependencies
 uv sync
-```
 
-### 4. Prek Hooks
-Install **Prek** hooks to ensure code quality. Prek is an ultra-fast, Rust-powered Git hook manager:
-```bash
+# Install Prek hooks
 uv run prek install
+
+# Activate virtual environment
+source .venv/bin/activate
 ```
 
 ## 🚀 Running the API Locally
