@@ -60,7 +60,6 @@ if settings.all_cors_origins:
     )
 
 
-
 # Include the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. This organizes the API endpoints under a common prefix (e.g., /api/v1) and allows for easy versioning of the API in the future.
 app.include_router(v1_router, prefix=settings.API_V1_STR)
 
