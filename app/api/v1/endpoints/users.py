@@ -10,6 +10,7 @@ from app.models.user import (
     UpdatePassword,
     UserCreate,
     UserPublic,
+    UserRole,
     UsersPublic,
     UserUpdate,
 )
@@ -44,8 +45,12 @@ async def read_users(
 # Endpoint for retrieving a user by ID. Both admin and regular users can perform this operation, but regular users can only access their own information. Returns the user if found, or a 404 error if not found.
 @router.get("/byID/{id}", response_model=UserPublic)
 async def read_user_by_id(
-    session: SessionDependency, _allow_admin: AllowAdmin, id: uuid.UUID
+    session: SessionDependency,
+    current_user: AllowAdminAndUser,
+    id: uuid.UUID,
 ) -> UserPublic:
+    if current_user.role != UserRole.ADMIN and current_user.id != id:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
     user = await user_crud.get_user_by_id(session=session, id=id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -80,14 +85,23 @@ async def update_password(
         raise HTTPException(status_code=400, detail="Failed to update password")
 
 
-# Endpoint for updating a user's information by ID. Both admin and regular users can perform this operation, but regular users can only update their own information. Returns the updated user or a 404 error if the user is not found.
+# Endpoint for updating a user's information by ID. Both admin and regular users can perform this operation, but regular users can only update their own information. Admins can update any user's information, including their role and active status. Returns the updated user or a 404 error if the user is not found.
 @router.patch("/{id}", response_model=UserPublic)
 async def update_user(
     session: SessionDependency,
-    _allow_admin_and_user: AllowAdminAndUser,
+    current_user: AllowAdminAndUser,
     id: uuid.UUID,
     user_update: UserUpdate,
 ) -> UserPublic:
+    if current_user.role != UserRole.ADMIN:
+        if current_user.id != id:
+            raise HTTPException(status_code=403, detail="Not enough permissions")
+        if user_update.role is not None or user_update.is_active is not None:
+            raise HTTPException(
+                status_code=403,
+                detail="Not enough permissions to update role or active status",
+            )
+
     user = await user_crud.update_user(session=session, id=id, user_update=user_update)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

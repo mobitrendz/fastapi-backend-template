@@ -38,9 +38,11 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
 
-# UserUpdate model for updating user information, allowing changes to the full name. This model is used in the update endpoint to specify which fields can be updated by the user or admin.
+# UserUpdate model for updating user information, allowing changes to the full name, role, and active status. This model is used in the update endpoint to specify which fields can be updated by the user or admin.
 class UserUpdate(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
+    is_active: bool | None = Field(default=None)
+    role: UserRole | None = Field(default=None)
 
 
 # UpdatePassword model for changing a user's password, including validation for the current and new passwords. This model is used in the password update endpoint to ensure that the user provides their current password and that the new password meets the specified length requirements.
