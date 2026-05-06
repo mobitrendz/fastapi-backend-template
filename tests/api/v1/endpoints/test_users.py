@@ -87,6 +87,55 @@ async def test_update_user(client: AsyncClient, superuser_token: str):
 
 
 @pytest.mark.asyncio
+async def test_admin_can_update_user_role_and_active_status(
+    client: AsyncClient, superuser_token: str
+):
+    import secrets
+
+    email = f"role_update_{secrets.randbelow(9000) + 1000}@example.com"
+    create_response = await client.post(
+        "/api/v1/users/",
+        headers={"Authorization": f"Bearer {superuser_token}"},
+        json={
+            "full_name": "Role Update",
+            "email": email,
+            "password": "password123",  # noqa: S106
+        },
+    )
+    user_id = create_response.json()["id"]
+
+    response = await client.patch(
+        f"/api/v1/users/{user_id}",
+        headers={"Authorization": f"Bearer {superuser_token}"},
+        json={"role": "guest", "is_active": False},
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["role"] == "guest"
+    assert data["is_active"] is False
+
+
+@pytest.mark.asyncio
+async def test_normal_user_cannot_update_role_or_active_status(
+    client: AsyncClient, normal_user_token: str
+):
+    current_user_response = await client.get(
+        "/api/v1/login/current-user",
+        headers={"Authorization": f"Bearer {normal_user_token}"},
+    )
+    user_id = current_user_response.json()["id"]
+
+    response = await client.patch(
+        f"/api/v1/users/{user_id}",
+        headers={"Authorization": f"Bearer {normal_user_token}"},
+        json={"role": "admin", "is_active": False},
+    )
+
+    assert response.status_code == 403
+
+
+@pytest.mark.asyncio
 async def test_delete_user(client: AsyncClient, superuser_token: str):
     import secrets
 

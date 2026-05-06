@@ -54,7 +54,7 @@ async def get_user_by_email(*, session: AsyncSession, email: str) -> User | None
     return result.scalars().first()
 
 
-# Update operation for users, allowing updates to the full name. Returns the updated user or None if not found.
+# Update operation for users, allowing updates to the full name, role, and active status. Returns the updated user or None if not found.
 async def update_user(
     *, session: AsyncSession, id: uuid.UUID, user_update: UserUpdate
 ) -> User | None:
@@ -63,7 +63,8 @@ async def update_user(
     if not user:
         return None
 
-    user.sqlmodel_update(user_update)
+    update_data = user_update.model_dump(exclude_unset=True)
+    user.sqlmodel_update(update_data)
 
     session.add(user)
     await session.commit()
