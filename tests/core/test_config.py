@@ -25,18 +25,18 @@ def test_emails_enabled():
         PROJECT_NAME="test",
         STACK_NAME="test",
         API_V1_STR="/v1",
-        SECRET_KEY="test",
+        SECRET_KEY="test",  # noqa: S105, S106
         ALGORITHM="HS256",
         ACCESS_TOKEN_EXPIRE_MINUTES=60,
         EMAIL_RESET_TOKEN_EXPIRE_HOURS=1,
         SUPER_USER_NAME="admin",
         SUPER_USER_EMAIL="admin@example.com",
-        SUPER_USER_PASSWORD="password",
+        SUPER_USER_PASSWORD="password",  # noqa: S106
         POSTGRES_SERVER="localhost",
         POSTGRES_PORT=5432,
         POSTGRES_DB="db",
         POSTGRES_USER="user",
-        POSTGRES_PASSWORD="pass",
+        POSTGRES_PASSWORD="pass",  # noqa: S106
         SMTP_HOST="localhost",
         EMAILS_FROM_EMAIL="test@example.com",
     )
