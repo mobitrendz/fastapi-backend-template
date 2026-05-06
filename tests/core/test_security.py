@@ -7,7 +7,7 @@ from app.core.config import settings
 
 
 def test_hash_password():
-    password = "testpassword"
+    password = "testpassword"  # noqa: S105
     hashed = security.hash_password(password)
     assert hashed != password
     assert security.verify_password(password, hashed)
@@ -61,7 +61,7 @@ def test_generate_reset_password_email(mocker):
     )
     email_to = "test@example.com"
     email = "user@example.com"
-    token = "sometoken"
+    token = "sometoken"  # noqa: S105
     email_data = security.generate_reset_password_email(email_to, email, token)
     assert (
         email_data.subject
@@ -104,7 +104,7 @@ def test_send_email_tls_ssl(mocker):
     original_user = settings.SMTP_USER
     original_pass = settings.SMTP_PASSWORD
     settings.SMTP_USER = "user"
-    settings.SMTP_PASSWORD = "pass"
+    settings.SMTP_PASSWORD = "pass"  # noqa: S105
     security.send_email(email_to="test@example.com")
     settings.SMTP_USER = original_user
     settings.SMTP_PASSWORD = original_pass

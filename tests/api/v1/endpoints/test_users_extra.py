@@ -33,7 +33,7 @@ async def test_update_password_incorrect_current(
 
 @pytest.mark.asyncio
 async def test_update_password_same_as_current(
-    client: AsyncClient, session: AsyncSession, mocker
+    client: AsyncClient, session: AsyncSession
 ):
     from app.core import security
     from app.crud import user as user_crud
@@ -41,7 +41,10 @@ async def test_update_password_same_as_current(
     # Create a fresh user for this test to avoid session issues
     email = f"samepass_{uuid.uuid4().hex[:6]}@example.com"
     user_in = UserCreate(
-        full_name="Same Pass", email=email, password="password123", role=UserRole.USER
+        full_name="Same Pass",
+        email=email,
+        password="password123",  # noqa: S106
+        role=UserRole.USER,
     )
     user = await user_crud.create_user(session=session, user_create=user_in)
     token = security.create_access_token(str(user.id))
@@ -68,7 +71,7 @@ async def test_update_password_failure_mock(
     response = await client.patch(
         "/api/v1/users/password",
         headers={"Authorization": f"Bearer {normal_user_token}"},
-        json={"current_password": "password123", "new_password": "newpassword123"},
+        json={"current_password": "password123", "new_password": "newpassword123"},  # noqa: S106
     )
     assert response.status_code == 400
     assert response.json()["detail"] == "Failed to update password"
@@ -84,7 +87,7 @@ async def test_read_user_by_id_forbidden(
     other_user_in = UserCreate(
         full_name="Other User",
         email="other_forbidden@example.com",
-        password="password123",
+        password="password123",  # noqa: S106
         role=UserRole.USER,
     )
     other_user = await user_crud.create_user(session=session, user_create=other_user_in)
@@ -107,7 +110,7 @@ async def test_update_user_permissions_denied(
     other_user_in = UserCreate(
         full_name="Other User",
         email=f"other_{uuid.uuid4().hex[:6]}@example.com",
-        password="password123",
+        password="password123",  # noqa: S106
         role=UserRole.USER,
     )
     other_user = await user_crud.create_user(session=session, user_create=other_user_in)
@@ -146,7 +149,7 @@ async def test_delete_user_success(
     user_in = UserCreate(
         full_name="To Delete",
         email=f"todelete_{uuid.uuid4().hex[:6]}@example.com",
-        password="password123",
+        password="password123",  # noqa: S106
         role=UserRole.USER,
     )
     user = await user_crud.create_user(session=session, user_create=user_in)

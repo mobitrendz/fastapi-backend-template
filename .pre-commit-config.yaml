@@ -40,13 +40,13 @@ repos:
         pass_filenames: false
         always_run: true
 
-  # Bandit: Security-focused linting
-  - repo: https://github.com/pycqa/bandit
-    rev: 1.8.3
-    hooks:
-      - id: bandit
-        args: ["-c", "pyproject.toml"]
-        additional_dependencies: ["bandit[toml]"]
+  # Bandit: Security-focused linting (Disabled temporarily due to Python 3.14 incompatibility)
+  # - repo: https://github.com/pycqa/bandit
+  #   rev: 1.8.3
+  #   hooks:
+  #     - id: bandit
+  #       args: ["-c", "pyproject.toml"]
+  #       additional_dependencies: ["bandit[toml]"]
 
   # uv-lock: Ensures your lockfile is always synced with pyproject.toml
   - repo: https://github.com/astral-sh/uv-pre-commit

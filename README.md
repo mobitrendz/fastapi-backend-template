@@ -252,7 +252,7 @@ To make the backend accessible to other devices on your local network (e.g., for
 ```bash
 # 1. Start the server on all interfaces:
    uv run fastapi dev --host 0.0.0.0
-   
+
 # 2. Find your local IP:
    - macOS: `ipconfig getifaddr en0`
    - Linux: `hostname -I`
