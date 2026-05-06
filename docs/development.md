@@ -38,6 +38,13 @@ uv run fastapi dev
 ```
 The server will start with hot-reload enabled at http://localhost:8000.
 
+#### 🌐 Local Network Access
+To make the backend accessible from other devices on your local network:
+```bash
+uv run fastapi dev --host 0.0.0.0
+```
+Then access it via your local IP (e.g., `http://192.168.1.15:8000`).
+
 ## 🗄️ Database Migrations & Seeding
 
 This project uses **Alembic** for migrations and a custom script for initial data seeding.

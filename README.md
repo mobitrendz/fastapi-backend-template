@@ -244,6 +244,20 @@ uv run python app/db/initial_data.py
 
 # 4. Start development server (Auto-reload enabled)
 uv run fastapi dev
+
+### 🌐 Local Network Access
+To make the backend accessible to other devices on your local network (e.g., for testing on a mobile device):
+
+1. **Start the server on all interfaces**:
+   ```bash
+   uv run fastapi dev --host 0.0.0.0
+   ```
+2. **Find your local IP**:
+   - macOS: `ipconfig getifaddr en0`
+   - Linux: `hostname -I`
+   - Windows: `ipconfig`
+3. **Access from another device**:
+   Open `http://<your-local-ip>:8000` in the browser of the other device.
 ```
 
 ### 6. 🧪 Quality Assurance
