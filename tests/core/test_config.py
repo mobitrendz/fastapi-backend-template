@@ -1,20 +1,24 @@
 import pytest
-from app.core.config import parse_cors, Settings
+
+from app.core.config import Settings, parse_cors
+
 
 def test_parse_cors_list():
     assert parse_cors(["http://localhost"]) == ["http://localhost"]
+
 
 def test_parse_cors_str_json():
     # pydantic might pass "[...]" if it's already a list-like string
     assert parse_cors('["http://localhost"]') == '["http://localhost"]'
 
+
 def test_parse_cors_invalid():
     with pytest.raises(ValueError):
         parse_cors(123)
 
+
 def test_emails_enabled():
     # Test with mock or temporary settings
-    from pydantic import EmailStr
     s = Settings(
         FRONTEND_HOST="http://localhost",
         ENVIRONMENT="dev",
@@ -34,9 +38,9 @@ def test_emails_enabled():
         POSTGRES_USER="user",
         POSTGRES_PASSWORD="pass",
         SMTP_HOST="localhost",
-        EMAILS_FROM_EMAIL="test@example.com"
+        EMAILS_FROM_EMAIL="test@example.com",
     )
     assert s.emails_enabled is True
-    
+
     s.SMTP_HOST = None
     assert s.emails_enabled is False
