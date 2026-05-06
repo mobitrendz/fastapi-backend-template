@@ -5,6 +5,7 @@ from app.core.config import settings
 
 
 @pytest.mark.asyncio
+@pytest.mark.usefixtures("superuser_token")
 async def test_recover_password_existing_user(client: AsyncClient, mocker):
     mocker.patch(
         "app.api.v1.endpoints.login.security.render_email_template",
