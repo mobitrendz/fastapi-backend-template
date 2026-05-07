@@ -38,12 +38,16 @@ uv run fastapi dev
 ```
 The server will start with hot-reload enabled at http://localhost:8000.
 
-#### 🌐 Local Network Access
-To make the backend accessible from other devices on your local network:
-```bash
-uv run fastapi dev --host 0.0.0.0
+#### 🌐 Local Network Access via Traefik
+All services are routed through Traefik using custom `.test` domains. To access them, ensure the following are in your `/etc/hosts` file:
+```text
+127.0.0.1 traefik.fastapi-template.test api.fastapi-template.test pgadmin.fastapi-template.test mail.fastapi-template.test
 ```
-Then access it via your local IP (e.g., `http://192.168.1.15:8000`).
+Services are then available at:
+- **API**: `http://api.fastapi-template.test`
+- **pgAdmin**: `http://pgadmin.fastapi-template.test`
+- **Mailcatcher**: `http://mail.fastapi-template.test`
+- **Traefik Dashboard**: `http://traefik.fastapi-template.test:8080`
 
 ## 🗄️ Database Migrations & Seeding
 
