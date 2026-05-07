@@ -30,6 +30,12 @@ router = APIRouter()
 async def create_user(
     session: SessionDependency, _allow_admin: AllowAdmin, user_create: UserCreate
 ) -> UserPublic:
+    user = await user_crud.get_user_by_email(session=session, email=user_create.email)
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="User with this email already exists",
+        )
     user = await user_crud.create_user(session=session, user_create=user_create)
     return UserPublic.model_validate(user)
 
