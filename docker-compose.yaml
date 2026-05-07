@@ -1,4 +1,27 @@
+networks:
+  proxy:
+    driver: bridge
+
 services:
+  traefik:
+    image: traefik:v3.3
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN:-fastapi-template.test}`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+    networks:
+      - proxy
+
   db:
     image: postgres:18
     container_name: postgres_db
@@ -32,6 +55,13 @@ services:
       PGADMIN_SESSION_EXPIRATION: 720
     ports:
       - "5050:80"
+    networks:
+      - default
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=Host(`pgadmin.${DOMAIN:-fastapi-template.test}`)"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
     depends_on:
       - db
 
@@ -72,6 +102,13 @@ services:
         restart: true
       prestart:
         condition: service_completed_successfully
+    networks:
+      - default
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.${DOMAIN:-fastapi-template.test}`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
     healthcheck:
       # Requires a @app.get("/health") route in your FastAPI main.py
       test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health"]
