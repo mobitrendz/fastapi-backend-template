@@ -4,7 +4,7 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core import user as user_crud
+from app.crud import user as user_crud
 from app.models.user import UserCreate, UserRole
 
 
@@ -38,7 +38,7 @@ async def test_signup_existing_email(client: AsyncClient, session: AsyncSession)
     user_in = UserCreate(
         full_name="Existing User",
         email="user@example.com",
-        password="password123",  # noqa: S105, S106
+        password="password123",  # noqa: S106
         role=UserRole.USER,
     )
     await user_crud.create_user(session=session, user_create=user_in)
