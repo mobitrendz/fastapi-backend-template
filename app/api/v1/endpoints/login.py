@@ -13,7 +13,7 @@ from app.core.security import (
 from app.crud import user as user_crud
 from app.db.database import SessionDependency
 from app.models.generic import Message, Token
-from app.models.user import UserPublic
+from app.models.user import UserCreate, UserPublic, UserRegister, UserRole
 
 router = APIRouter()
 
@@ -58,6 +58,31 @@ async def get_current_user(
     session: SessionDependency, token: TokenDependency
 ) -> UserPublic:
     user = await user_crud.get_current_user(session=session, token=token)
+    return UserPublic.model_validate(user)
+
+
+@router.post("/signup", response_model=UserPublic)
+async def register_user(
+    session: SessionDependency, user_in: UserRegister
+) -> UserPublic:
+    """
+    Public signup endpoint for new users.
+    """
+    user = await user_crud.get_user_by_email(session=session, email=user_in.email)
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="User with this email already exists",
+        )
+
+    user_create = UserCreate(
+        email=user_in.email,
+        password=user_in.password,
+        full_name=user_in.full_name,
+        role=UserRole.USER,
+        is_active=True,
+    )
+    user = await user_crud.create_user(session=session, user_create=user_create)
     return UserPublic.model_validate(user)
 
 

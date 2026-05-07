@@ -38,6 +38,13 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
 
+# UserRegister model for public signup. It only includes fields that a new user should be able to provide.
+class UserRegister(SQLModel):
+    full_name: str | None = Field(default=None, max_length=255)
+    email: EmailStr = Field(max_length=255)
+    password: str = Field(min_length=8, max_length=128)
+
+
 # UserUpdate model for updating user information, allowing changes to the full name, role, and active status. This model is used in the update endpoint to specify which fields can be updated by the user or admin.
 class UserUpdate(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
