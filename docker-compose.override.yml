@@ -24,10 +24,6 @@ services:
     networks:
       - default
       - proxy
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.mail.rule=Host(`mail.${DOMAIN:-fastapi-template.test}`)"
-      - "traefik.http.services.mail.loadbalancer.server.port=1080"
     ports:
       - "1080:1080"
       - "1025:1025"
