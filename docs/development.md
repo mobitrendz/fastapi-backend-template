@@ -32,13 +32,31 @@ source .venv/bin/activate
 
 ## 🚀 Running the API Locally
 
-### Start Native Development Server
-```bash
-uv run fastapi dev
-```
-The server will start with hot-reload enabled at http://localhost:8000.
+### Start Native Development Server (Hybrid Setup)
+For developers who prefer running the database services via Docker while developing the FastAPI application natively on their host machine for faster iteration:
 
-### Start Docker Development Stack
+1. **Start Database Services only**:
+   ```bash
+   docker compose up -d db pgadmin mailcatcher
+   ```
+
+2. **Configure Local Environment**:
+   Ensure your `.env` connects to the local Docker ports (e.g., `POSTGRES_SERVER=localhost` and `POSTGRES_PORT=5432`).
+
+3. **Run API Natively**:
+   ```bash
+   # Sync environment and dependencies
+   uv sync
+
+   # Activate virtual environment
+   source .venv/bin/activate
+
+   # Start development server (Auto-reload enabled)
+   uv run fastapi dev
+   ```
+   The API will be available at `http://localhost:8000/docs`, communicating with the PostgreSQL instance running inside Docker.
+
+### Start Full Docker Development Stack
 ```bash
 docker compose up --build
 ```

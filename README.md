@@ -1,8 +1,8 @@
 # FastAPI AI-Optimized Enterprise Backend Template
 
-[![Docker Validation](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml)
-[![Backend Code Quality](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml)
-[![Coverage](coverage.svg)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml)
+<a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml" target="_blank"><img src="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml/badge.svg?branch=develop" alt="Docker Validation"></a>
+<a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml" target="_blank"><img src="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop" alt="Backend Code Quality"></a>
+<a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml" target="_blank"><img src="coverage.svg" alt="Coverage"></a>
 
 A production-ready FastAPI template designed for scalable, high-performance web applications. This project provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows out of the box.
 
@@ -12,7 +12,7 @@ A production-ready FastAPI template designed for scalable, high-performance web 
 *   **Python 3.12+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
 *   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
-*   **Modern Dependency Management**: Powered by [uv](https://astral.sh) for lightning-fast, reproducible builds.
+*   **Modern Dependency Management**: Powered by <a href="https://astral.sh" target="_blank">uv</a> for lightning-fast, reproducible builds.
 *   **Full-Stack Orchestration**: Integrated **PostgreSQL 18**, **Traefik**, and development-only admin/email tooling.
 *   **Enterprise Security**: Centralised OAuth2, JWT implementation, Argon2-based hashing, and automated **Security Scanning** via Bandit.
 *   **Robust Health Monitoring**: Integrated Docker health checks ensuring zero-downtime dependency readiness.
@@ -78,13 +78,13 @@ This project uses **uv** for high-performance dependency management.
   ```powershell
   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
   ```
-- **More info**: [uv Installation Guide](https://docs.astral.sh/uv/getting-started/installation/)
+- **More info**: <a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank">uv Installation Guide</a>
 
 ### 🐳 Docker & Docker Compose
 Used for full-stack orchestration and environmental parity.
 
-- **Desktop (macOS/Windows/Linux)**: [Install Docker Desktop](https://docs.docker.com/get-docker/)
-- **Linux (Engine only)**: [Install Docker Engine](https://docs.docker.com/engine/install/)
+- **Desktop (macOS/Windows/Linux)**: <a href="https://docs.docker.com/get-docker/" target="_blank">Install Docker Desktop</a>
+- **Linux (Engine only)**: <a href="https://docs.docker.com/engine/install/" target="_blank">Install Docker Engine</a>
 
 ## 🏁 Getting Started
 
@@ -100,14 +100,14 @@ Update the following variables in `.env` file:
 
 **Security & Super user**
 
-Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generator](https://jwtsecretkeygenerator.com)).
+Generate a secure SECRET_KEY for JWT tokens (e.g., using <a href="https://jwtsecretkeygenerator.com" target="_blank">JWT Secret Key Generator</a>).
 ```bash
 SECRET_KEY="your-generated-hs256-key"
 
 # Superuser details
 SUPER_USER_NAME="Admin User"
 SUPER_USER_EMAIL="admin@example.com"
-SUPER_USER_PASSWORD="admin123"      # Password must be min. 8 characters
+SUPER_USER_PASSWORD="adminpassword123"      # Password must be min. 8 characters
 ```
 
 **Database Connection**
@@ -143,19 +143,34 @@ For a base stack without development-only pgAdmin and MailCatcher services, run:
 docker compose -f docker-compose.yaml up --build
 ```
 
-This triggers the following automated sequence:
+### 4. Local API Development (Hybrid Setup)
 
-1. **Database Provisioning**: Postgres 18 initialises with health checks.
-2. **Migration & Seeding**: The `prestart` container runs `alembic upgrade head` and `app/db/initial_data.py`.
-3. **API Warm-up**: The FastAPI service starts only after `prestart` completes successfully.
+For developers who prefer running the database services via Docker while developing the FastAPI application natively on their host machine for faster iteration:
 
-**Development Note**: Migration files are synchronized between the host and container via Docker volumes.
+1. **Start Database Services only**:
+   ```bash
+   docker compose up -d db pgadmin mailcatcher
+   ```
 
-### 4. Application Entry Points
-- API Documentation: http://localhost:8000/docs
-- Database Management: http://localhost:5050
-- MailCatcher UI: http://localhost:1080
-- Health Status: http://localhost:8000/health
+2. **Configure Local Environment**:
+   Ensure your `.env` connects to the local Docker ports (e.g., `POSTGRES_SERVER=localhost` and `POSTGRES_PORT=5432`).
+
+3. Run API Natively:
+   ```bash
+   # Sync environment and dependencies
+   uv sync
+
+   # Activate virtual environment
+   source .venv/bin/activate
+
+   # Start development server (Auto-reload enabled)
+   uv run fastapi dev
+   ```
+
+4. **Access Endpoints**:
+   The API will be available at `http://localhost:8000/docs`, communicating with the PostgreSQL instance running inside Docker.
+
+---
 
 ### 5. 🛠️ Local Development
 Maintain system integrity and code quality with the integrated toolchain:
@@ -197,15 +212,15 @@ The project documentation is built with **Zensical**, a high-performance, Rust-p
 - **Serve Locally**: `uv run zensical serve` (Available at: http://localhost:3000)
 - **Build Static Site**: `uv run zensical build`
 
-*For an in-depth understanding of the system, please explore the full [Documentation Portal](http://localhost:3000).*
+*For an in-depth understanding of the system, please explore the full <a href="http://localhost:3000" target="_blank">Documentation Portal</a>.*
 
 ---
 
 ## 📝 Release Notes
-See the full [Release Notes](release-notes.md) for a detailed history of changes.
-## 📝 License
+See the full <a href="release-notes.md" target="_blank">Release Notes</a> for a detailed history of changes.
 
-This project is licensed under the [MIT License](LICENSE).
+## ⚖️ License
+This project is licensed under the <a href="LICENSE" target="_blank">MIT License</a>.
 
 ## 💡 Inspiration
-This project is heavily inspired by the official [full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) in the FastAPI repository. It builds upon those foundational concepts, incorporating modern toolchain upgrades, enhanced observability, and AI-optimized developer workflows.
+This project is heavily inspired by the official <a href="https://github.com/fastapi/full-stack-fastapi-template" target="_blank">full-stack-fastapi-template</a> in the FastAPI repository. It builds upon those foundational concepts, incorporating modern toolchain upgrades, enhanced observability, and AI-optimized developer workflows.
