@@ -1,20 +1,20 @@
-import logging
-
-# from app.db import initial_data, backend_pre_start
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
+import structlog
 from fastapi import FastAPI
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router as v1_router
 from app.core.config import settings
+from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
 from app.db import initial_data
 from app.models.generic import Message
 
-logger = logging.getLogger(__name__)
+setup_logging()
+logger = structlog.get_logger(__name__)
 
 
 # Main application setup using FastAPI. This module defines the main application instance and includes the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. The application also includes a health check endpoint to verify that the application is running and healthy.
@@ -25,21 +25,21 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # noqa: UP043
     # --- STARTUP LOGIC ---
-    print("--- START SEEDING INITIAL DATA ---")
-    print(app.summary)
+    logger.info("--- START SEEDING INITIAL DATA ---")
+    logger.debug("Application summary", summary=app.summary)
 
     # 1. Run migrations (Optional: see note below)
     # 2. Seed initial data
     try:
         await initial_data.init()
-        print("--- FINISH SEEDING INITIAL DATA ---")
+        logger.info("--- FINISH SEEDING INITIAL DATA ---")
     except Exception as e:
-        print(f"Seeding failed: {e}")
+        logger.error("Seeding failed", error=str(e))
 
     yield  # The app is now running and "healthy"
 
     # --- SHUTDOWN LOGIC ---
-    print("--- SYSTEM SHUTDOWN ---")
+    logger.info("--- SYSTEM SHUTDOWN ---")
 
 
 app = FastAPI(

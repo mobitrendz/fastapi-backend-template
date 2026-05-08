@@ -105,8 +105,8 @@ Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generat
 SECRET_KEY="your-generated-hs256-key"
 
 # Superuser details
-SUPER_USER_NAME="Sreeraj Sreenivasan"
-SUPER_USER_EMAIL="sreeraj.dev@icloud.com"
+SUPER_USER_NAME="Admin User"
+SUPER_USER_EMAIL="admin@example.com"
 SUPER_USER_PASSWORD="admin123"      # Password must be min. 8 characters
 ```
 
@@ -191,19 +191,13 @@ uv run pytest
 ```
 
 ### 7. 📚 Documentation (Zensical)
-The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator.
+The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator. It serves as the primary resource for deep-dives into our architecture, development workflows, and deployment strategies.
 
-#### Build Static Site
-```bash
-uv run zensical build
-```
+#### Access & Build
+- **Serve Locally**: `uv run zensical serve` (Available at: http://localhost:3000)
+- **Build Static Site**: `uv run zensical build`
 
-#### Serve Documentation Locally
-```bash
-uv run zensical serve
-```
-
-Access the local documentation at: http://localhost:3000
+*For an in-depth understanding of the system, please explore the full [Documentation Portal](http://localhost:3000).*
 
 ---
 

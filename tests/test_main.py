@@ -46,7 +46,8 @@ async def test_lifespan_error(mocker, capsys):
     async with lifespan(app):
         pass
     captured = capsys.readouterr()
-    assert "Seeding failed: Seeding failed" in captured.out
+    assert '"event": "Seeding failed"' in captured.out
+    assert '"error": "Seeding failed"' in captured.out
 
 
 @pytest.mark.asyncio
