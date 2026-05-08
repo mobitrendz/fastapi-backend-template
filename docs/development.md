@@ -110,7 +110,7 @@ Email templates are located in `app/email-templates`.
 
 To add or modify templates, update the MJML files and ensure they are rendered correctly via the `render_email_template` utility in `app.core.security`.
 
-## 🧹 Linting & Formatting
+## 🧹 Linting & Formatting (Ruff)
 
 We use **Ruff** for linting and formatting.
 
@@ -128,6 +128,23 @@ uv run ruff check --fix .
 ```bash
 uv run ruff format .
 ```
+
+## ⚓ Automated Code Quality (Prek)
+
+We use **Prek** (a Rust-powered Git hook manager) to automate code quality and security checks before every commit. These hooks enforce linting, type checking, and security standards automatically.
+
+### Install Git Hooks
+You must install the hooks locally to enable the automation:
+```bash
+uv run prek install
+```
+
+### Run Hooks Manually
+You can run all configured quality checks manually at any time:
+```bash
+uv run prek run --all-files
+```
+*Note: This command will execute Ruff, Mypy, Bandit, and Zensical build checks.*
 
 ## 🔍 Type Checking
 
