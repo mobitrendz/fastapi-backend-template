@@ -96,40 +96,7 @@ cd fastapi-backend-template
 
 ### 2. Environment Configuration
 
-Update the following variables in `.env` file:
-
-**Security & Super user**
-
-Generate a secure SECRET_KEY for JWT tokens (e.g., using <a href="https://jwtsecretkeygenerator.com" target="_blank">JWT Secret Key Generator</a>).
-```bash
-SECRET_KEY="your-generated-hs256-key"
-
-# Superuser details
-SUPER_USER_NAME="Admin User"
-SUPER_USER_EMAIL="admin@example.com"
-SUPER_USER_PASSWORD="adminpassword"      # Password must be min. 8 characters
-```
-
-**Database Connection**
-
-```bash
-# Postgres Connection Settings
-POSTGRES_SERVER=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=fastapi_template_db
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=admin
-
-# The app will construct the URL as:
-# postgresql+psycopg://postgres:admin@localhost:5432/fastapi_template_db
-```
-
-**Local pgAdmin settings**
-```bash
-PGADMIN_EMAIL=admin@example.com
-PGADMIN_PASSWORD=admin
-```
-These are used only when `docker-compose.override.yml` is included for local development.
+Refer to the <a href="http://localhost:3000/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation for details on setting up your `.env` file, database credentials, and security keys.
 
 ### 3. Orchestration Launch
 
@@ -168,7 +135,11 @@ For developers who prefer running the database services via Docker while develop
    ```
 
 4. **Access Endpoints**:
-   The API will be available at `http://localhost:8000/docs`, communicating with the PostgreSQL instance running inside Docker.
+   - API Documentation: http://localhost:8000/docs
+   - Prometheus Metrics: http://localhost:8000/metrics
+   - pgAdmin: http://localhost:5050
+   - MailCatcher UI: http://localhost:1080
+   - Health Status: http://localhost:8000/health
 
 ---
 
