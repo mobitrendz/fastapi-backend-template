@@ -1,9 +1,9 @@
 [project]
 name = "fastapi-backend-template"
 version = "0.1.0"
-description = "FastAPI learning project"
+description = "High-performance, AI-optimized enterprise backend template built with FastAPI, SQLModel, and PostgreSQL."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.18.4", # For database migrations, allowing for version control of the database schema and easy application of changes across different environments.
     "fastapi[standard]>=0.135.2", # For building the API with FastAPI
@@ -29,7 +29,7 @@ dependencies = [
 [dependency-groups]
 lint = [
     "ruff>=0.15.11",   # Fast, all-in-one linter and formatter
-    "mypy>=1.20.1",   # Static type checking
+    "mypy>=2.0.0",   # Static type checking
     "bandit>=1.8.3",   # Security-focused linting
 ]
 

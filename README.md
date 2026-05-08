@@ -8,7 +8,7 @@ A robust foundation for scalable web applications leveraging **FastAPI**, **SQLM
 
 ## 🌟 Key Features
 
-*   **AI-Driven Development**: Optimized for **Codex** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.
+*   **AI-Driven Development**: Optimized for **Google Antigravity** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.
 *   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
 *   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
@@ -54,7 +54,7 @@ A robust foundation for scalable web applications leveraging **FastAPI**, **SQLM
 - 🧭 **Traefik** — Local reverse proxy for stable `.test` service URLs.
 - 📥 **MailCatcher** — Instant SMTP server for capturing and inspecting emails during development.
 - 🦀 **Zensical** — Ultra-fast, Rust-powered documentation generator for this project.
-- 🤖 **Codex** — AI coding collaborator for implementation, review, documentation, and repository maintenance.
+- 🤖 **Google Antigravity** — AI coding collaborator for implementation, review, documentation, and repository maintenance.
 - 🤖 **Gemini CLI** — AI-powered autonomous agent for rapid, surgical engineering.
 
 ### 🧪 Quality Assurance
@@ -65,7 +65,7 @@ A robust foundation for scalable web applications leveraging **FastAPI**, **SQLM
 
 ## 🤖 AI-Driven Development
 
-This project is built to work well with AI coding assistants such as **Codex** and **Gemini CLI**.
+This project is built to work well with AI coding assistants such as **Google Antigravity** and **Gemini CLI**.
 
 ### Core Benefits:
 - **Autonomous Engineering**: AI assistants can research the codebase, plan complex changes, and execute focused edits.

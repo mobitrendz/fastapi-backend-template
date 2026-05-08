@@ -31,7 +31,7 @@ site_description = "FastAPI backend template documentation for local development
 # The site_author attribute. This is used in the HTML head element.
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_author
-site_author = "FastAPI Backend Template Authors"
+site_author = "FastAPI Template Contributors"
 
 # The site_url is the canonical URL for your site. When building online
 # documentation you should set this.
@@ -43,7 +43,7 @@ site_author = "FastAPI Backend Template Authors"
 #
 # Read more: https://zensical.org/docs/setup/basics/#copyright
 copyright = """
-Copyright &copy; 2026 The authors
+Copyright &copy; 2025-2026 FastAPI Template Contributors
 """
 
 # Zensical supports both implicit navigation and explicitly defined navigation.
