@@ -55,9 +55,12 @@ Copyright &copy; 2025-2026 FastAPI Template Contributors
 # Read more: https://zensical.org/docs/setup/navigation/
 nav = [
   { "Introduction" = "index.md" },
+  { "Tech Stack" = "tech-stack.md", icon = "lucide/cpu" },
   { "Architecture" = "architecture.md" },
+  { "AI-Driven Development" = "ai-development.md" },
   { "Development" = "development.md" },
   { "Deployment" = "deployment.md" },
+  { "CI/CD Pipeline" = "deployment-cd.md", icon = "lucide/rocket" },
 ]
 
 # With the "extra_css" option you can add your own CSS styling to customize
