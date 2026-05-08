@@ -8,7 +8,7 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 
 ## 🌟 Key Features
 
-*   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
+*   **Python 3.12+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Modular Architecture**: Clean separation of API, Services, CRUD, and Models.
 *   **Enterprise Security**: OAuth2 with JWT, Argon2 password hashing.
 *   **Observability**: Structured JSON logging with Structlog and Prometheus metrics.
@@ -21,27 +21,40 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 ## 📁 Project Structure
 
 ```text
-app/                       # Main Application Logic
-├── api/                   # API Entry points
-│   └── v1/                # API Versioning (Endpoints & Routers)
-├── core/                  # Global configuration, Security (JWT, Auth)
-├── crud/                  # Reusable database CRUD operations
-├── db/                    # Connection engine, session, and seed data
-├── email-templates/       # MJML/HTML templates for system emails
-├── models/                # SQLModels, Tables, and DTOs
-├── services/              # Complex business logic orchestration
-└── main.py                # FastAPI application initialization
-alembic/                   # Database migrations and environment setup
-docs/                      # Zensical documentation source (Markdown)
-scripts/                   # Shell scripts for deployment and startup
-traefik/                   # Traefik file-provider route configuration
-tests/                     # Pytest suite for unit and integration testing
-pyproject.toml             # Dependency management (uv)
-docker-compose.yaml        # Container Orchestration Manifest
-docker-compose.override.yml # Local development services and overrides
-Dockerfile                 # Multi-stage, non-root Production Build
-GEMINI.md                  # AI mandates and architectural context
+fastapi-backend-template/
+├── .vscode/                       # Debugging env configuration (launch.json)
+├── app/                           # Main Application Logic
+│   ├── api/                       # API Entry points
+│   │   └── v1/                    # API Versioning
+│   │       ├── endpoints/         # Individual route handlers (e.g., users.py)
+│   │       └── router.py          # Main router merging all v1 endpoints
+│   ├── core/                      # Global configuration and security (JWT, Auth)
+│   ├── crud/                      # Reusable database CRUD operations
+│   ├── db/                        # Connection engine, session, and seed data
+│   ├── email-templates/           # MJML/HTML templates for system emails
+│   ├── models/                    # SQLModels, Tables, and DTOs (Data Transfer Objects)
+│   ├── services/                  # Complex business logic and external integrations
+│   └── main.py                    # FastAPI application initialization
+├── alembic/                       # Database migrations and environment setup
+├── docs/                          # Zensical documentation source (Markdown)
+├── site/                          # Generated Zensical static documentation
+├── scripts/                       # Shell scripts for deployment and startup
+├── traefik/                       # Traefik file-provider route configuration
+├── tests/                         # Pytest suite for unit and integration testing
+├── .env                           # Environment variables (Internal)
+├── .env.example                   # Template for environment variables
+├── .pre-commit-config.yaml        # Prek/Pre-commit hook configuration
+├── alembic.ini                    # Alembic configuration
+├── docker-compose.override.yml    # Container Orchestration Manifest for dev env
+├── docker-compose.yaml            # Container Orchestration Manifest
+├── Dockerfile                     # Multi-stage, non-root Production Build
+├── GEMINI.md                      # AI mandates and architectural context
+├── pyproject.toml                 # Dependency management (uv)
+├── uv.lock                        # Deterministic dependency lock file
+├── zensical.toml                  # Zensical documentation configuration
+└── README.md                      # Project documentation
 ```
+
 
 ## 🤖 AI-Driven Development
 
@@ -51,7 +64,7 @@ This project is engineered for **Gemini CLI**, enabling autonomous refactoring, 
 
 ### 1. Prerequisites
 Ensure you have the following installed:
-- **Python 3.14+**
+- **Python 3.12+**
 - **[uv](https://astral.sh)**: `curl -LsSf https://astral.sh/uv/install.sh | sh`
 - **[Docker & Docker Compose](https://docs.docker.com/get-docker/)**
 

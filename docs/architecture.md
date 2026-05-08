@@ -1,5 +1,5 @@
 ---
-icon: lucide/layers
+icon: lucide/boxes
 ---
 
 # Architecture

@@ -136,6 +136,15 @@ We use **Mypy** for static type checking.
 uv run mypy .
 ```
 
+## 🛡️ Security Analysis (Bandit)
+
+We use **Bandit** to perform automated security linting and identify potential vulnerabilities in the application code.
+```bash
+# Run security scan
+uv run bandit -c pyproject.toml -r app
+```
+*Note: Bandit is also automatically executed as part of the `pre-commit` workflow.*
+
 ## 🤖 Gemini CLI
 
 This project is optimized for AI-driven development.

@@ -3,7 +3,7 @@
 This document provides foundational mandates and architectural guidance for the FastAPI Backend Template project. These rules take precedence over general defaults.
 
 ## 🚀 Project Identity & Tech Stack
-- **Framework**: FastAPI (Python 3.14+)
+- **Framework**: FastAPI (Python 3.12+)
 - **ORM/Schema**: SQLModel (SQLAlchemy + Pydantic integration)
 - **Database**: PostgreSQL 18 (using `psycopg3`)
 - **Migrations**: Alembic
