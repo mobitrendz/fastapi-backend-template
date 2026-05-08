@@ -200,6 +200,9 @@ The project documentation is built with **Zensical**, a high-performance, Rust-p
 
 ---
 
+## 🤝 Contributing
+We welcome contributions! Please see our [Contributing Guide](docs/contributing.md) for details on how to get involved. If you find a bug or have a feature request, please open an issue on GitHub.
+
 ## 📝 Release Notes
 See the full <a href="release-notes.md" target="_blank">Release Notes</a> for a detailed history of changes.
 
