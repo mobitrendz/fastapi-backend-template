@@ -1,3 +1,7 @@
+---
+icon: lucide/hand-helping
+---
+
 # Contributing
 
 We welcome contributions to this project! Whether you're reporting a bug, proposing a new feature, or improving documentation, your help is appreciated.

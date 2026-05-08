@@ -8,12 +8,13 @@ The project follows a **Layered Modular Architecture** designed for scalability,
 
 ## 🏗️ Layered Structure
 
-``` mermaid
+```mermaid
 graph TD
     API[API Layer - app/api] --> Services[Service Layer - app/services]
     Services --> CRUD[CRUD Layer - app/crud]
     CRUD --> DB[(Database)]
     Services --> Email[Email Service / MailCatcher]
+    API --> Middleware[Prometheus & SlowAPI Middleware]
     Models[Model Layer - app/models] -.-> API
     Models -.-> Services
     Models -.-> CRUD
@@ -21,41 +22,30 @@ graph TD
 
 ### 1. API Layer (`app/api/v1`)
 - **Responsibility**: Request handling, validation, and response serialization.
-- **Routing**: Versioned endpoints using `APIRouter`.
-- **Logic**: Minimal. Delegates complex tasks to the Service Layer.
+- **Middleware**: Integrates `SlowAPI` (rate limiting) and `Instrumentator` (Prometheus metrics) to protect and monitor endpoints.
 
 ### 2. Service Layer (`app/services`)
 - **Responsibility**: Business logic orchestration.
 - **Role**: Coordinates multiple CRUD operations, external API calls, and domain-specific rules.
-- **Email Integration**: Orchestrates the rendering of **MJML templates** from `app/email-templates` before sending via the configured SMTP provider.
 
 ### 3. CRUD Layer (`app/crud`)
 - **Responsibility**: Atomic database operations.
-- **Role**: Reusable functions for Create, Read, Update, and Delete operations on specific models.
-- **Tooling**: Built on **SQLModel** and **SQLAlchemy**.
+- **Role**: Reusable functions using **SQLModel** and **SQLAlchemy** (Async-ready).
 
 ### 4. Model Layer (`app/models`)
-- **Responsibility**: Data definitions.
-- **Unified Models**: Uses `SQLModel` to define both Database Tables and Pydantic Schemas.
-- **DTOs**: Explicitly separates `Read`, `Create`, and `Update` models to prevent sensitive data leakage.
+- **Responsibility**: Unified `SQLModel` definitions for Tables and DTOs.
 
-## 📡 External Integrations
-
-### Email (MailCatcher)
-- **Development**: All outgoing emails are captured by **MailCatcher** in the development environment.
-- **Production**: Configurable via environment variables to use any standard SMTP provider.
+## 🛡️ Observability & Resilience
+- **Structured Logging**: `Structlog` provides unified JSON-formatted logs.
+- **Error Tracking**: `Sentry SDK` captures and alerts on unhandled exceptions via native FastAPI integration.
+- **Monitoring**: `Prometheus` metrics exposed at `/metrics` for real-time performance tracking.
+- **Retry Logic**: `Tenacity` handles transient service failures.
 
 ## 🗄️ Database & Migrations
-
 - **Database**: PostgreSQL 18.
-- **Migrations**: **Alembic** manages all schema changes.
-- **Workflow**:
-    1. Update `SQLModel` definitions in `app/models`.
-    2. Generate migration: `uv run alembic revision --autogenerate -m "desc"`.
-    3. Apply migration: `uv run alembic upgrade head`.
+- **Migrations**: **Alembic** for versioned schema management.
 
-## 🛡️ Security
-- **Authentication**: OAuth2 with Password Flow.
-- **JWT**: Tokens generated using HS256.
-- **Hashing**: Argon2 via `pwdlib`.
-- **Validation**: Pydantic v2 ensures strict data typing and validation.
+## 🔐 Security
+- **Authentication**: OAuth2/JWT with HS256.
+- **Hashing**: Argon2.
+- **Security Linting**: `Bandit` runs on every commit via Prek.
