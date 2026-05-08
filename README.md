@@ -4,7 +4,7 @@
 [![Backend Code Quality](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml)
 [![Coverage](coverage.svg)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml)
 
-A robust foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**. This project is currently in active development and serves as an evolving blueprint for high-performance Python 3.12+ environments, utilizing **uv** for deterministic dependency management and **Docker Compose** for full-stack orchestration.
+A production-ready FastAPI template designed for scalable, high-performance web applications. This project provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows out of the box.
 
 ## 🌟 Key Features
 
@@ -62,79 +62,6 @@ A robust foundation for scalable web applications leveraging **FastAPI**, **SQLM
 - 🧹 **Ruff** — Extremely fast, all-in-one Python linter and code formatter.
 - 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
 - ⚓ **Prek** — Ultra-fast, Rust-powered Git hook manager for automated code quality checks.
-
-## 🤖 AI-Driven Development
-
-This project is built to work well with AI coding assistants such as **Google Antigravity** and **Gemini CLI**.
-
-### Core Benefits:
-- **Autonomous Engineering**: AI assistants can research the codebase, plan complex changes, and execute focused edits.
-- **Context Awareness**: Leverages repository guidance such as `GEMINI.md`, existing code patterns, tests, and documentation to keep changes aligned with local standards.
-- **Automated Validation**: Integrated workflow for running tests and linters immediately after code modifications.
-
-To interact with this project using Gemini CLI:
-```bash
-# Start an interactive session
-gemini
-
-# Sandbox - restrict the CLI's access strictly to your current project directory
-gemini --sandbox seatbelt
-
-# Example directive
-> "Add a new CRUD endpoint for 'Products' following the existing user pattern"
-```
-
-## 🛠️ Infrastructure & Orchestration
-
-The project utilises a multi-container architecture managed via Docker Compose. The base `docker-compose.yaml` contains production-oriented services, while `docker-compose.override.yml` adds local development tools such as pgAdmin and MailCatcher.
-
-### Service Architecture
-
-| Service | Technology | Role |
-| :--- | :--- | :--- |
-| **Traefik** | Traefik v3 | Reverse proxy for host-based routing. Uses `traefik/dynamic.yml` in the base stack and `traefik/dynamic.local.yml` in local development. |
-| **API** | FastAPI / Uvicorn | Primary application server with built-in health monitoring. |
-| **DB** | PostgreSQL 18 | Relational data store with persisted volume mapping. |
-| **Prestart** | Python/Alembic | Lifecycle service; executes migrations and populates initial system state. |
-| **pgAdmin** | pgAdmin 4 | Development-only database administration interface from `docker-compose.override.yml`. |
-| **MailCatcher** | MailCatcher | Development-only SMTP server and web interface from `docker-compose.override.yml`. |
-
-## 📂 Project Structure
-
-```
-fastapi-backend-template/
-├── .vscode/                       # Debugging env configuration (launch.json)
-├── app/                           # Main Application Logic
-│   ├── api/                       # API Entry points
-│   │   └── v1/                    # API Versioning
-│   │       ├── endpoints/         # Individual route handlers (e.g., users.py)
-│   │       └── router.py          # Main router merging all v1 endpoints
-│   ├── core/                      # Global configuration and security (JWT, Auth)
-│   ├── crud/                      # Reusable database CRUD operations
-│   ├── db/                        # Connection engine, session, and seed data
-│   ├── email-templates/           # MJML/HTML templates for system emails
-│   ├── models/                    # SQLModels, Tables, and DTOs (Data Transfer Objects)
-│   ├── services/                  # Complex business logic and external integrations
-│   └── main.py                    # FastAPI application initialization
-├── alembic/                       # Database migrations and environment setup
-├── docs/                          # Zensical documentation source (Markdown)
-├── site/                          # Generated Zensical static documentation
-├── scripts/                       # Shell scripts for deployment and startup
-├── traefik/                       # Traefik file-provider route configuration
-├── tests/                         # Pytest suite for unit and integration testing
-├── .env                           # Environment variables (Internal)
-├── .env.example                   # Template for environment variables
-├── .pre-commit-config.yaml        # Prek/Pre-commit hook configuration
-├── alembic.ini                    # Alembic configuration
-├── docker-compose.override.yml    # Container Orchestration Manifest for dev env
-├── docker-compose.yaml            # Container Orchestration Manifest
-├── Dockerfile                     # Multi-stage, non-root Production Build
-├── GEMINI.md                      # AI mandates and architectural context
-├── pyproject.toml                 # Dependency management (uv)
-├── uv.lock                        # Deterministic dependency lock file
-├── zensical.toml                  # Zensical documentation configuration
-└── README.md                      # Project documentation
-```
 
 ## 📋 Prerequisites
 
