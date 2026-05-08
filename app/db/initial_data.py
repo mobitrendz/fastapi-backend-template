@@ -1,5 +1,4 @@
-import logging
-
+import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
@@ -8,8 +7,7 @@ from app.crud import user as user_crud
 from app.db.database import async_session_maker
 from app.models.user import User, UserCreate, UserRole
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 # Initial data creation for the database, including creating a superuser if it does not already exist.
