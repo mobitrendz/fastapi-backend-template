@@ -58,10 +58,8 @@ nav = [
   { "Tech Stack" = "tech-stack.md", icon = "lucide/cpu" },
   { "Architecture" = "architecture.md" },
   { "AI-Driven Development" = "ai-development.md" },
-  { "Observability" = "observability.md", icon = "lucide/bar-chart" },
   { "Development" = "development.md" },
   { "Deployment" = "deployment.md" },
-  { "CI/CD Pipeline" = "deployment-cd.md", icon = "lucide/rocket" },
   { "Contributing" = "contributing.md", icon = "lucide/git-pull-request" },
 ]
 
