@@ -17,8 +17,9 @@ FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
-# Install curl for the health check and libpq for Postgres compatibility
+# Install curl, libpq, and uv
 RUN apt-get update && apt-get install -y --no-install-recommends curl libpq5 && rm -rf /var/lib/apt/lists/*
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Set environment paths
 ENV PYTHONDONTWRITEBYTECODE=1 \

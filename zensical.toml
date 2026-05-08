@@ -62,6 +62,7 @@ nav = [
   { "Development" = "development.md" },
   { "Deployment" = "deployment.md" },
   { "CI/CD Pipeline" = "deployment-cd.md", icon = "lucide/rocket" },
+  { "Contributing" = "contributing.md", icon = "lucide/git-pull-request" },
 ]
 
 # With the "extra_css" option you can add your own CSS styling to customize
