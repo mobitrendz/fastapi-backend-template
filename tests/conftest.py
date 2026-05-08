@@ -1,6 +1,7 @@
 from collections.abc import AsyncGenerator
 
 import pytest_asyncio
+from fastapi_pagination import add_pagination
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
@@ -11,6 +12,8 @@ from app.crud import user as user_crud
 from app.db.database import get_session
 from app.main import app
 from app.models.user import UserCreate, UserRole
+
+add_pagination(app)
 
 # Use PostgreSQL for testing (can be configured to a separate test DB if needed)
 # For simplicity, we use the same DB but with transactional isolation (rollback)
