@@ -153,52 +153,11 @@ This triggers the following automated sequence:
 
 ### 4. Application Entry Points
 - API Documentation: http://localhost:8000/docs
-- API via Traefik: http://api.fastapi-template.test/docs
-- Database Management: http://localhost:5050 or http://pgadmin.fastapi-template.test
-- MailCatcher UI: http://localhost:1080 or http://mail.fastapi-template.test
-- Traefik Dashboard: http://traefik.fastapi-template.test:8080
+- Database Management: http://localhost:5050
+- MailCatcher UI: http://localhost:1080
 - Health Status: http://localhost:8000/health
 
 ### 5. 🛠️ Local Development
-For native development, ensure you have the [uv](https://astral.sh) package manager installed:
-
-```bash
-# Sync environment and dependencies
-uv sync
-
-# Activate Prek hooks
-uv run prek install
-
-# Activate virtual environment
-source .venv/bin/activate
-
-# 1. Generate migrations (after making model changes)
-uv run alembic revision --autogenerate -m "description of changes"
-
-# 2. Execute schema migrations
-uv run alembic upgrade head
-
-# 3. Seed initial data (superuser, etc.)
-uv run python app/db/initial_data.py
-
-# 4. Start development server (Auto-reload enabled)
-uv run fastapi dev
-```
-
-### 🌐 Local Access via Traefik
-The local Compose override mounts `traefik/dynamic.local.yml`, which routes the API and development tools through custom `.test` domains. To access them, add the following to your `/etc/hosts` file:
-```text
-127.0.0.1 traefik.fastapi-template.test api.fastapi-template.test pgadmin.fastapi-template.test mail.fastapi-template.test
-```
-Services are then available at:
-- **API**: `http://api.fastapi-template.test`
-- **pgAdmin**: `http://pgadmin.fastapi-template.test`
-- **Mailcatcher**: `http://mail.fastapi-template.test`
-- **Traefik Dashboard**: `http://traefik.fastapi-template.test:8080`
-
-The base Traefik config in `traefik/dynamic.yml` excludes pgAdmin and MailCatcher so those local-only services are not published when running with `docker-compose.yaml` alone.
-
-### 6. 🧪 Quality Assurance
 Maintain system integrity and code quality with the integrated toolchain:
 
 #### 🧹 Linting & Formatting (Ruff)
@@ -234,16 +193,17 @@ uv run pytest
 ### 7. 📚 Documentation (Zensical)
 The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator.
 
-#### Serve Documentation Locally
-```bash
-uv run zensical serve
-```
-Access the local documentation at: http://localhost:3000
-
 #### Build Static Site
 ```bash
 uv run zensical build
 ```
+
+#### Serve Documentation Locally
+```bash
+uv run zensical serve
+```
+
+Access the local documentation at: http://localhost:3000
 
 ---
 
