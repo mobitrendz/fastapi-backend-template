@@ -1,4 +1,4 @@
-name: Test FastAPI Backend Template
+name: Backend Code Quality
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Test FastAPI Backend Template
+    name: Backend Code Quality
     runs-on: ubuntu-latest
 
     services:
