@@ -90,13 +90,15 @@ Used for full-stack orchestration and environmental parity.
 
 ### 1. Clone the Repository
 ```bash
-git clone -b develop git@github.com:mobitrendz/fastapi-backend-template.git
+git clone git@github.com:mobitrendz/fastapi-backend-template.git
 cd fastapi-backend-template
 ```
 
 ### 2. Environment Configuration
 
 Refer to the <a href="http://localhost:3000/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation for details on setting up your `.env` file, database credentials, and security keys.
+
+*Note: The documentation portal requires Zensical to be running locally (`uv run zensical serve`) to access these links.*
 
 ### 3. Orchestration Launch
 
@@ -110,7 +112,18 @@ For a base stack without development-only pgAdmin and MailCatcher services, run:
 docker compose -f docker-compose.yaml up --build
 ```
 
-### 4. Local API Development (Hybrid Setup)
+### 4. Documentation (Zensical)
+The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator. It serves as the primary resource for deep-dives into our architecture, development workflows, and deployment strategies.
+
+#### Access & Build
+- **Serve Locally**: `uv run zensical serve` (Available at: http://localhost:3000)
+- **Build Static Site**: `uv run zensical build`
+
+*For an in-depth understanding of the system, please explore the full <a href="http://localhost:3000" target="_blank">Documentation Portal</a>.*
+
+---
+
+### 5. Local API Development (Hybrid Setup)
 
 For developers who prefer running the database services via Docker while developing the FastAPI application natively on their host machine for faster iteration:
 
@@ -143,7 +156,7 @@ For developers who prefer running the database services via Docker while develop
 
 ---
 
-### 5. 🛠️ Local Development
+### 6. 🛠️ Local Development
 Maintain system integrity and code quality with the integrated toolchain:
 
 #### 🧹 Linting & Formatting (Ruff)
