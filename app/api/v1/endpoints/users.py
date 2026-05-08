@@ -1,6 +1,10 @@
 import uuid
 
 from fastapi import APIRouter, HTTPException
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlmodel import apaginate
+from fastapi_pagination.utils import disable_installed_extensions_check
+from sqlmodel import select
 
 from app.crud import user as user_crud
 from app.crud.user import AllowAdmin, AllowAdminAndUser, CurrentUser
@@ -8,12 +12,14 @@ from app.db.database import SessionDependency
 from app.models.generic import Message
 from app.models.user import (
     UpdatePassword,
+    User,
     UserCreate,
     UserPublic,
     UserRole,
-    UsersPublic,
     UserUpdate,
 )
+
+disable_installed_extensions_check()
 
 router = APIRouter()
 
@@ -41,11 +47,11 @@ async def create_user(
 
 
 # Endpoint for retrieving all users. Only admin users can perform this operation. Returns a list of users along with the total count.
-@router.get("/", response_model=UsersPublic)
+@router.get("/", response_model=Page[UserPublic])
 async def read_users(
     session: SessionDependency, _allow_admin: AllowAdmin
-) -> UsersPublic:
-    return await user_crud.get_users(session=session)
+) -> Page[UserPublic]:
+    return await apaginate(session, select(User))  # type: ignore
 
 
 # Endpoint for retrieving a user by ID. Both admin and regular users can perform this operation, but regular users can only access their own information. Returns the user if found, or a 404 error if not found.

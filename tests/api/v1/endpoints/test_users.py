@@ -46,9 +46,8 @@ async def test_read_users(client: AsyncClient, superuser_token: str):
     )
     assert response.status_code == 200
     data = response.json()
-    assert "data" in data
-    assert "count" in data
-    assert data["count"] >= 1
+    assert "items" in data
+    assert len(data["items"]) >= 1
 
 
 @pytest.mark.asyncio
@@ -58,7 +57,7 @@ async def test_read_user_by_id(client: AsyncClient, superuser_token: str):
         "/api/v1/users/",
         headers={"Authorization": f"Bearer {superuser_token}"},
     )
-    user_id = response.json()["data"][0]["id"]
+    user_id = response.json()["items"][0]["id"]
 
     response = await client.get(
         f"/api/v1/users/byID/{user_id}",
@@ -75,7 +74,7 @@ async def test_update_user(client: AsyncClient, superuser_token: str):
         "/api/v1/users/",
         headers={"Authorization": f"Bearer {superuser_token}"},
     )
-    user_id = response.json()["data"][0]["id"]
+    user_id = response.json()["items"][0]["id"]
 
     response = await client.patch(
         f"/api/v1/users/{user_id}",

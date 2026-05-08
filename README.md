@@ -206,7 +206,7 @@ uv run pytest
 ```
 
 ### 7. 📚 Documentation (Zensical)
-The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator. It serves as the primary resource for deep-dives into our architecture, development workflows, and deployment strategies.
+The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator. It serves as the primary resource for deep-dives into our **architecture, development workflows, and deployment strategies**.
 
 #### Access & Build
 - **Serve Locally**: `uv run zensical serve` (Available at: http://localhost:3000)
