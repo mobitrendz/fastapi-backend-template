@@ -59,6 +59,8 @@ A production-ready FastAPI template designed for scalable, high-performance web 
 
 ### 🧪 Quality Assurance
 - 🧪 **Pytest & Coverage** — Mature testing framework with detailed coverage reporting.
+- 🐳 **Testcontainers** — Isolated, containerized integration testing.
+- 🧠 **Hypothesis** — Advanced property-based testing for edge-case identification.
 - 🧹 **Ruff** — Extremely fast, all-in-one Python linter and code formatter.
 - 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
 - ⚓ **Prek** — Ultra-fast, Rust-powered Git hook manager for automated code quality checks.
