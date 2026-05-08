@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 import structlog
 from fastapi import FastAPI
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import EmailStr
 from starlette.middleware.cors import CORSMiddleware
 
@@ -47,6 +48,9 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url="/openapi.json",
 )
+
+# Initialize Prometheus Instrumentator
+Instrumentator().instrument(app).expose(app)
 
 
 # Set all CORS enabled origins
