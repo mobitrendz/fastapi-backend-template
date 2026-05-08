@@ -30,6 +30,49 @@ uv run prek install
 source .venv/bin/activate
 ```
 
+## ⚙️ Environment Configuration
+
+To set up your local environment, copy the example configuration file:
+
+```bash
+cp .env.example .env
+```
+
+You must update the following variables in your `.env` file:
+
+### Security & Superuser
+Generate a secure `SECRET_KEY` for JWT tokens (e.g., using a [JWT Secret Key Generator](https://jwtsecretkeygenerator.com)).
+```bash
+SECRET_KEY="your-generated-hs256-key"
+
+# Superuser details
+SUPER_USER_NAME="Admin User"
+SUPER_USER_EMAIL="admin@example.com"
+SUPER_USER_PASSWORD="adminpassword" # Password must be at least 8 characters
+```
+
+### Database Connection
+```bash
+# Postgres Connection Settings
+POSTGRES_SERVER=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=fastapi_template_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=admin
+
+# The app constructs the URL as:
+# postgresql+psycopg://postgres:admin@localhost:5432/fastapi_template_db
+```
+
+### Local pgAdmin settings
+```bash
+PGADMIN_EMAIL=admin@example.com
+PGADMIN_PASSWORD=admin
+```
+*Note: These are used only when running with `docker-compose.override.yml` for local development.*
+
+---
+
 ## 🚀 Running the API Locally
 
 ### Start Native Development Server (Hybrid Setup)
@@ -54,7 +97,14 @@ For developers who prefer running the database services via Docker while develop
    # Start development server (Auto-reload enabled)
    uv run fastapi dev
    ```
-   The API will be available at `http://localhost:8000/docs`, communicating with the PostgreSQL instance running inside Docker.
+   The API will be available at:
+   - **API Documentation**: `http://localhost:8000/docs`
+   - **pgAdmin**: `http://localhost:5050`
+   - **MailCatcher UI**: `http://localhost:1080`
+   - **Prometheus Metrics**: `http://localhost:8000/metrics`
+   - **Health Status**: `http://localhost:8000/health`
+
+   These endpoints will communicate with the PostgreSQL instance running inside Docker.
 
 ### Start Full Docker Development Stack
 ```bash
