@@ -107,7 +107,7 @@ SECRET_KEY="your-generated-hs256-key"
 # Superuser details
 SUPER_USER_NAME="Admin User"
 SUPER_USER_EMAIL="admin@example.com"
-SUPER_USER_PASSWORD="adminpassword123"      # Password must be min. 8 characters
+SUPER_USER_PASSWORD="adminpassword"      # Password must be min. 8 characters
 ```
 
 **Database Connection**
