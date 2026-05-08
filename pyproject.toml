@@ -32,13 +32,14 @@ lint = [
     "mypy>=2.0.0",   # Static type checking
     "bandit>=1.8.3",   # Security-focused linting
 ]
-
 test = [
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
     "pytest-asyncio>=1.3.0",
     "httpx>=0.27.0",   # Required for testing FastAPI endpoints
     "pytest-mock>=3.15.1",
+    "testcontainers>=4.14.2",
+    "hypothesis>=6.152.4",
 ]
 
 dev = [

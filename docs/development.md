@@ -149,7 +149,7 @@ uv run python app/db/initial_data.py
 
 ## 🧪 Testing
 
-We use **Pytest** for our testing suite.
+We use **Pytest** for our testing suite, enhanced with **Testcontainers** for isolated infrastructure and **Hypothesis** for property-based testing.
 
 ### Run All Tests
 ```bash
@@ -160,6 +160,13 @@ uv run pytest
 ```bash
 uv run pytest --cov=app --cov-report=term-missing
 ```
+
+### Property-based Testing (Hypothesis)
+We use Hypothesis to generate edge-case data for our core utilities and validation logic.
+```bash
+uv run pytest tests/test_hypothesis.py
+```
+*Note: Testcontainers will automatically spin up a clean PostgreSQL instance for your tests when needed.*
 
 ## 📧 Email Testing (MailCatcher)
 

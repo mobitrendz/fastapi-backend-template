@@ -1,10 +1,12 @@
 from collections.abc import AsyncGenerator
 
+import pytest
 import pytest_asyncio
 from fastapi_pagination import add_pagination
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
+from testcontainers.postgres import PostgresContainer
 
 from app.core import security
 from app.core.config import settings
@@ -15,32 +17,36 @@ from app.models.user import UserCreate, UserRole
 
 add_pagination(app)
 
-# Use PostgreSQL for testing (can be configured to a separate test DB if needed)
-# For simplicity, we use the same DB but with transactional isolation (rollback)
-TEST_SQLALCHEMY_DATABASE_URI = str(settings.SQLALCHEMY_DATABASE_URI)
 
-engine = create_async_engine(TEST_SQLALCHEMY_DATABASE_URI)
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+# Testcontainer for Postgres
+@pytest.fixture(scope="session")
+def postgres_container():
+    with PostgresContainer("postgres:18") as container:
+        yield container
 
 
-@pytest_asyncio.fixture(scope="session", autouse=True)
-async def setup_database():
-    # Ensure tables exist
+@pytest_asyncio.fixture(scope="session")
+async def engine(postgres_container):
+    # Dynamically build the connection URL from the container
+    url = postgres_container.get_connection_url().replace(
+        "postgresql+psycopg2", "postgresql+psycopg"
+    )
+    engine = create_async_engine(url)
+
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-    yield
+
+    yield engine
+
+    await engine.dispose()
 
 
 @pytest_asyncio.fixture
-async def session() -> AsyncGenerator[AsyncSession]:
-    async with engine.connect() as connection:
-        # Start a transaction
-        transaction = await connection.begin()
-        # Bind the session to the connection
-        async with AsyncSession(bind=connection, expire_on_commit=False) as session:
-            yield session
-            # Rollback the transaction after the test
-            await transaction.rollback()
+async def session(engine) -> AsyncGenerator[AsyncSession]:
+    async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+    async with async_session_maker() as session:
+        yield session
+        await session.rollback()
 
 
 @pytest_asyncio.fixture
