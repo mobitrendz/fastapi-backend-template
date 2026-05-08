@@ -32,14 +32,20 @@ source .venv/bin/activate
 
 ## 🚀 Running the API Locally
 
-### Start Development Server
+### Start Native Development Server
 ```bash
 uv run fastapi dev
 ```
 The server will start with hot-reload enabled at http://localhost:8000.
 
+### Start Docker Development Stack
+```bash
+docker compose up --build
+```
+Docker Compose uses `docker-compose.override.yml` by default in local development. That override adds pgAdmin, MailCatcher, hot reload, and the local Traefik route file at `traefik/dynamic.local.yml`.
+
 #### 🌐 Local Network Access via Traefik
-All services are routed through Traefik using custom `.test` domains. To access them, ensure the following are in your `/etc/hosts` file:
+When using the Docker development stack, services are routed through Traefik using custom `.test` domains. To access them, ensure the following are in your `/etc/hosts` file:
 ```text
 127.0.0.1 traefik.fastapi-template.test api.fastapi-template.test pgadmin.fastapi-template.test mail.fastapi-template.test
 ```
@@ -48,6 +54,8 @@ Services are then available at:
 - **pgAdmin**: `http://pgadmin.fastapi-template.test`
 - **Mailcatcher**: `http://mail.fastapi-template.test`
 - **Traefik Dashboard**: `http://traefik.fastapi-template.test:8080`
+
+pgAdmin and MailCatcher are local-only services. They are defined in `docker-compose.override.yml` and are not part of the base `docker-compose.yaml` stack.
 
 ## 🗄️ Database Migrations & Seeding
 
@@ -90,7 +98,7 @@ uv run pytest --cov=app --cov-report=term-missing
 For local development and testing of password recovery or other email-related features, we use **MailCatcher**.
 
 - **SMTP Port**: `1025`
-- **Web Interface**: http://localhost:1080
+- **Web Interface**: http://localhost:1080 or http://mail.fastapi-template.test
 
 When running via Docker Compose, the backend is configured to route emails through the `mailcatcher` service. You can view all outgoing emails in the web interface.
 
