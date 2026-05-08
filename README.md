@@ -317,3 +317,11 @@ Access the local documentation at: http://localhost:3000
 ```bash
 uv run zensical build
 ```
+
+---
+
+## 📝 Release Notes
+See the full [Release Notes](release-notes.md) for a detailed history of changes.
+
+## ⚖️ License
+This project is licensed under the [MIT License](LICENSE).
