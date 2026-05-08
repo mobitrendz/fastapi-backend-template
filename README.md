@@ -4,12 +4,12 @@
 [![Backend Code Quality](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml)
 [![Coverage](coverage.svg)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml)
 
-A robust foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**. This project is currently in active development and serves as an evolving blueprint for high-performance Python 3.14+ environments, utilizing **uv** for deterministic dependency management and **Docker Compose** for full-stack orchestration.
+A robust foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**. This project is currently in active development and serves as an evolving blueprint for high-performance Python 3.12+ environments, utilizing **uv** for deterministic dependency management and **Docker Compose** for full-stack orchestration.
 
 ## 🌟 Key Features
 
 *   **AI-Driven Development**: Optimized for **Google Antigravity** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.
-*   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
+*   **Python 3.12+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
 *   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
 *   **Modern Dependency Management**: Powered by [uv](https://astral.sh) for lightning-fast, reproducible builds.
@@ -20,7 +20,7 @@ A robust foundation for scalable web applications leveraging **FastAPI**, **SQLM
 ## 🛠️ Tech Stack
 
 ### 🏗️ Core Architecture
-- 🐍 **Python 3.14+** — Latest high-performance interpreter with advanced language features.
+- 🐍 **Python 3.12+** — Latest high-performance interpreter with advanced language features.
 - ⚡ **FastAPI** — High-performance, production-ready web framework for building APIs.
 - 📐 **Pydantic v2** — Modern data validation and settings management using type hints.
 - 🔢 **FastAPI-Pagination** — Uniform pagination support for clean and consistent list responses.
