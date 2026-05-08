@@ -249,6 +249,9 @@ uv run zensical build
 
 ## 📝 Release Notes
 See the full [Release Notes](release-notes.md) for a detailed history of changes.
+## 📝 License
 
-## ⚖️ License
 This project is licensed under the [MIT License](LICENSE).
+
+## 💡 Inspiration
+This project is heavily inspired by the official [full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template) in the FastAPI repository. It builds upon those foundational concepts, incorporating modern toolchain upgrades, enhanced observability, and AI-optimized developer workflows.
