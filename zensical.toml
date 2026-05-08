@@ -14,24 +14,24 @@ version = "0.1.0"
 
 # The address on which the development server will listen.
 # This is not used in production, but it can be useful to set it to a specific value for development.
-# Note: Services are now routed via Traefik at http://api.fastapi-template.test
+# Note: Local Docker services are routed via Traefik at http://api.fastapi-template.test
 dev_addr = "localhost:3000"
 
 # The site_name is shown in the page header and the browser window title
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_name
-site_name = "Documentation"
+site_name = "FastAPI Backend Template"
 
 # The site_description is included in the HTML head and should contain a
 # meaningful description of the site content for use by search engines.
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_description
-site_description = "A new project generated from the default template project."
+site_description = "FastAPI backend template documentation for local development, Traefik routing, and deployment."
 
 # The site_author attribute. This is used in the HTML head element.
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_author
-site_author = "<your name here>"
+site_author = "FastAPI Backend Template Authors"
 
 # The site_url is the canonical URL for your site. When building online
 # documentation you should set this.

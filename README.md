@@ -13,7 +13,7 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 *   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
 *   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
 *   **Modern Dependency Management**: Powered by [uv](https://astral.sh) for lightning-fast, reproducible builds.
-*   **Full-Stack Orchestration**: Integrated **PostgreSQL 18** and **pgAdmin 4** services.
+*   **Full-Stack Orchestration**: Integrated **PostgreSQL 18**, **Traefik**, and development-only admin/email tooling.
 *   **Enterprise Security**: Centralised OAuth2, JWT implementation, Argon2-based hashing, and automated **Security Scanning** via Bandit.
 *   **Robust Health Monitoring**: Integrated Docker health checks ensuring zero-downtime dependency readiness.
 
@@ -51,6 +51,7 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 ### 🛠️ Tooling & Infrastructure
 - 📦 **uv** — Next-generation, lightning-fast Python package and project manager.
 - 🐳 **Docker & Compose** — Full-stack container orchestration for environmental parity.
+- 🧭 **Traefik** — Local reverse proxy for stable `.test` service URLs.
 - 📥 **MailCatcher** — Instant SMTP server for capturing and inspecting emails during development.
 - 🦀 **Zensical** — Ultra-fast, Rust-powered documentation generator for this project.
 - 🤖 **Gemini CLI** — AI-powered autonomous agent for rapid, surgical engineering.
@@ -84,17 +85,18 @@ gemini --sandbox seatbelt
 
 ## 🛠️ Infrastructure & Orchestration
 
-The project utilises a multi-container architecture managed via `docker-compose.yaml`. This ensures environmental parity across development, staging, and production.
+The project utilises a multi-container architecture managed via Docker Compose. The base `docker-compose.yaml` contains production-oriented services, while `docker-compose.override.yml` adds local development tools such as pgAdmin and MailCatcher.
 
 ### Service Architecture
 
 | Service | Technology | Role |
 | :--- | :--- | :--- |
+| **Traefik** | Traefik v3 | Reverse proxy for host-based routing. Uses `traefik/dynamic.yml` in the base stack and `traefik/dynamic.local.yml` in local development. |
 | **API** | FastAPI / Uvicorn | Primary application server with built-in health monitoring. |
 | **DB** | PostgreSQL 18 | Relational data store with persisted volume mapping. |
-| **pgAdmin** | pgAdmin 4 | Web-based database administration and query interface. |
-| **MailCatcher** | MailCatcher | Local SMTP server and web interface for email testing. |
 | **Prestart** | Python/Alembic | Lifecycle service; executes migrations and populates initial system state. |
+| **pgAdmin** | pgAdmin 4 | Development-only database administration interface from `docker-compose.override.yml`. |
+| **MailCatcher** | MailCatcher | Development-only SMTP server and web interface from `docker-compose.override.yml`. |
 
 ## 📂 Project Structure
 
@@ -117,6 +119,7 @@ fastapi-backend-template/
 ├── docs/                          # Zensical documentation source (Markdown)
 ├── site/                          # Generated Zensical static documentation
 ├── scripts/                       # Shell scripts for deployment and startup
+├── traefik/                       # Traefik file-provider route configuration
 ├── tests/                         # Pytest suite for unit and integration testing
 ├── .env                           # Environment variables (Internal)
 ├── .env.example                   # Template for environment variables
@@ -193,17 +196,23 @@ POSTGRES_PASSWORD=admin
 # postgresql+psycopg://postgres:admin@localhost:5432/fastapi_template_db
 ```
 
-**pgAdmin settings**
+**Local pgAdmin settings**
 ```bash
 PGADMIN_EMAIL=admin@example.com
 PGADMIN_PASSWORD=admin
 ```
+These are used only when `docker-compose.override.yml` is included for local development.
 
 ### 3. Orchestration Launch
 
-Deploy the entire stack with a single command:
+Deploy the local development stack with a single command:
 ```bash
 docker compose up --build
+```
+
+For a base stack without development-only pgAdmin and MailCatcher services, run:
+```bash
+docker compose -f docker-compose.yaml up --build
 ```
 
 This triggers the following automated sequence:
@@ -216,8 +225,10 @@ This triggers the following automated sequence:
 
 ### 4. Application Entry Points
 - API Documentation: http://localhost:8000/docs
-- Database Management: http://localhost:5050
-- MailCatcher UI: http://localhost:1080
+- API via Traefik: http://api.fastapi-template.test/docs
+- Database Management: http://localhost:5050 or http://pgadmin.fastapi-template.test
+- MailCatcher UI: http://localhost:1080 or http://mail.fastapi-template.test
+- Traefik Dashboard: http://traefik.fastapi-template.test:8080
 - Health Status: http://localhost:8000/health
 
 ### 5. 🛠️ Local Development
@@ -247,7 +258,7 @@ uv run fastapi dev
 ```
 
 ### 🌐 Local Access via Traefik
-All services are routed through Traefik using custom `.test` domains. To access them, add the following to your `/etc/hosts` file:
+The local Compose override mounts `traefik/dynamic.local.yml`, which routes the API and development tools through custom `.test` domains. To access them, add the following to your `/etc/hosts` file:
 ```text
 127.0.0.1 traefik.fastapi-template.test api.fastapi-template.test pgadmin.fastapi-template.test mail.fastapi-template.test
 ```
@@ -256,6 +267,8 @@ Services are then available at:
 - **pgAdmin**: `http://pgadmin.fastapi-template.test`
 - **Mailcatcher**: `http://mail.fastapi-template.test`
 - **Traefik Dashboard**: `http://traefik.fastapi-template.test:8080`
+
+The base Traefik config in `traefik/dynamic.yml` excludes pgAdmin and MailCatcher so those local-only services are not published when running with `docker-compose.yaml` alone.
 
 ### 6. 🧪 Quality Assurance
 Maintain system integrity and code quality with the integrated toolchain:

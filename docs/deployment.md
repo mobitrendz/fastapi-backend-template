@@ -4,19 +4,25 @@ icon: lucide/ship
 
 # Deployment
 
-The project is designed to be deployed using **Docker Compose** for seamless environment parity.
+The project is designed to be deployed using **Docker Compose** for seamless environment parity. The base `docker-compose.yaml` is production-oriented; local-only services are added by `docker-compose.override.yml`.
 
 ## 🐳 Docker Compose Architecture
 
-The `docker-compose.yaml` defines several key services:
+The base `docker-compose.yaml` defines these key services:
 
 | Service | Technology | Role |
 | :--- | :--- | :--- |
+| **Traefik** | Traefik v3 | Reverse proxy for host-based routing. |
 | **API** | FastAPI / Uvicorn | The application server. |
 | **DB** | PostgreSQL 18 | The primary database. |
-| **pgAdmin** | pgAdmin 4 | Database administration interface. |
-| **MailCatcher** | MailCatcher | Local SMTP server for email testing (Development). |
 | **Seeder** | Python | Handles migrations and initial data. |
+
+Development-only services live in `docker-compose.override.yml`:
+
+| Service | Technology | Role |
+| :--- | :--- | :--- |
+| **pgAdmin** | pgAdmin 4 | Local database administration interface. |
+| **MailCatcher** | MailCatcher | Local SMTP server and email inspection UI. |
 
 ## 🚀 Deployment Steps
 
@@ -28,9 +34,17 @@ cp .env.example .env
 Ensure `SECRET_KEY` and database credentials are set securely.
 
 ### 2. Launch Stack
+For production-style deployment without local-only tools:
+```bash
+docker compose -f docker-compose.yaml up -d --build
+```
+
+For local development, where Compose automatically includes `docker-compose.override.yml`:
 ```bash
 docker compose up -d --build
 ```
+
+The base Traefik route file is `traefik/dynamic.yml`. The local override mounts `traefik/dynamic.local.yml`, which adds pgAdmin and MailCatcher routes.
 
 ### 3. Verify Health
 Check service health:

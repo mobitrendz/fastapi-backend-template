@@ -12,6 +12,7 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 *   **Modular Architecture**: Clean separation of API, Services, CRUD, and Models.
 *   **Enterprise Security**: OAuth2 with JWT, Argon2 password hashing.
 *   **Observability**: Structured JSON logging with Structlog and Prometheus metrics.
+*   **Local Reverse Proxy**: Traefik routes local services through stable `.test` domains.
 *   **Email Testing**: Integrated **MailCatcher** for capturing and inspecting outgoing emails locally.
 *   **Automated Quality**: Fast linting, formatting, and type-checking powered by **Ruff**, **Mypy**, and **Prek**.
 *   **Modern Tooling**: Powered by [uv](https://astral.sh) for dependency management.
@@ -33,9 +34,11 @@ app/                       # Main Application Logic
 alembic/                   # Database migrations and environment setup
 docs/                      # Zensical documentation source (Markdown)
 scripts/                   # Shell scripts for deployment and startup
+traefik/                   # Traefik file-provider route configuration
 tests/                     # Pytest suite for unit and integration testing
 pyproject.toml             # Dependency management (uv)
 docker-compose.yaml        # Container Orchestration Manifest
+docker-compose.override.yml # Local development services and overrides
 Dockerfile                 # Multi-stage, non-root Production Build
 GEMINI.md                  # AI mandates and architectural context
 ```
@@ -73,12 +76,12 @@ cp .env.example .env
 
 ### 3. Run with Docker
 ```bash
-# Deploy full stack
+# Deploy local development stack
 docker compose up --build
 ```
 This automatically runs migrations and seeds the initial data via the `prestart` service.
 
-Access the API at: http://localhost:8000/docs
+Access the API at http://localhost:8000/docs or, after adding the local hosts entries, at http://api.fastapi-template.test/docs.
 
 ### 4. Quality Assurance
 Ensure the system is stable by running the test suite:

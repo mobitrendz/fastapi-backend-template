@@ -1,4 +1,8 @@
 services:
+  traefik:
+    volumes:
+      - ./traefik/dynamic.local.yml:/etc/traefik/dynamic.yml:ro
+
   backend:
     # Enable Hot Reload by mounting local source code
     volumes:
@@ -15,9 +19,21 @@ services:
       - WATCHFILES_FORCE_POLLING=true
 
   pgadmin:
-    # You might only want pgadmin visible during development
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_ui
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@example.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_SESSION_EXPIRATION: 720
     ports:
       - "5050:80"
+    networks:
+      - default
+      - proxy
+    depends_on:
+      - db
 
   mailcatcher:
     image: schickling/mailcatcher
