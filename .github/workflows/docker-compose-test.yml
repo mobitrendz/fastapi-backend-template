@@ -1,4 +1,4 @@
-name: Docker Compose Test
+name: Docker Validation
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Test Docker Compose
+    name: Docker Validation
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
