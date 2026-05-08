@@ -40,7 +40,7 @@ A production-ready FastAPI template designed for scalable, high-performance web 
 ### 📊 Observability & Resilience
 - 🪵 **Structlog** — High-performance structured logging for deep system visibility.
 - 📈 **Prometheus** — Real-time metrics instrumentation for monitoring system health.
-- 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring.
+- 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring with native FastAPI integration.
 - 🔄 **Tenacity** — Sophisticated retry logic for handling transient operational failures.
 
 ### 📧 Email & Templating
