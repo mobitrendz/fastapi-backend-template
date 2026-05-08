@@ -73,30 +73,6 @@ async def update_user(
     return user
 
 
-# Update operation for changing a user's password, which requires verification of the current password. Returns a success message or raises an HTTP exception if verification fails.
-async def update_password(
-    *, session: AsyncSession, updatePassword: UpdatePassword, current_user: CurrentUser
-) -> bool:
-
-    verified = verify_password(
-        updatePassword.current_password, current_user.hashed_password
-    )
-
-    if not verified:
-        raise HTTPException(status_code=400, detail="Incorrect password")
-    if updatePassword.current_password == updatePassword.new_password:
-        raise HTTPException(
-            status_code=400, detail="New password cannot be the same as the current one"
-        )
-
-    hashed_password = hash_password(updatePassword.new_password)
-    current_user.hashed_password = hashed_password
-    session.add(current_user)
-    await session.commit()
-
-    return True
-
-
 # Delete operation for users, allowing deletion by ID. Returns a boolean indicating success or failure of the deletion.
 async def delete_user(*, session: AsyncSession, id: uuid.UUID) -> bool:
     user = await get_user_by_id(session=session, id=id)
@@ -134,18 +110,19 @@ async def authenticate_user(
 
 # Dependency to get the current authenticated user based on the JWT token. It decodes the token, validates it, and retrieves the user from the database. Raises appropriate HTTP exceptions if validation fails or if the user is not found or inactive.
 async def get_current_user(session: SessionDependency, token: TokenDependency) -> User:
+    # fmt: off
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
         token_data = TokenPayload(**payload)
-    except InvalidTokenError, ValidationError:
+    except (InvalidTokenError, ValidationError):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         ) from None
-
     user = await session.get(User, token_data.sub)
+    # fmt: on
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -184,3 +161,27 @@ AllowAdminAndUser = Annotated[User, Depends(ALLOW_ADMIN_AND_USER)]
 
 # Type alias for the current authenticated user, used in dependencies for role-based access control. This allows for cleaner code when specifying dependencies that require the current user.
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+# Update operation for changing a user's password, which requires verification of the current password. Returns a success message or raises an HTTP exception if verification fails.
+async def update_password(
+    *, session: AsyncSession, updatePassword: UpdatePassword, current_user: CurrentUser
+) -> bool:
+
+    verified = verify_password(
+        updatePassword.current_password, current_user.hashed_password
+    )
+
+    if not verified:
+        raise HTTPException(status_code=400, detail="Incorrect password")
+    if updatePassword.current_password == updatePassword.new_password:
+        raise HTTPException(
+            status_code=400, detail="New password cannot be the same as the current one"
+        )
+
+    hashed_password = hash_password(updatePassword.new_password)
+    current_user.hashed_password = hashed_password
+    session.add(current_user)
+    await session.commit()
+
+    return True

@@ -16,7 +16,7 @@
 - **Development Environment**: Standardized local service access to use custom `.test` domains through Traefik instead of direct IP/localhost ports.
 - **Linting & Tooling**:
   - Enabled `pre-commit` hooks via `prek` (requires manual `prek install` after update).
-  - Temporarily disabled `bandit` due to Python 3.14 incompatibility.
+  - Temporarily disabled `bandit` due to Python 3.12 incompatibility.
   - Updated all GitHub Action workflows to use modern versions: `actions/checkout@v6`, `actions/setup-python@v6`, `astral-sh/setup-uv@v8.0.0`.
 
 ### Fixed
