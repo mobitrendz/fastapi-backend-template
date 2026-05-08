@@ -10,7 +10,7 @@ available version before reporting an issue.
 
 Please do not create a public GitHub issue for security vulnerabilities.
 
-To report a vulnerability, contact the project maintainer(sreeraj.sreenivasan@gmail.com) privately with:
+To report a vulnerability, contact the project maintainer(sreeraj.dev@icloud.com) privately with:
 
 - A clear description of the vulnerability
 - Steps to reproduce the issue
