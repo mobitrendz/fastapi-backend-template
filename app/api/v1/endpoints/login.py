@@ -1,11 +1,12 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.core import security
 from app.core.config import settings
+from app.core.limiter import limiter
 from app.core.security import (
     TokenDependency,
     oauth2_scheme,
@@ -20,7 +21,9 @@ router = APIRouter()
 
 # This endpoint allows users to log in and receive an access token for authentication in future requests.
 @router.post("/access-token", response_model=Token)
+@limiter.limit("5/minute")
 async def login_access_token(
+    request: Request,  # noqa: ARG001
     session: SessionDependency,
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
@@ -62,8 +65,11 @@ async def get_current_user(
 
 
 @router.post("/signup", response_model=UserPublic)
+@limiter.limit("5/minute")
 async def register_user(
-    session: SessionDependency, user_in: UserRegister
+    request: Request,  # noqa: ARG001
+    session: SessionDependency,
+    user_in: UserRegister,
 ) -> UserPublic:
     """
     Public signup endpoint for new users.
@@ -87,7 +93,12 @@ async def register_user(
 
 
 @router.post("/password-recovery/{email}")
-async def recover_password(email: str, session: SessionDependency) -> Message:
+@limiter.limit("3/minute")
+async def recover_password(
+    request: Request,  # noqa: ARG001
+    email: str,
+    session: SessionDependency,
+) -> Message:
 
     user = await user_crud.get_user_by_email(session=session, email=email)
 
