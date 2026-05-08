@@ -8,7 +8,7 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 
 ## 🌟 Key Features
 
-*   **AI-Driven Development**: Optimized for **Gemini CLI** for autonomous engineering, refactoring, and feature implementation.
+*   **AI-Driven Development**: Optimized for **Codex** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.
 *   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
 *   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
@@ -54,6 +54,7 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 - 🧭 **Traefik** — Local reverse proxy for stable `.test` service URLs.
 - 📥 **MailCatcher** — Instant SMTP server for capturing and inspecting emails during development.
 - 🦀 **Zensical** — Ultra-fast, Rust-powered documentation generator for this project.
+- 🤖 **Codex** — AI coding collaborator for implementation, review, documentation, and repository maintenance.
 - 🤖 **Gemini CLI** — AI-powered autonomous agent for rapid, surgical engineering.
 
 ### 🧪 Quality Assurance
@@ -62,13 +63,13 @@ A production-ready foundation for scalable web applications leveraging **FastAPI
 - 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
 - ⚓ **Prek** — Ultra-fast, Rust-powered Git hook manager for automated code quality checks.
 
-## 🤖 Gemini CLI AI-Driven Development
+## 🤖 AI-Driven Development
 
-This project is built and maintained using **Gemini CLI**, an advanced AI agent for software engineering.
+This project is built to work well with AI coding assistants such as **Codex** and **Gemini CLI**.
 
 ### Core Benefits:
-- **Autonomous Engineering**: Gemini CLI can research the codebase, plan complex changes, and execute them surgically.
-- **Context Awareness**: Leverages the `GEMINI.md` mandates to ensure all AI-generated code adheres to project-specific architectural standards.
+- **Autonomous Engineering**: AI assistants can research the codebase, plan complex changes, and execute focused edits.
+- **Context Awareness**: Leverages repository guidance such as `GEMINI.md`, existing code patterns, tests, and documentation to keep changes aligned with local standards.
 - **Automated Validation**: Integrated workflow for running tests and linters immediately after code modifications.
 
 To interact with this project using Gemini CLI:
