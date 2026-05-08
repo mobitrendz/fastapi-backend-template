@@ -6,10 +6,14 @@ from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import EmailStr
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router as v1_router
 from app.core.config import settings
+from app.core.limiter import limiter
 from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
 from app.db import initial_data
@@ -49,6 +53,12 @@ app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url="/openapi.json",
 )
+
+
+# ...
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
+app.add_middleware(SlowAPIMiddleware)
 
 # Initialize Prometheus Instrumentator
 Instrumentator().instrument(app).expose(app)
