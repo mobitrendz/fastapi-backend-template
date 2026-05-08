@@ -2,7 +2,7 @@
 
 [![Docker Validation](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml)
 [![Backend Code Quality](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml)
-[![Test Coverage](coverage.svg)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml)
+[![Coverage](coverage.svg)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml)
 
 A production-ready foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**. This template is engineered for high-performance Python 3.14+ environments, utilizing **uv** for deterministic dependency management and **Docker Compose** for full-stack orchestration.
 
