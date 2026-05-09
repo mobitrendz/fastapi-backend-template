@@ -29,8 +29,8 @@ dependencies = [
 
 [dependency-groups]
 lint = [
-    "ruff>=0.15.11",   # Fast, all-in-one linter and formatter
-    "mypy>=2.0.0",   # Static type checking
+    "ruff>=0.15.5",   # Fast, all-in-one linter and formatter
+    "mypy>=1.10.0",   # Static type checking
     "bandit>=1.8.3",   # Security-focused linting
 ]
 test = [
@@ -55,8 +55,9 @@ dev = [
 ]
 
 [tool.ruff]
+
 line-length = 88
-target-version = "py314"
+target-version = "py312"
 lint.select = [
     "E",    # pycodestyle errors
     "W",    # pycodestyle warnings
