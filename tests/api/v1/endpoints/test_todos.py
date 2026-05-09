@@ -89,19 +89,21 @@ async def test_rbac_todo_access(
         session=session, email=settings.SUPER_USER_EMAIL
     )
     assert super_user is not None
+    super_todo_title = f"Super secret todo {uuid.uuid4()}"
     super_todo = await todo_crud.create_todo(
         session=session,
-        todo_create=ToDoListCreate(title="Super secret todo"),
+        todo_create=ToDoListCreate(title=super_todo_title),
         current_user=super_user,
     )
 
     # 2. Create a normal USER todo
     user = await user_crud.get_user_by_email(session=session, email="user@example.com")
     assert user is not None
+    user_todo_title = f"User todo {uuid.uuid4()}"
     await client.post(
         "/api/v1/todos/",
         headers={"Authorization": f"Bearer {normal_user_token}"},
-        json={"title": "User todo"},
+        json={"title": user_todo_title},
     )
 
     # --- Test SUPER Access ---
@@ -112,8 +114,8 @@ async def test_rbac_todo_access(
     )
     assert super_response.status_code == 200
     super_titles = {t["title"] for t in super_response.json()["data"]}
-    assert "Super secret todo" in super_titles
-    assert "User todo" in super_titles
+    assert super_todo_title in super_titles
+    assert user_todo_title in super_titles
 
     # --- Test ADMIN Access ---
     # ADMIN should see User todo but NOT Super todo
@@ -123,8 +125,8 @@ async def test_rbac_todo_access(
     )
     assert admin_response.status_code == 200
     admin_titles = {t["title"] for t in admin_response.json()["data"]}
-    assert "User todo" in admin_titles
-    assert "Super secret todo" not in admin_titles
+    assert user_todo_title in admin_titles
+    assert super_todo_title not in admin_titles
 
     # ADMIN should get 404/403 (effectively 404 in our impl) for Super todo specifically
     admin_single_response = await client.get(
