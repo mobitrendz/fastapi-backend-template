@@ -27,7 +27,8 @@ This document provides a comprehensive overview of the technologies, tools, and 
 ## 📊 Observability & Resilience
 - 🪵 **Structlog** — High-performance structured logging for deep system visibility.
 - 📈 **Prometheus** — Real-time metrics instrumentation for monitoring system health.
-- 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring.
+- 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring with native FastAPI integration.
+- ✨ **Rich** — Beautiful console formatting and traceback visualization for local development.
 - 🔄 **Tenacity** — Sophisticated retry logic for handling transient operational failures.
 
 ## 📧 Email & Templating
@@ -48,6 +49,7 @@ This document provides a comprehensive overview of the technologies, tools, and 
 - 🧪 **Pytest & Coverage** — Mature testing framework with detailed coverage reporting.
 - 🐳 **Testcontainers** — Isolated, containerized integration testing.
 - 🧠 **Hypothesis** — Advanced property-based testing for edge-case identification.
+- 🚀 **py-spy & Scalene** — Advanced performance profiling for CPU and memory optimization.
 - 🧹 **Ruff** — Extremely fast, all-in-one Python linter and code formatter.
 - 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
 - ⚓ **Prek** — Ultra-fast, Rust-powered Git hook manager for automated code quality checks.

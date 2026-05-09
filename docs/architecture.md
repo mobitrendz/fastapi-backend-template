@@ -14,26 +14,46 @@ graph TD
     Services --> CRUD[CRUD Layer - app/crud]
     CRUD --> DB[(Database)]
     Services --> Email[Email Service / MailCatcher]
-    API --> Middleware[Prometheus & SlowAPI Middleware]
+
+    subgraph Core[Core Layer - app/core]
+        Config[Config]
+        Security[Security]
+        Logger[Logger]
+        Limiter[Limiter]
+    end
+
+    API -.-> Core
+    Services -.-> Core
+    CRUD -.-> Core
+
     Models[Model Layer - app/models] -.-> API
     Models -.-> Services
     Models -.-> CRUD
 ```
 
 ### 1. API Layer (`app/api/v1`)
-- **Responsibility**: Request handling, validation, and response serialization.
-- **Middleware**: Integrates `SlowAPI` (rate limiting) and `Instrumentator` (Prometheus metrics) to protect and monitor endpoints.
+- **Responsibility**: Request handling, routing, and response serialization.
+- **Role**: Validates incoming data using Pydantic schemas and delegates business logic to the Service or CRUD layers.
 
 ### 2. Service Layer (`app/services`)
-- **Responsibility**: Business logic orchestration.
-- **Role**: Coordinates multiple CRUD operations, external API calls, and domain-specific rules.
+- **Responsibility**: Complex business logic orchestration.
+- **Role**: Coordinates multiple CRUD operations, interacts with external APIs, and manages MJML email template rendering.
 
 ### 3. CRUD Layer (`app/crud`)
-- **Responsibility**: Atomic database operations.
-- **Role**: Reusable functions using **SQLModel** and **SQLAlchemy** (Async-ready).
+- **Responsibility**: Atomic, reusable database operations.
+- **Role**: Direct interaction with the database using **SQLModel** and **SQLAlchemy** (Async-native).
 
 ### 4. Model Layer (`app/models`)
-- **Responsibility**: Unified `SQLModel` definitions for Tables and DTOs.
+- **Responsibility**: Unified data definitions.
+- **Role**: Defines `SQLModel` classes that serve as both database tables and Pydantic schemas (Read/Create/Update DTOs).
+
+### 5. Core Layer (`app/core`)
+- **Responsibility**: Cross-cutting concerns and global configuration.
+- **Components**:
+    - **Config**: Environment variable management via Pydantic Settings.
+    - **Security**: JWT token handling, Argon2 password hashing, and authentication logic.
+    - **Logger**: Centralized structured logging (Structlog + Rich).
+    - **Limiter**: API rate limiting configuration (SlowAPI).
 
 ## 🛡️ Observability & Resilience
 - **Structured Logging**: `Structlog` provides unified JSON-formatted logs.

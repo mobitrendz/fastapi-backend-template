@@ -108,6 +108,9 @@ uv run pytest --cov=app --cov-report=term-missing
 
 ## 📚 Documentation Sections
 
+- [**Tech Stack**](tech-stack.md): Detailed overview of the project's technology stack.
 - [**Architecture**](architecture.md): Understand the modular design and data flow.
-- [**Development**](development.md): Guide for local setup, testing, and migrations.
-- [**Deployment**](deployment.md): Production builds and infrastructure details.
+- [**AI-Driven Development**](ai-development.md): Guide for optimizing development with AI tools.
+- [**Development**](development.md): Guide for local setup, testing, and observability.
+- [**Deployment**](deployment.md): Production builds, Docker, and CI/CD pipelines.
+- [**Contributing**](contributing.md): Guidelines for contributing to the project.
