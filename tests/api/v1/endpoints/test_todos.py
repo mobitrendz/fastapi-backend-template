@@ -76,7 +76,7 @@ async def test_read_todos_returns_current_users_todos_only(
 
 
 @pytest.mark.asyncio
-async def test_admin_can_read_all_todos(
+async def test_admin_cannot_read_todos(
     client: AsyncClient,
     session: AsyncSession,
     normal_user_token: str,
@@ -88,18 +88,17 @@ async def test_admin_can_read_all_todos(
     create_response = await client.post(
         "/api/v1/todos/",
         headers={"Authorization": f"Bearer {normal_user_token}"},
-        json={"title": "Admin visible todo", "priority": "low"},
+        json={"title": "Admin invisible todo", "priority": "low"},
     )
     assert create_response.status_code == 200
 
+    # Super user (Role.SUPER) should NOT have access to ToDos
     response = await client.get(
         "/api/v1/todos/",
         headers={"Authorization": f"Bearer {superuser_token}"},
     )
 
-    assert response.status_code == 200
-    titles = {todo["title"] for todo in response.json()["data"]}
-    assert "Admin visible todo" in titles
+    assert response.status_code == 403
 
 
 @pytest.mark.asyncio

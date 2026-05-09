@@ -4,6 +4,7 @@ import pytest
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.deps import ALLOW_ADMIN, get_current_user
 from app.core import security
 from app.crud import user as user_crud
 from app.models.user import UpdatePassword, UserCreate, UserRole, UserUpdate
@@ -101,7 +102,7 @@ async def test_role_checker_unauthorized(session: AsyncSession):
     )
     user = await user_crud.create_user(session=session, user_create=user_in)
 
-    checker = user_crud.ALLOW_ADMIN
+    checker = ALLOW_ADMIN
     with pytest.raises(HTTPException) as exc:
         checker(current_user=user)
     assert exc.value.status_code == 403
@@ -121,6 +122,6 @@ async def test_get_current_user_inactive_crud(session: AsyncSession):
 
     token = security.create_access_token(str(user.id))
     with pytest.raises(HTTPException) as exc:
-        await user_crud.get_current_user(session=session, token=token)
+        await get_current_user(session=session, token=token)
     assert exc.value.status_code == 400
     assert exc.value.detail == "Inactive user"

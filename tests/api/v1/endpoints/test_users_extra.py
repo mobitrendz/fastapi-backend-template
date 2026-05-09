@@ -206,10 +206,55 @@ async def test_update_user_forbidden_sensitive_fields(
         json={"role": UserRole.ADMIN},
     )
     assert response.status_code == 403
-    assert (
-        response.json()["detail"]
-        == "Not enough permissions to update role or active status"
+    assert response.json()["detail"] == "Cannot change your own role or active status"
+
+
+@pytest.mark.asyncio
+async def test_admin_cannot_manage_other_admins_or_super(
+    client: AsyncClient, session: AsyncSession
+):
+    from app.core import security
+    from app.crud import user as user_crud
+
+    # Create an ADMIN user
+    admin_email = f"admin_{uuid.uuid4().hex[:6]}@example.com"
+    admin_in = UserCreate(
+        full_name="Admin User",
+        email=admin_email,
+        password="password123",
+        role=UserRole.ADMIN,
     )
+    admin_user = await user_crud.create_user(session=session, user_create=admin_in)
+    admin_token = security.create_access_token(str(admin_user.id))
+
+    # Get SUPER user ID
+    from app.core.config import settings
+
+    super_user = await user_crud.get_user_by_email(
+        session=session, email=settings.SUPER_USER_EMAIL
+    )
+    assert super_user is not None
+
+    # ADMIN tries to view SUPER details -> 403
+    response = await client.get(
+        f"/api/v1/users/byID/{super_user.id}",
+        headers={"Authorization": f"Bearer {admin_token}"},
+    )
+    assert response.status_code == 403
+
+    # ADMIN tries to create another ADMIN -> 403
+    response = await client.post(
+        "/api/v1/users/",
+        headers={"Authorization": f"Bearer {admin_token}"},
+        json={
+            "full_name": "Another Admin",
+            "email": "another_admin@example.com",
+            "password": "password123",
+            "role": UserRole.ADMIN,
+        },
+    )
+    assert response.status_code == 403
+    assert response.json()["detail"] == "Admins can only create regular users."
 
 
 @pytest.mark.asyncio

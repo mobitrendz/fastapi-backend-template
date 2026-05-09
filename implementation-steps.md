@@ -1717,7 +1717,7 @@ async def create_user(session: SessionDependency, allow_admin: AllowAdmin, user_
 class UserRole(StrEnum):
     ADMIN = "admin"
     USER = "user"
-    GUEST = "guest"
+    SUPER = "super"
 ```
 
 - Role-based access control dependencies
