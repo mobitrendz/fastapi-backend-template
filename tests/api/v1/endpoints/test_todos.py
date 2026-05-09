@@ -41,7 +41,9 @@ async def test_create_todo(client: AsyncClient, normal_user_token: str):
 async def test_read_todos_returns_current_users_todos_only(
     client: AsyncClient, session: AsyncSession, normal_user_token: str
 ):
-    owner = await user_crud.get_user_by_email(session=session, email="user@example.com")
+    owner = await user_crud.get_user_by_email(
+        session=session, email="test_user@example.com"
+    )
     assert owner is not None
 
     other_user = await user_crud.create_user(
@@ -97,7 +99,9 @@ async def test_rbac_todo_access(
     )
 
     # 2. Create a normal USER todo
-    user = await user_crud.get_user_by_email(session=session, email="user@example.com")
+    user = await user_crud.get_user_by_email(
+        session=session, email="test_user@example.com"
+    )
     assert user is not None
     user_todo_title = f"User todo {uuid.uuid4()}"
     await client.post(

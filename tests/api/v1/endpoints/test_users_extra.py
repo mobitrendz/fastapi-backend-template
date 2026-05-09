@@ -130,7 +130,9 @@ async def test_update_user_role_denied_for_normal_user(
 ):
     from app.crud import user as user_crud
 
-    user = await user_crud.get_user_by_email(session=session, email="user@example.com")
+    user = await user_crud.get_user_by_email(
+        session=session, email="test_user@example.com"
+    )
 
     response = await client.patch(
         f"/api/v1/users/{user.id}",
