@@ -1,4 +1,5 @@
 import uuid
+from unittest.mock import MagicMock
 
 import pytest
 from fastapi import HTTPException
@@ -111,9 +112,12 @@ async def test_crud_missing_branches(session: AsyncSession):
     assert res is None
 
     # Line 128: get_current_user user not found
+    mock_request = MagicMock()
     with pytest.raises(HTTPException) as exc:
         await get_current_user(
-            session=session, token=security.create_access_token(str(uuid.uuid4()))
+            request=mock_request,
+            session=session,
+            token=security.create_access_token(str(uuid.uuid4())),
         )
     assert exc.value.status_code == 404
 
@@ -129,5 +133,5 @@ async def test_crud_missing_branches(session: AsyncSession):
     )
     token = security.create_access_token(str(user.id))
     with pytest.raises(HTTPException) as exc:
-        await get_current_user(session=session, token=token)
+        await get_current_user(request=mock_request, session=session, token=token)
     assert exc.value.status_code == 400

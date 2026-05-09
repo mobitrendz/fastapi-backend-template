@@ -1,4 +1,5 @@
 import uuid
+from unittest.mock import MagicMock
 
 import pytest
 from fastapi import HTTPException
@@ -121,7 +122,8 @@ async def test_get_current_user_inactive_crud(session: AsyncSession):
     user = await user_crud.create_user(session=session, user_create=user_in)
 
     token = security.create_access_token(str(user.id))
+    mock_request = MagicMock()
     with pytest.raises(HTTPException) as exc:
-        await get_current_user(session=session, token=token)
+        await get_current_user(request=mock_request, session=session, token=token)
     assert exc.value.status_code == 400
     assert exc.value.detail == "Inactive user"
