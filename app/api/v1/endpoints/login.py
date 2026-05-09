@@ -4,11 +4,11 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordRequestForm
 
+from app.api.deps import get_current_user as get_curr_user
 from app.core import security
 from app.core.config import settings
 from app.core.limiter import limiter
 from app.core.security import (
-    TokenDependency,
     oauth2_scheme,
 )
 from app.crud import user as user_crud
@@ -58,10 +58,9 @@ async def read_secure(token: str = Depends(oauth2_scheme)) -> dict[str, str]:
 # This endpoint allows authenticated users to retrieve their own user information using the access token.
 @router.get("/current-user", response_model=UserPublic)
 async def get_current_user(
-    session: SessionDependency, token: TokenDependency
+    current_user: Annotated[UserPublic, Depends(get_curr_user)],
 ) -> UserPublic:
-    user = await user_crud.get_current_user(session=session, token=token)
-    return UserPublic.model_validate(user)
+    return current_user
 
 
 @router.post("/signup", response_model=UserPublic)

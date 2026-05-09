@@ -5,6 +5,7 @@ from fastapi import HTTPException
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.deps import get_current_user
 from app.core import security
 from app.crud import user as user_crud
 from app.models.user import UserCreate
@@ -111,7 +112,7 @@ async def test_crud_missing_branches(session: AsyncSession):
 
     # Line 128: get_current_user user not found
     with pytest.raises(HTTPException) as exc:
-        await user_crud.get_current_user(
+        await get_current_user(
             session=session, token=security.create_access_token(str(uuid.uuid4()))
         )
     assert exc.value.status_code == 404
@@ -128,5 +129,5 @@ async def test_crud_missing_branches(session: AsyncSession):
     )
     token = security.create_access_token(str(user.id))
     with pytest.raises(HTTPException) as exc:
-        await user_crud.get_current_user(session=session, token=token)
+        await get_current_user(session=session, token=token)
     assert exc.value.status_code == 400

@@ -106,12 +106,12 @@ async def test_admin_can_update_user_role_and_active_status(
     response = await client.patch(
         f"/api/v1/users/{user_id}",
         headers={"Authorization": f"Bearer {superuser_token}"},
-        json={"role": "guest", "is_active": False},
+        json={"role": "super", "is_active": False},
     )
 
     assert response.status_code == 200
     data = response.json()
-    assert data["role"] == "guest"
+    assert data["role"] == "super"
     assert data["is_active"] is False
 
 
