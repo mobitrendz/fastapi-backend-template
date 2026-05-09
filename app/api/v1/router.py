@@ -1,6 +1,14 @@
 from fastapi import APIRouter
 
-from .endpoints import activities, login, todos, users, welcome
+from .endpoints import (
+    activities,
+    admin_dashboard,
+    dashboard,
+    login,
+    todos,
+    users,
+    welcome,
+)
 
 api_router = APIRouter()
 
@@ -11,4 +19,8 @@ api_router.include_router(todos.router, prefix="/todos", tags=["ToDos"])
 api_router.include_router(login.router, prefix="/login", tags=["Login"])
 api_router.include_router(
     activities.router, prefix="/activities", tags=["User Activities"]
+)
+api_router.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
+api_router.include_router(
+    admin_dashboard.router, prefix="/admin/dashboard", tags=["Admin Dashboard"]
 )

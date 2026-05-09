@@ -25,6 +25,7 @@ dependencies = [
     "emails>=1.1.1",
     "email-validator>=2.3.0",
     "rich>=14.3.3",
+    "psutil>=7.2.2",
 ]
 
 [dependency-groups]
@@ -51,6 +52,7 @@ dev = [
     "py-spy>=0.4.2",
     "scalene>=2.2.1",
     "types-passlib>=1.7.7.20260211",     # Type stubs for password hashing (helps Mypy)
+    "types-psutil>=7.2.2.20260508",
     "zensical>=0.0.34", # High-performance documentation generator (Rust-powered)
 ]
 
