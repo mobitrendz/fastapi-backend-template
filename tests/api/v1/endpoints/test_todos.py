@@ -5,6 +5,7 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core import security
+from app.core.config import settings
 from app.crud import todo as todo_crud
 from app.crud import user as user_crud
 from app.models.todo import ToDoListCreate
@@ -76,29 +77,69 @@ async def test_read_todos_returns_current_users_todos_only(
 
 
 @pytest.mark.asyncio
-async def test_admin_cannot_read_todos(
+async def test_rbac_todo_access(
     client: AsyncClient,
     session: AsyncSession,
     normal_user_token: str,
+    admin_user_token: str,
     superuser_token: str,
 ):
-    owner = await user_crud.get_user_by_email(session=session, email="user@example.com")
-    assert owner is not None
+    # 1. Create a SUPER user todo
+    super_user = await user_crud.get_user_by_email(
+        session=session, email=settings.SUPER_USER_EMAIL
+    )
+    assert super_user is not None
+    super_todo = await todo_crud.create_todo(
+        session=session,
+        todo_create=ToDoListCreate(title="Super secret todo"),
+        current_user=super_user,
+    )
 
-    create_response = await client.post(
+    # 2. Create a normal USER todo
+    user = await user_crud.get_user_by_email(session=session, email="user@example.com")
+    assert user is not None
+    await client.post(
         "/api/v1/todos/",
         headers={"Authorization": f"Bearer {normal_user_token}"},
-        json={"title": "Admin invisible todo", "priority": "low"},
+        json={"title": "User todo"},
     )
-    assert create_response.status_code == 200
 
-    # Super user (Role.SUPER) should NOT have access to ToDos
-    response = await client.get(
+    # --- Test SUPER Access ---
+    # SUPER should see both
+    super_response = await client.get(
         "/api/v1/todos/",
         headers={"Authorization": f"Bearer {superuser_token}"},
     )
+    assert super_response.status_code == 200
+    super_titles = {t["title"] for t in super_response.json()["data"]}
+    assert "Super secret todo" in super_titles
+    assert "User todo" in super_titles
 
-    assert response.status_code == 403
+    # --- Test ADMIN Access ---
+    # ADMIN should see User todo but NOT Super todo
+    admin_response = await client.get(
+        "/api/v1/todos/",
+        headers={"Authorization": f"Bearer {admin_user_token}"},
+    )
+    assert admin_response.status_code == 200
+    admin_titles = {t["title"] for t in admin_response.json()["data"]}
+    assert "User todo" in admin_titles
+    assert "Super secret todo" not in admin_titles
+
+    # ADMIN should get 404/403 (effectively 404 in our impl) for Super todo specifically
+    admin_single_response = await client.get(
+        f"/api/v1/todos/{super_todo.id}",
+        headers={"Authorization": f"Bearer {admin_user_token}"},
+    )
+    assert admin_single_response.status_code == 404
+
+    # --- Test USER Access ---
+    # USER should NOT see Super todo
+    user_single_response = await client.get(
+        f"/api/v1/todos/{super_todo.id}",
+        headers={"Authorization": f"Bearer {normal_user_token}"},
+    )
+    assert user_single_response.status_code == 404
 
 
 @pytest.mark.asyncio

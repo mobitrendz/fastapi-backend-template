@@ -80,6 +80,22 @@ async def superuser_token(session: AsyncSession) -> str:
 
 
 @pytest_asyncio.fixture
+async def admin_user_token(session: AsyncSession) -> str:
+    email = "admin@example.com"
+    user = await user_crud.get_user_by_email(session=session, email=email)
+    if not user:
+        user_in = UserCreate(
+            full_name="Admin User",
+            email=email,
+            password="password123",  # noqa: S106
+            role=UserRole.ADMIN,
+        )
+        user = await user_crud.create_user(session=session, user_create=user_in)
+
+    return security.create_access_token(str(user.id))
+
+
+@pytest_asyncio.fixture
 async def normal_user_token(session: AsyncSession) -> str:
     email = "user@example.com"
     user = await user_crud.get_user_by_email(session=session, email=email)

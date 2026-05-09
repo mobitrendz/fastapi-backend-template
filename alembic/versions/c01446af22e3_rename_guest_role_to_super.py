@@ -18,14 +18,16 @@ depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
-    # Rename 'guest' or 'GUEST' to 'super' in the userrole enum
+    # Rename 'guest', 'GUEST', or 'super' to 'SUPER' in the userrole enum
     op.execute("""
         DO $$
         BEGIN
             IF EXISTS (SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = 'userrole' AND e.enumlabel = 'guest') THEN
-                ALTER TYPE userrole RENAME VALUE 'guest' TO 'super';
+                ALTER TYPE userrole RENAME VALUE 'guest' TO 'SUPER';
             ELSIF EXISTS (SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = 'userrole' AND e.enumlabel = 'GUEST') THEN
-                ALTER TYPE userrole RENAME VALUE 'GUEST' TO 'super';
+                ALTER TYPE userrole RENAME VALUE 'GUEST' TO 'SUPER';
+            ELSIF EXISTS (SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = 'userrole' AND e.enumlabel = 'super') THEN
+                ALTER TYPE userrole RENAME VALUE 'super' TO 'SUPER';
             END IF;
         END
         $$;
@@ -33,12 +35,14 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    # Rename 'super' back to 'guest'
+    # Rename 'SUPER' back to 'GUEST'
     op.execute("""
         DO $$
         BEGIN
-            IF EXISTS (SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = 'userrole' AND e.enumlabel = 'super') THEN
-                ALTER TYPE userrole RENAME VALUE 'super' TO 'guest';
+            IF EXISTS (SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = 'userrole' AND e.enumlabel = 'SUPER') THEN
+                ALTER TYPE userrole RENAME VALUE 'SUPER' TO 'GUEST';
+            ELSIF EXISTS (SELECT 1 FROM pg_enum e JOIN pg_type t ON e.enumtypid = t.oid WHERE t.typname = 'userrole' AND e.enumlabel = 'super') THEN
+                ALTER TYPE userrole RENAME VALUE 'super' TO 'GUEST';
             END IF;
         END
         $$;
