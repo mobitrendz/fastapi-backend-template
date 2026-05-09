@@ -1,7 +1,7 @@
 from typing import Annotated
 
 import jwt
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
 
@@ -12,7 +12,9 @@ from app.models.generic import TokenPayload
 from app.models.user import User, UserRole
 
 
-async def get_current_user(session: SessionDependency, token: TokenDependency) -> User:
+async def get_current_user(
+    request: Request, session: SessionDependency, token: TokenDependency
+) -> User:
     # fmt: off
     try:
         payload = jwt.decode(
@@ -30,6 +32,10 @@ async def get_current_user(session: SessionDependency, token: TokenDependency) -
         raise HTTPException(status_code=404, detail="User not found")
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
+
+    # Store user in request state for middleware access
+    request.state.user = user
+
     return user
 
 
