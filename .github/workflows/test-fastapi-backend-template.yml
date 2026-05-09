@@ -13,21 +13,6 @@ jobs:
     name: Backend Code Quality
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_DB: fastapi_template_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d fastapi_template_test"
-          --health-interval 3s
-          --health-timeout 3s
-          --health-retries 10
-
     env:
       FRONTEND_HOST: http://localhost:5173
       ENVIRONMENT: ci

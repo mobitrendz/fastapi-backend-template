@@ -16,21 +16,6 @@ jobs:
     name: Test Coverage
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:18
-        env:
-          POSTGRES_DB: fastapi_template_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres -d fastapi_template_test"
-          --health-interval 3s
-          --health-timeout 3s
-          --health-retries 10
-
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       FRONTEND_HOST: http://localhost:5173
