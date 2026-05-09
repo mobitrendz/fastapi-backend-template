@@ -11,6 +11,7 @@ from app.crud import user as user_crud
 from app.db.database import SessionDependency
 from app.models.generic import Message
 from app.models.user import (
+    PasswordHistoriesPublic,
     UpdatePassword,
     User,
     UserCreate,
@@ -98,6 +99,19 @@ async def read_user_by_email(
         raise HTTPException(status_code=403, detail="Not enough permissions")
 
     return UserPublic.model_validate(user)
+
+
+@router.get("/me/password-history", response_model=PasswordHistoriesPublic)
+async def read_password_history(
+    session: SessionDependency,
+    current_user: CurrentUser,
+) -> PasswordHistoriesPublic:
+    """
+    Retrieve the last 5 password changes for the authenticated user.
+    """
+    return await user_crud.get_password_history(
+        session=session, user_id=current_user.id
+    )
 
 
 @router.patch("/password", response_model=Message)

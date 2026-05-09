@@ -4,7 +4,7 @@ from enum import StrEnum
 
 from pydantic import EmailStr
 from sqlalchemy import DateTime
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 
 # Function to get the current UTC datetime
@@ -60,6 +60,33 @@ class User(UserBase, table=True):
         default_factory=get_datetime_utc,
         sa_type=DateTime(timezone=True),  # type: ignore
     )
+    password_history: list["PasswordHistory"] = Relationship(back_populates="user")
+
+
+# Password History model
+class PasswordHistory(SQLModel, table=True):
+    __tablename__: str = "password_history"  # type: ignore
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(foreign_key="user.id", index=True, ondelete="CASCADE")
+    hashed_password: str
+    created_at: datetime = Field(
+        default_factory=get_datetime_utc,
+        sa_type=DateTime(timezone=True),  # type: ignore
+    )
+
+    user: User = Relationship(back_populates="password_history")
+
+
+# Properties to return via API for Password History
+class PasswordHistoryPublic(SQLModel):
+    id: uuid.UUID
+    created_at: datetime
+
+
+class PasswordHistoriesPublic(SQLModel):
+    data: list[PasswordHistoryPublic]
+    count: int
 
 
 # Properties to return via API

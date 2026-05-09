@@ -1,4 +1,5 @@
 import uuid
+from typing import Any, cast
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,6 +7,8 @@ from sqlmodel import select
 
 from app.core.security import hash_password, verify_password
 from app.models.user import (
+    PasswordHistoriesPublic,
+    PasswordHistory,
     UpdatePassword,
     User,
     UserCreate,
@@ -107,9 +110,29 @@ async def update_password(
             status_code=400, detail="New password cannot be the same as the current one"
         )
 
+    # Save current password to history before updating
+    password_history = PasswordHistory(
+        user_id=current_user.id, hashed_password=current_user.hashed_password
+    )
+    session.add(password_history)
+
     hashed_password = hash_password(updatePassword.new_password)
     current_user.hashed_password = hashed_password
     session.add(current_user)
     await session.commit()
 
     return True
+
+
+async def get_password_history(
+    *, session: AsyncSession, user_id: uuid.UUID
+) -> PasswordHistoriesPublic:
+    statement = (
+        select(PasswordHistory)
+        .where(PasswordHistory.user_id == user_id)
+        .order_by(cast(Any, PasswordHistory.created_at).desc())
+        .limit(5)
+    )
+    result = await session.execute(statement)
+    history = result.scalars().all()
+    return PasswordHistoriesPublic(data=list(history), count=len(history))
