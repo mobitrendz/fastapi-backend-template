@@ -57,6 +57,7 @@ nav = [
   { "Introduction" = "index.md" },
   { "Tech Stack" = "tech-stack.md", icon = "lucide/cpu" },
   { "Architecture" = "architecture.md" },
+  { "User Management" = "user-management.md", icon = "lucide/users" },
   { "AI-Driven Development" = "ai-development.md" },
   { "Development" = "development.md" },
   { "Deployment" = "deployment.md" },
