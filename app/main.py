@@ -19,6 +19,7 @@ from app.core.limiter import limiter
 from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
 from app.db import initial_data
+from app.middleware.activity_logger import ActivityLoggerMiddleware
 from app.models.generic import Message
 
 setup_logging()
@@ -62,6 +63,7 @@ if settings.SENTRY_DSN:
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
 app.add_middleware(SlowAPIMiddleware)
+app.add_middleware(ActivityLoggerMiddleware)
 
 # Initialize Prometheus Instrumentator
 Instrumentator().instrument(app).expose(app)

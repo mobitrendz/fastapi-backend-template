@@ -158,6 +158,35 @@ uv run pytest
 
 ---
 
+### 🗄️ Database Migrations (Alembic)
+
+This project uses **Alembic** for robust database schema management. All changes to the database structure must be performed via migration scripts.
+
+#### 🏗️ Creating Migrations
+When you modify your `SQLModel` definitions in `app/models/`, generate a new migration script:
+```bash
+# Generate a migration script automatically
+uv run alembic revision --autogenerate -m "description of changes"
+```
+
+#### 🚀 Applying Migrations
+To sync your database with the latest schema:
+```bash
+# Apply all pending migrations to the database
+uv run alembic upgrade head
+```
+
+#### 🔄 Reverting Migrations
+To roll back the last migration:
+```bash
+# Revert the database to the previous version
+uv run alembic downgrade -1
+```
+
+*Note: Ensure your database container (`db` service) is running before executing migration commands.*
+
+---
+
 ## 🤝 Contributing
 We welcome contributions! Please see our [Contributing Guide](docs/contributing.md) for details on how to get involved. If you find a bug or have a feature request, please open an issue on GitHub.
 
