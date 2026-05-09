@@ -246,6 +246,34 @@ gemini "Add a new endpoint to list users"
 ```
 Refer to `GEMINI.md` for project-specific AI mandates.
 
+## 🚀 Performance Profiling
+
+We use **py-spy** and **Scalene** to monitor and optimize application performance.
+
+### 1. Real-time Profiling (py-spy)
+**py-spy** is a sampling profiler for Python programs. It lets you visualize what your Python program is spending time on without restarting the program or modifying the code.
+
+#### Record a Flame Graph
+```bash
+# Get the process ID of the running FastAPI app
+# Then run:
+uv run py-spy record -o profile.svg --pid <PID>
+```
+
+#### Top view (like 'top' but for Python functions)
+```bash
+uv run py-spy top --pid <PID>
+```
+
+### 2. Deep Memory & CPU Analysis (Scalene)
+**Scalene** is a high-performance CPU, GPU, and memory profiler for Python that does a number of things other Python profilers do not and cannot do.
+
+#### Profile the FastAPI application
+```bash
+uv run scalene --- -m fastapi run app/main.py
+```
+*Note: Scalene will open a web-based interface showing line-by-line CPU and memory usage.*
+
 ## 📈 Observability & Monitoring
 
 This project features enterprise-grade observability to monitor, debug, and optimize your API in real-time.
@@ -262,12 +290,13 @@ You can configure your Prometheus server to scrape this endpoint to generate rea
 - Request counts by status code.
 - Endpoint-specific performance.
 
-### Structured Logging (Structlog)
-Standard Python logging has been replaced with **Structlog** to provide machine-readable, structured JSON logs.
+### Structured Logging (Structlog & Rich)
+Standard Python logging has been replaced with **Structlog** and **Rich** to provide machine-readable JSON logs in production and beautiful, human-readable console output during local development.
 
 #### Why Structured Logging?
+- **Local DX**: `Rich` provides color-coded logs and enhanced traceback visualization.
 - **Searchability**: Easily filter logs by specific keys (e.g., `event`, `level`, `timestamp`).
-- **Observability**: Integrates seamlessly with log aggregation services (like ELK stack or Datadog) for centralized monitoring.
+- **Observability**: Integrates seamlessly with log aggregation services (like ELK stack or Datadog).
 
 *For more information on logging configuration, see `app/core/logger.py`.*
 

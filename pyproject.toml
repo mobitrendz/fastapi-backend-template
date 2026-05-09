@@ -24,6 +24,7 @@ dependencies = [
     "jinja2>=3.1.6",
     "emails>=1.1.1",
     "email-validator>=2.3.0",
+    "rich>=14.3.3",
 ]
 
 [dependency-groups]
@@ -47,6 +48,8 @@ dev = [
     { include-group = "test" },
     "debugpy>=1.8.20",
     "prek",
+    "py-spy>=0.4.2",
+    "scalene>=2.2.1",
     "types-passlib>=1.7.7.20260211",     # Type stubs for password hashing (helps Mypy)
     "zensical>=0.0.34", # High-performance documentation generator (Rust-powered)
 ]
@@ -104,6 +107,9 @@ replace-imports-with-any = ["jwt.**", "fastapi.**"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S106"]  # Ignore hardcoded password checks in the tests directory
 
 [tool.bandit]
 exclude_dirs = ["tests", "alembic"]

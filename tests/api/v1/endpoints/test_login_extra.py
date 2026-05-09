@@ -27,6 +27,9 @@ async def test_recover_password_existing_user(client: AsyncClient, mocker):
 @pytest.mark.asyncio
 async def test_recover_password_non_existing_user(client: AsyncClient, mocker):
     mock_send_email = mocker.patch("app.api.v1.endpoints.login.security.send_email")
+    mock_get_user = mocker.patch(
+        "app.api.v1.endpoints.login.user_crud.get_user_by_email", return_value=None
+    )
 
     response = await client.post(
         "/api/v1/login/password-recovery/nonexistent@example.com"
@@ -37,6 +40,7 @@ async def test_recover_password_non_existing_user(client: AsyncClient, mocker):
         == "If that email is registered, we sent a password recovery link"
     )
     mock_send_email.assert_not_called()
+    mock_get_user.assert_called_once()
 
 
 @pytest.mark.asyncio
