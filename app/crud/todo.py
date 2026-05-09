@@ -1,4 +1,5 @@
 import uuid
+from typing import Any, cast
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
@@ -27,9 +28,22 @@ async def get_todos(
     session: AsyncSession,
     current_user: User,
 ) -> ToDoListsPublic:
-    statement = select(ToDoList)
-    if current_user.role != UserRole.ADMIN:
-        statement = statement.where(ToDoList.user_id == current_user.id)
+    # Logic:
+    # 1. SUPER can see everything.
+    # 2. USER can see only their own.
+    # 3. ADMIN can see their own AND all regular USER todos (but not other ADMIN/SUPER).
+
+    if current_user.role == UserRole.SUPER:
+        statement = select(ToDoList)
+    elif current_user.role == UserRole.ADMIN:
+        # Own todos + todos where owner is a regular USER
+        statement = (
+            select(ToDoList)
+            .join(User, cast(Any, ToDoList.user_id) == User.id)
+            .where((ToDoList.user_id == current_user.id) | (User.role == UserRole.USER))
+        )
+    else:
+        statement = select(ToDoList).where(ToDoList.user_id == current_user.id)
 
     result = await session.execute(statement)
     todos = result.scalars().all()
@@ -39,12 +53,26 @@ async def get_todos(
 async def get_todo_by_id(
     *, session: AsyncSession, id: uuid.UUID, current_user: User
 ) -> ToDoList | None:
-    todo = await session.get(ToDoList, id)
+    # We join User to check the role of the owner if current_user is ADMIN
+    statement = select(ToDoList).where(ToDoList.id == id)
+    result = await session.execute(statement)
+    todo = result.scalars().first()
+
     if not todo:
         return None
-    if current_user.role != UserRole.ADMIN and todo.user_id != current_user.id:
-        return None
-    return todo
+
+    if current_user.role == UserRole.SUPER:
+        return todo
+
+    if todo.user_id == current_user.id:
+        return todo
+
+    if current_user.role == UserRole.ADMIN:
+        owner = await session.get(User, todo.user_id)
+        if owner and owner.role == UserRole.USER:
+            return todo
+
+    return None
 
 
 async def update_todo(

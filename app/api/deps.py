@@ -69,5 +69,5 @@ AllowAnyRole = Annotated[
     User, Depends(RoleChecker([UserRole.SUPER, UserRole.ADMIN, UserRole.USER]))
 ]
 
-# Specifically for ToDo access (Only Normal Users)
-AllowTodo = AllowUser
+# Specifically for ToDo access (Allow all roles, but CRUD handles ownership)
+AllowTodo = AllowAnyRole
