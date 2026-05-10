@@ -1,9 +1,11 @@
+import traceback
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import sentry_sdk
 import structlog
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
 from fastapi_pagination import add_pagination
 from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import EmailStr
@@ -18,7 +20,9 @@ from app.core.config import settings
 from app.core.limiter import limiter
 from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
+from app.crud.system_log import create_system_log
 from app.db import initial_data
+from app.db.database import async_session_maker
 from app.middleware.activity_logger import ActivityLoggerMiddleware
 from app.models.generic import ErrorDetail, Message
 
@@ -69,6 +73,45 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(ActivityLoggerMiddleware)
+
+
+@app.exception_handler(ValueError)
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """
+    Capture unhandled exceptions, log them to the database, and return a clean JSON response.
+    """
+    stack_trace = traceback.format_exc()
+    logger.error("Unhandled exception", error=str(exc), path=request.url.path)
+
+    try:
+        async with async_session_maker() as session:
+            user = getattr(request.state, "user", None)
+            user_id = getattr(user, "id", None) if user else None
+
+            await create_system_log(
+                session=session,
+                level="ERROR",
+                message=str(exc),
+                stack_trace=stack_trace,
+                path=request.url.path,
+                method=request.method,
+                user_id=user_id,
+                context={
+                    "query_params": str(request.query_params),
+                    "client": request.client.host if request.client else "unknown",
+                },
+            )
+    except Exception as e:
+        logger.error("Failed to log exception to database", error=str(e))
+
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "detail": "An internal server error occurred. The administrators have been notified."
+        },
+    )
+
 
 # Initialize Prometheus Instrumentator
 Instrumentator().instrument(app).expose(app)
