@@ -38,38 +38,60 @@ To set up your local environment, copy the example configuration file:
 cp .env.example .env
 ```
 
-You must update the following variables in your `.env` file:
+The application uses these variables to configure security, database connections, and external services.
 
-### Security & Superuser
-Generate a secure `SECRET_KEY` for JWT tokens (e.g., using a [JWT Secret Key Generator](https://jwtsecretkeygenerator.com)).
+### 1. Project & Frontend Settings
 ```bash
-SECRET_KEY="your-generated-hs256-key"
+PROJECT_NAME="FastAPI Backend Template"
+DOMAIN="fastapi-template.test"
+ENVIRONMENT="local" # local, staging, or production
 
-# Superuser details
-SUPER_USER_NAME="Admin User"
+# Used for generating links in emails
+FRONTEND_HOST="http://localhost:5173"
+```
+
+### 2. Security & Authentication
+Generate a secure `SECRET_KEY` using `openssl rand -hex 32`.
+```bash
+SECRET_KEY="your-secret-key"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Initial superuser created on startup
+SUPER_USER_NAME="Admin"
 SUPER_USER_EMAIL="admin@example.com"
-SUPER_USER_PASSWORD="adminpassword" # Password must be at least 8 characters
+SUPER_USER_PASSWORD="secure-password"
 ```
 
-### Database Connection
+### 3. Database (PostgreSQL)
 ```bash
-# Postgres Connection Settings
-POSTGRES_SERVER=localhost
+POSTGRES_SERVER="localhost"
 POSTGRES_PORT=5432
-POSTGRES_DB=fastapi_template_db
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=admin
-
-# The app constructs the URL as:
-# postgresql+psycopg://postgres:admin@localhost:5432/fastapi_template_db
+POSTGRES_DB="fastapi_template_db"
+POSTGRES_USER="postgres"
+POSTGRES_PASSWORD="db-password"
 ```
 
-### Local pgAdmin settings
+### 4. Database Management (pgAdmin)
 ```bash
-PGADMIN_EMAIL=admin@example.com
-PGADMIN_PASSWORD=admin
+PGADMIN_EMAIL="admin@example.com"
+PGADMIN_PASSWORD="pgadmin-password"
 ```
-*Note: These are used only when running with `docker-compose.override.yml` for local development.*
+*Note: pgAdmin is available at http://localhost:5050 in local development.*
+
+### 5. Email Configuration (SMTP)
+By default, the project uses **MailCatcher** for local email testing.
+```bash
+SMTP_HOST="localhost"
+SMTP_PORT=1025
+EMAILS_FROM_EMAIL="admin@example.com"
+```
+
+### 6. Error Tracking (Sentry)
+```bash
+SENTRY_DSN="your-sentry-dsn"
+```
+*Note: Leave empty to disable Sentry in local development.*
 
 ---
 
