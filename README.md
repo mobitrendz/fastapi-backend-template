@@ -6,10 +6,24 @@
 
 A production-ready FastAPI template designed for scalable, high-performance web applications. This project provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows out of the box.
 
+## 🏗️ Architectural Pattern
+
+This template follows a **Layered Modular Architecture** to ensure high maintainability and clear separation of concerns:
+
+1.  **API Layer (`app/api`)**: Versioned controllers handling request validation and OpenAPI documentation.
+2.  **Service Layer (`app/services`)**: Business logic orchestrating multiple CRUD operations or external integrations.
+3.  **CRUD Layer (`app/crud`)**: Atomic, reusable database operations.
+4.  **Model Layer (`app/models`)**: Unified SQLModel definitions for both DB tables and API DTOs (Data Transfer Objects).
+5.  **Core Layer (`app/core`)**: Centralized security, configuration, and observability logic.
+
+---
+
 ## 🔗 Related Projects
 
-*   **React Frontend Template**: A companion frontend built with React, Vite, and Tailwind CSS, specifically designed to integrate with this backend.
+*   **React Frontend Template**: A companion frontend built with React 19, Vite, and Tailwind CSS. It is pre-configured to consume this API and handle its standardized error formats.
     - [GitHub Repository](https://github.com/mobitrendz/react-frontend-template)
+
+---
 
 ## 🌟 Key Features
 
@@ -34,6 +48,29 @@ A production-ready FastAPI template designed for scalable, high-performance web 
 | **Testing** | `Pytest`, `Testcontainers`, `Hypothesis` | Isolated infrastructure testing, property-based edge-case detection, and high coverage standards. |
 | **Optimization** | `py-spy`, `Scalene` | Deep profiling of CPU and memory usage to eliminate bottlenecks in production. |
 | **Developer DX** | `uv`, `Ruff`, `Mypy`, `Prek`, `Zensical` | Lightning-fast dependency management, formatting, and strict type checking, all orchestrated via automated hooks. |
+
+---
+
+## 🛡️ Enterprise Security & RBAC
+
+The template implements a robust **Role-Based Access Control (RBAC)** system using FastAPI dependencies.
+
+### User Roles
+- **SUPER**: Full system access (seeded via `.env`).
+- **ADMIN**: Can manage users but cannot access system metrics or other admins.
+- **USER**: Standard access to personal data (e.g., ToDo lists).
+
+### Usage in Routes
+Secure your endpoints using the provided dependencies:
+```python
+from app.api.deps import AllowSuper, AllowAdmin
+
+@router.get("/admin-only")
+async def secure_route(current_user: AllowAdmin):
+    return {"message": "Hello, Admin!"}
+```
+
+---
 
 ## 📋 Prerequisites
 
