@@ -3,7 +3,8 @@ name: Docker Validation
 on:
   push:
     branches:
-      - main
+      - master
+      - stage
       - develop
   pull_request:
   workflow_dispatch:

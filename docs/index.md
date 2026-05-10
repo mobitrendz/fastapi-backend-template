@@ -119,3 +119,13 @@ uv run pytest --cov=app --cov-report=term-missing
 - [**Development**](development.md): Guide for local setup, testing, and observability.
 - [**Deployment**](deployment.md): Production builds, Docker, and CI/CD pipelines.
 - [**Contributing**](contributing.md): Guidelines for contributing to the project.
+
+## 🚀 Release Checklist for Developers
+
+Before merging changes to `master`, ensure you have completed this checklist:
+
+1.  **Contract Integrity**: Run `uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json` and commit any changes to the schema. This ensures the frontend remains in sync.
+2.  **Type Safety**: Run `uv run mypy .` and ensure all tests pass.
+3.  **Security Scan**: Run `uv run bandit -c pyproject.toml -r app`.
+4.  **Test Coverage**: Ensure coverage remains at or above 92% by running `uv run pytest`.
+5.  **Documentation**: Update the Zensical documentation if any new features or breaking changes were introduced.

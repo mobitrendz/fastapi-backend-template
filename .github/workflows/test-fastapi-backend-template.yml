@@ -3,7 +3,8 @@ name: Backend Code Quality
 on:
   push:
     branches:
-      - main
+      - master
+      - stage
       - develop
   pull_request:
   workflow_dispatch:
