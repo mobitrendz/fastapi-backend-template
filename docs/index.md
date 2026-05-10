@@ -15,7 +15,9 @@ Welcome to the **FastAPI Backend Template** documentation. This project is a pro
 
 *   **Python 3.12+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Modular Architecture**: Clean separation of API, Services, CRUD, and Models.
-*   **Enterprise Security**: OAuth2 with JWT, Argon2 password hashing.
+*   **Enterprise Security**: OAuth2 with JWT, Argon2 password hashing, and granular **RBAC** (Super User, Admin, User).
+*   **Contract-First Workflow**: Automated OpenAPI schema generation and drift detection.
+*   **System Observability**: Integrated **System Error Logging** in the Super User dashboard.
 *   **Observability**: Structured JSON logging with Structlog and Prometheus metrics.
 *   **Local Reverse Proxy**: Traefik routes local services through stable `.test` domains.
 *   **Email Testing**: Integrated **MailCatcher** for capturing and inspecting outgoing emails locally.
