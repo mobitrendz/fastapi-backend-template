@@ -252,7 +252,7 @@ To maintain 2026 enterprise standards, follow this checklist before every merge 
 
 1.  **Contract Integrity**: Generate and commit the latest schema:
     ```bash
-    uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2))" > openapi.json
+    uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2, sort_keys=True))" > openapi.json
     ```
 2.  **Code Quality**: Run `uv run ruff check .` and `uv run mypy .`.
 3.  **Security**: Execute `uv run bandit -c pyproject.toml -r app`.

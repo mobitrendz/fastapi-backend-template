@@ -35,7 +35,7 @@ jobs:
           import json
           from app.main import app
           with open('openapi_current.json', 'w') as f:
-              json.dump(app.openapi(), f, indent=2)
+              json.dump(app.openapi(), f, indent=2, sort_keys=True)
           "
 
       - name: 🔍 Verify Schema Integrity

@@ -1,2184 +1,73 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "FastAPI Backend Template",
-    "version": "0.1.0"
-  },
-  "paths": {
-    "/metrics": {
-      "get": {
-        "summary": "Metrics",
-        "description": "Endpoint that serves Prometheus metrics.",
-        "operationId": "metrics_metrics_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/checkDBConnection": {
-      "get": {
-        "tags": [
-          "Welcome"
-        ],
-        "summary": "Check Database Connection",
-        "operationId": "check_database_connection_api_v1_checkDBConnection_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object",
-                  "title": "Response Check Database Connection Api V1 Checkdbconnection Get"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/getEnvironment": {
-      "get": {
-        "tags": [
-          "Welcome"
-        ],
-        "summary": "Get Env Settings",
-        "operationId": "get_env_settings_api_v1_getEnvironment_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object",
-                  "title": "Response Get Env Settings Api V1 Getenvironment Get"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/{user_name}": {
-      "get": {
-        "tags": [
-          "Welcome"
-        ],
-        "summary": "Get Custom Welcome Message",
-        "operationId": "get_custom_welcome_message_api_v1__user_name__get",
-        "parameters": [
-          {
-            "name": "user_name",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "User Name"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "title": "Response Get Custom Welcome Message Api V1  User Name  Get"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/": {
-      "get": {
-        "tags": [
-          "Welcome"
-        ],
-        "summary": "Get Welcome Message",
-        "operationId": "get_welcome_message_api_v1__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object",
-                  "title": "Response Get Welcome Message Api V1  Get"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Read Users",
-        "operationId": "read_users_api_v1_users__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Page_UserPublic_"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Create User",
-        "operationId": "create_user_api_v1_users__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/users/byID/{id}": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Read User By Id",
-        "operationId": "read_user_by_id_api_v1_users_byID__id__get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/byEmail/{email}": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Read User By Email",
-        "operationId": "read_user_by_email_api_v1_users_byEmail__email__get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "email",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Email"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/users/me/password-history": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Read Password History",
-        "description": "Retrieve the last 5 password changes for the authenticated user.",
-        "operationId": "read_password_history_api_v1_users_me_password_history_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PasswordHistoriesPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/users/password": {
-      "patch": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Update Password",
-        "operationId": "update_password_api_v1_users_password_patch",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdatePassword"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/users/{id}": {
-      "patch": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Update User",
-        "operationId": "update_user_api_v1_users__id__patch",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Users"
-        ],
-        "summary": "Delete User",
-        "operationId": "delete_user_api_v1_users__id__delete",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/todos/": {
-      "get": {
-        "tags": [
-          "ToDos"
-        ],
-        "summary": "Read Todos",
-        "operationId": "read_todos_api_v1_todos__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToDoListsPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "ToDos"
-        ],
-        "summary": "Create Todo",
-        "operationId": "create_todo_api_v1_todos__post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ToDoListCreate"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToDoListPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/todos/{id}": {
-      "get": {
-        "tags": [
-          "ToDos"
-        ],
-        "summary": "Read Todo By Id",
-        "operationId": "read_todo_by_id_api_v1_todos__id__get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToDoListPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch": {
-        "tags": [
-          "ToDos"
-        ],
-        "summary": "Update Todo",
-        "operationId": "update_todo_api_v1_todos__id__patch",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Id"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ToDoListUpdate"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ToDoListPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "ToDos"
-        ],
-        "summary": "Delete Todo",
-        "operationId": "delete_todo_api_v1_todos__id__delete",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "Id"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/login/access-token": {
-      "post": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Login Access Token",
-        "description": "OAuth2 compatible token login, get an access token for future requests",
-        "operationId": "login_access_token_api_v1_login_access_token_post",
-        "requestBody": {
-          "content": {
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Body_login_access_token_api_v1_login_access_token_post"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Token"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/login/secure-data": {
-      "get": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Read Secure",
-        "operationId": "read_secure_api_v1_login_secure_data_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object",
-                  "title": "Response Read Secure Api V1 Login Secure Data Get"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/login/current-user": {
-      "get": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Get Current User",
-        "operationId": "get_current_user_api_v1_login_current_user_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/login/signup": {
-      "post": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Register User",
-        "description": "Public signup endpoint for new users.",
-        "operationId": "register_user_api_v1_login_signup_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserRegister"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/login/password-recovery/{email}": {
-      "post": {
-        "tags": [
-          "Login"
-        ],
-        "summary": "Recover Password",
-        "operationId": "recover_password_api_v1_login_password_recovery__email__post",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Email"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/activities/me": {
-      "get": {
-        "tags": [
-          "User Activities"
-        ],
-        "summary": "Read My Activities",
-        "description": "Retrieve the last 20 activities for the authenticated user.",
-        "operationId": "read_my_activities_api_v1_activities_me_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserActivitiesPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/activities/": {
-      "get": {
-        "tags": [
-          "User Activities"
-        ],
-        "summary": "Read All Activities",
-        "description": "Retrieve all system-wide activities (SUPER users only).",
-        "operationId": "read_all_activities_api_v1_activities__get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Page_UserActivityPublic_"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/dashboard/stats": {
-      "get": {
-        "tags": [
-          "Dashboard"
-        ],
-        "summary": "Read Dashboard Stats",
-        "description": "Retrieve comprehensive system and application metrics (SUPER users only).",
-        "operationId": "read_dashboard_stats_api_v1_dashboard_stats_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DashboardReport"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/dashboard/stats": {
-      "get": {
-        "tags": [
-          "Admin Dashboard"
-        ],
-        "summary": "Read Admin Dashboard Stats",
-        "description": "Retrieve user activity metrics and trends (SUPER and ADMIN users only).\nFilters out activities from non-regular users.",
-        "operationId": "read_admin_dashboard_stats_api_v1_admin_dashboard_stats_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AdminDashboardReport"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/api/v1/admin/dashboard/logs": {
-      "get": {
-        "tags": [
-          "Admin Dashboard"
-        ],
-        "summary": "Read System Logs",
-        "description": "Retrieve recent system error logs (SUPER users only).",
-        "operationId": "read_system_logs_api_v1_admin_dashboard_logs_get",
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 50,
-              "title": "Limit"
-            }
-          },
-          {
-            "name": "level",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Level"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SystemLogsPublic"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/admin/dashboard/error-test": {
-      "get": {
-        "tags": [
-          "Admin Dashboard"
-        ],
-        "summary": "Trigger Error",
-        "description": "Deliberately trigger an error to test the global exception handler (SUPER users only).",
-        "operationId": "trigger_error_api_v1_admin_dashboard_error_test_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2PasswordBearer": []
-          }
-        ]
-      }
-    },
-    "/health": {
-      "get": {
-        "tags": [
-          "Health Check"
-        ],
-        "summary": "Health",
-        "operationId": "health_health_get",
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
-                  "type": "object",
-                  "title": "Response Health Health Get"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/test-email/": {
-      "post": {
-        "tags": [
-          "Test email"
-        ],
-        "summary": "Test Email",
-        "operationId": "test_email_test_email__post",
-        "parameters": [
-          {
-            "name": "email_to",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "email",
-              "title": "Email To"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDetail"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "components": {
     "schemas": {
       "ActivitySummary": {
         "properties": {
-          "total_hits": {
-            "type": "integer",
-            "title": "Total Hits"
+          "failure_rate": {
+            "title": "Failure Rate",
+            "type": "number"
           },
           "success_rate": {
-            "type": "number",
-            "title": "Success Rate"
-          },
-          "failure_rate": {
-            "type": "number",
-            "title": "Failure Rate"
+            "title": "Success Rate",
+            "type": "number"
           },
           "top_endpoints": {
             "items": {
               "$ref": "#/components/schemas/HotEndpoint"
             },
-            "type": "array",
-            "title": "Top Endpoints"
+            "title": "Top Endpoints",
+            "type": "array"
+          },
+          "total_hits": {
+            "title": "Total Hits",
+            "type": "integer"
           }
         },
-        "type": "object",
         "required": [
           "total_hits",
           "success_rate",
           "failure_rate",
           "top_endpoints"
         ],
-        "title": "ActivitySummary"
+        "title": "ActivitySummary",
+        "type": "object"
       },
       "AdminDashboardReport": {
         "properties": {
-          "total_regular_users": {
-            "type": "integer",
-            "title": "Total Regular Users"
-          },
-          "total_activities_24h": {
-            "type": "integer",
-            "title": "Total Activities 24H"
-          },
           "daily_trends": {
             "items": {
               "$ref": "#/components/schemas/DailyActivity"
             },
-            "type": "array",
-            "title": "Daily Trends"
+            "title": "Daily Trends",
+            "type": "array"
           },
           "top_active_users": {
             "items": {
               "$ref": "#/components/schemas/UserActivityStat"
             },
-            "type": "array",
-            "title": "Top Active Users"
+            "title": "Top Active Users",
+            "type": "array"
+          },
+          "total_activities_24h": {
+            "title": "Total Activities 24H",
+            "type": "integer"
+          },
+          "total_regular_users": {
+            "title": "Total Regular Users",
+            "type": "integer"
           }
         },
-        "type": "object",
         "required": [
           "total_regular_users",
           "total_activities_24h",
           "daily_trends",
           "top_active_users"
         ],
-        "title": "AdminDashboardReport"
+        "title": "AdminDashboardReport",
+        "type": "object"
       },
       "Body_login_access_token_api_v1_login_access_token_post": {
         "properties": {
-          "grant_type": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^password$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Grant Type"
-          },
-          "username": {
-            "type": "string",
-            "title": "Username"
-          },
-          "password": {
-            "type": "string",
-            "format": "password",
-            "title": "Password"
-          },
-          "scope": {
-            "type": "string",
-            "title": "Scope",
-            "default": ""
-          },
           "client_id": {
             "anyOf": [
               {
@@ -2201,67 +90,93 @@
             ],
             "format": "password",
             "title": "Client Secret"
+          },
+          "grant_type": {
+            "anyOf": [
+              {
+                "pattern": "^password$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "password": {
+            "format": "password",
+            "title": "Password",
+            "type": "string"
+          },
+          "scope": {
+            "default": "",
+            "title": "Scope",
+            "type": "string"
+          },
+          "username": {
+            "title": "Username",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "username",
           "password"
         ],
-        "title": "Body_login_access_token_api_v1_login_access_token_post"
+        "title": "Body_login_access_token_api_v1_login_access_token_post",
+        "type": "object"
       },
       "DailyActivity": {
         "properties": {
-          "date": {
-            "type": "string",
-            "format": "date",
-            "title": "Date"
-          },
           "count": {
-            "type": "integer",
-            "title": "Count"
+            "title": "Count",
+            "type": "integer"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "date",
           "count"
         ],
-        "title": "DailyActivity"
+        "title": "DailyActivity",
+        "type": "object"
       },
       "DashboardReport": {
         "properties": {
+          "activity": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
           "server": {
             "$ref": "#/components/schemas/ServerMetrics"
           },
           "users": {
             "$ref": "#/components/schemas/UserStats"
-          },
-          "activity": {
-            "$ref": "#/components/schemas/ActivitySummary"
           }
         },
-        "type": "object",
         "required": [
           "server",
           "users",
           "activity"
         ],
-        "title": "DashboardReport"
+        "title": "DashboardReport",
+        "type": "object"
       },
       "ErrorDetail": {
         "properties": {
           "detail": {
-            "type": "string",
+            "description": "A specific error message suitable for UI display",
             "title": "Detail",
-            "description": "A specific error message suitable for UI display"
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "detail"
         ],
-        "title": "ErrorDetail"
+        "title": "ErrorDetail",
+        "type": "object"
       },
       "HTTPValidationError": {
         "properties": {
@@ -2269,49 +184,49 @@
             "items": {
               "$ref": "#/components/schemas/ValidationError"
             },
-            "type": "array",
-            "title": "Detail"
+            "title": "Detail",
+            "type": "array"
           }
         },
-        "type": "object",
-        "title": "HTTPValidationError"
+        "title": "HTTPValidationError",
+        "type": "object"
       },
       "HotEndpoint": {
         "properties": {
-          "path": {
-            "type": "string",
-            "title": "Path"
+          "count": {
+            "title": "Count",
+            "type": "integer"
           },
           "method": {
-            "type": "string",
-            "title": "Method"
+            "title": "Method",
+            "type": "string"
           },
-          "count": {
-            "type": "integer",
-            "title": "Count"
+          "path": {
+            "title": "Path",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "path",
           "method",
           "count"
         ],
-        "title": "HotEndpoint"
+        "title": "HotEndpoint",
+        "type": "object"
       },
       "Message": {
         "properties": {
           "message": {
-            "type": "string",
+            "description": "A human-readable success or status message",
             "title": "Message",
-            "description": "A human-readable success or status message"
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "message"
         ],
-        "title": "Message"
+        "title": "Message",
+        "type": "object"
       },
       "Page_UserActivityPublic_": {
         "properties": {
@@ -2319,31 +234,30 @@
             "items": {
               "$ref": "#/components/schemas/UserActivityPublic"
             },
-            "type": "array",
-            "title": "Items"
-          },
-          "total": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Total"
+            "title": "Items",
+            "type": "array"
           },
           "page": {
-            "type": "integer",
             "minimum": 1.0,
-            "title": "Page"
-          },
-          "size": {
-            "type": "integer",
-            "minimum": 1.0,
-            "title": "Size"
+            "title": "Page",
+            "type": "integer"
           },
           "pages": {
-            "type": "integer",
             "minimum": 0.0,
-            "title": "Pages"
+            "title": "Pages",
+            "type": "integer"
+          },
+          "size": {
+            "minimum": 1.0,
+            "title": "Size",
+            "type": "integer"
+          },
+          "total": {
+            "minimum": 0.0,
+            "title": "Total",
+            "type": "integer"
           }
         },
-        "type": "object",
         "required": [
           "items",
           "total",
@@ -2351,7 +265,8 @@
           "size",
           "pages"
         ],
-        "title": "Page[UserActivityPublic]"
+        "title": "Page[UserActivityPublic]",
+        "type": "object"
       },
       "Page_UserPublic_": {
         "properties": {
@@ -2359,31 +274,30 @@
             "items": {
               "$ref": "#/components/schemas/UserPublic"
             },
-            "type": "array",
-            "title": "Items"
-          },
-          "total": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "Total"
+            "title": "Items",
+            "type": "array"
           },
           "page": {
-            "type": "integer",
             "minimum": 1.0,
-            "title": "Page"
-          },
-          "size": {
-            "type": "integer",
-            "minimum": 1.0,
-            "title": "Size"
+            "title": "Page",
+            "type": "integer"
           },
           "pages": {
-            "type": "integer",
             "minimum": 0.0,
-            "title": "Pages"
+            "title": "Pages",
+            "type": "integer"
+          },
+          "size": {
+            "minimum": 1.0,
+            "title": "Size",
+            "type": "integer"
+          },
+          "total": {
+            "minimum": 0.0,
+            "title": "Total",
+            "type": "integer"
           }
         },
-        "type": "object",
         "required": [
           "items",
           "total",
@@ -2391,86 +305,108 @@
           "size",
           "pages"
         ],
-        "title": "Page[UserPublic]"
+        "title": "Page[UserPublic]",
+        "type": "object"
       },
       "PasswordHistoriesPublic": {
         "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
           "data": {
             "items": {
               "$ref": "#/components/schemas/PasswordHistoryPublic"
             },
-            "type": "array",
-            "title": "Data"
-          },
-          "count": {
-            "type": "integer",
-            "title": "Count"
+            "title": "Data",
+            "type": "array"
           }
         },
-        "type": "object",
         "required": [
           "data",
           "count"
         ],
-        "title": "PasswordHistoriesPublic"
+        "title": "PasswordHistoriesPublic",
+        "type": "object"
       },
       "PasswordHistoryPublic": {
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
           "created_at": {
-            "type": "string",
             "format": "date-time",
-            "title": "Created At"
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "id",
           "created_at"
         ],
-        "title": "PasswordHistoryPublic"
+        "title": "PasswordHistoryPublic",
+        "type": "object"
       },
       "ServerMetrics": {
         "properties": {
           "cpu_usage": {
-            "type": "number",
-            "title": "Cpu Usage"
-          },
-          "memory_usage": {
-            "type": "number",
-            "title": "Memory Usage"
+            "title": "Cpu Usage",
+            "type": "number"
           },
           "disk_usage": {
-            "type": "number",
-            "title": "Disk Usage"
+            "title": "Disk Usage",
+            "type": "number"
+          },
+          "memory_usage": {
+            "title": "Memory Usage",
+            "type": "number"
           },
           "uptime_seconds": {
-            "type": "number",
-            "title": "Uptime Seconds"
+            "title": "Uptime Seconds",
+            "type": "number"
           }
         },
-        "type": "object",
         "required": [
           "cpu_usage",
           "memory_usage",
           "disk_usage",
           "uptime_seconds"
         ],
-        "title": "ServerMetrics"
+        "title": "ServerMetrics",
+        "type": "object"
       },
       "SystemLogPublic": {
         "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
           "level": {
-            "type": "string",
-            "title": "Level"
+            "title": "Level",
+            "type": "string"
           },
           "message": {
-            "type": "string",
-            "title": "Message"
+            "title": "Message",
+            "type": "string"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
           },
           "path": {
             "anyOf": [
@@ -2483,7 +419,7 @@
             ],
             "title": "Path"
           },
-          "method": {
+          "stack_trace": {
             "anyOf": [
               {
                 "type": "string"
@@ -2492,7 +428,7 @@
                 "type": "null"
               }
             ],
-            "title": "Method"
+            "title": "Stack Trace"
           },
           "status_code": {
             "anyOf": [
@@ -2508,79 +444,53 @@
           "user_id": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "uuid"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "User Id"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "stack_trace": {
-            "anyOf": [
-              {
+                "format": "uuid",
                 "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Stack Trace"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
+            "title": "User Id"
           }
         },
-        "type": "object",
         "required": [
           "level",
           "message",
           "id",
           "created_at"
         ],
-        "title": "SystemLogPublic"
+        "title": "SystemLogPublic",
+        "type": "object"
       },
       "SystemLogsPublic": {
         "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
           "data": {
             "items": {
               "$ref": "#/components/schemas/SystemLogPublic"
             },
-            "type": "array",
-            "title": "Data"
-          },
-          "count": {
-            "type": "integer",
-            "title": "Count"
+            "title": "Data",
+            "type": "array"
           }
         },
-        "type": "object",
         "required": [
           "data",
           "count"
         ],
-        "title": "SystemLogsPublic"
+        "title": "SystemLogsPublic",
+        "type": "object"
       },
       "ToDoListCreate": {
         "properties": {
-          "title": {
-            "type": "string",
-            "maxLength": 255,
-            "title": "Title"
-          },
           "description": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 1000
+                "maxLength": 1000,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2588,15 +498,11 @@
             ],
             "title": "Description"
           },
-          "status": {
-            "$ref": "#/components/schemas/ToDoStatus",
-            "default": "pending"
-          },
           "due_date_time": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2607,26 +513,35 @@
           "priority": {
             "$ref": "#/components/schemas/ToDoPriority",
             "default": "medium"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ToDoStatus",
+            "default": "pending"
+          },
+          "title": {
+            "maxLength": 255,
+            "title": "Title",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "title"
         ],
-        "title": "ToDoListCreate"
+        "title": "ToDoListCreate",
+        "type": "object"
       },
       "ToDoListPublic": {
         "properties": {
-          "title": {
-            "type": "string",
-            "maxLength": 255,
-            "title": "Title"
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
           },
           "description": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 1000
+                "maxLength": 1000,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2634,15 +549,11 @@
             ],
             "title": "Description"
           },
-          "status": {
-            "$ref": "#/components/schemas/ToDoStatus",
-            "default": "pending"
-          },
           "due_date_time": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2650,54 +561,46 @@
             ],
             "title": "Due Date Time"
           },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
           "priority": {
             "$ref": "#/components/schemas/ToDoPriority",
             "default": "medium"
           },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
+          "status": {
+            "$ref": "#/components/schemas/ToDoStatus",
+            "default": "pending"
+          },
+          "title": {
+            "maxLength": 255,
+            "title": "Title",
+            "type": "string"
           },
           "user_id": {
-            "type": "string",
             "format": "uuid",
-            "title": "User Id"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
+            "title": "User Id",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "title",
           "id",
           "user_id",
           "created_at"
         ],
-        "title": "ToDoListPublic"
+        "title": "ToDoListPublic",
+        "type": "object"
       },
       "ToDoListUpdate": {
         "properties": {
-          "title": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 255
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Title"
-          },
           "description": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 1000
+                "maxLength": 1000,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2705,21 +608,11 @@
             ],
             "title": "Description"
           },
-          "status": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ToDoStatus"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
           "due_date_time": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2736,132 +629,150 @@
                 "type": "null"
               }
             ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ToDoStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
           }
         },
-        "type": "object",
-        "title": "ToDoListUpdate"
+        "title": "ToDoListUpdate",
+        "type": "object"
       },
       "ToDoListsPublic": {
         "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
           "data": {
             "items": {
               "$ref": "#/components/schemas/ToDoListPublic"
             },
-            "type": "array",
-            "title": "Data"
-          },
-          "count": {
-            "type": "integer",
-            "title": "Count"
+            "title": "Data",
+            "type": "array"
           }
         },
-        "type": "object",
         "required": [
           "data",
           "count"
         ],
-        "title": "ToDoListsPublic"
+        "title": "ToDoListsPublic",
+        "type": "object"
       },
       "ToDoPriority": {
-        "type": "string",
         "enum": [
           "high",
           "medium",
           "low"
         ],
-        "title": "ToDoPriority"
+        "title": "ToDoPriority",
+        "type": "string"
       },
       "ToDoStatus": {
-        "type": "string",
         "enum": [
           "pending",
           "in progress",
           "completed"
         ],
-        "title": "ToDoStatus"
+        "title": "ToDoStatus",
+        "type": "string"
       },
       "Token": {
         "properties": {
           "access_token": {
-            "type": "string",
-            "title": "Access Token"
+            "title": "Access Token",
+            "type": "string"
           },
           "token_type": {
-            "type": "string",
+            "default": "bearer",
             "title": "Token Type",
-            "default": "bearer"
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "access_token"
         ],
-        "title": "Token"
+        "title": "Token",
+        "type": "object"
       },
       "UpdatePassword": {
         "properties": {
           "current_password": {
-            "type": "string",
             "maxLength": 128,
             "minLength": 8,
-            "title": "Current Password"
+            "title": "Current Password",
+            "type": "string"
           },
           "new_password": {
-            "type": "string",
             "maxLength": 128,
             "minLength": 8,
-            "title": "New Password"
+            "title": "New Password",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "current_password",
           "new_password"
         ],
-        "title": "UpdatePassword"
+        "title": "UpdatePassword",
+        "type": "object"
       },
       "UserActivitiesPublic": {
         "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
           "data": {
             "items": {
               "$ref": "#/components/schemas/UserActivityPublic"
             },
-            "type": "array",
-            "title": "Data"
-          },
-          "count": {
-            "type": "integer",
-            "title": "Count"
+            "title": "Data",
+            "type": "array"
           }
         },
-        "type": "object",
         "required": [
           "data",
           "count"
         ],
-        "title": "UserActivitiesPublic"
+        "title": "UserActivitiesPublic",
+        "type": "object"
       },
       "UserActivityPublic": {
         "properties": {
-          "method": {
-            "type": "string",
-            "maxLength": 10,
-            "title": "Method"
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
           },
-          "path": {
-            "type": "string",
-            "maxLength": 255,
-            "title": "Path"
-          },
-          "status_code": {
-            "type": "integer",
-            "title": "Status Code"
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
           },
           "ip_address": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 45
+                "maxLength": 45,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2869,11 +780,25 @@
             ],
             "title": "Ip Address"
           },
+          "method": {
+            "maxLength": 10,
+            "title": "Method",
+            "type": "string"
+          },
+          "path": {
+            "maxLength": 255,
+            "title": "Path",
+            "type": "string"
+          },
+          "status_code": {
+            "title": "Status Code",
+            "type": "integer"
+          },
           "user_agent": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 1000
+                "maxLength": 1000,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2881,30 +806,19 @@
             ],
             "title": "User Agent"
           },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
           "user_id": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "uuid"
+                "format": "uuid",
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
             "title": "User Id"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
           }
         },
-        "type": "object",
         "required": [
           "method",
           "path",
@@ -2913,13 +827,18 @@
           "user_id",
           "created_at"
         ],
-        "title": "UserActivityPublic"
+        "title": "UserActivityPublic",
+        "type": "object"
       },
       "UserActivityStat": {
         "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
           "email": {
-            "type": "string",
-            "title": "Email"
+            "title": "Email",
+            "type": "string"
           },
           "full_name": {
             "anyOf": [
@@ -2931,27 +850,29 @@
               }
             ],
             "title": "Full Name"
-          },
-          "count": {
-            "type": "integer",
-            "title": "Count"
           }
         },
-        "type": "object",
         "required": [
           "email",
           "full_name",
           "count"
         ],
-        "title": "UserActivityStat"
+        "title": "UserActivityStat",
+        "type": "object"
       },
       "UserCreate": {
         "properties": {
+          "email": {
+            "format": "email",
+            "maxLength": 255,
+            "title": "Email",
+            "type": "string"
+          },
           "full_name": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 255
+                "maxLength": 255,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -2959,96 +880,54 @@
             ],
             "title": "Full Name"
           },
-          "email": {
-            "type": "string",
-            "maxLength": 255,
-            "format": "email",
-            "title": "Email"
-          },
           "is_active": {
-            "type": "boolean",
+            "default": true,
             "title": "Is Active",
-            "default": true
+            "type": "boolean"
+          },
+          "password": {
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password",
+            "type": "string"
           },
           "role": {
             "$ref": "#/components/schemas/UserRole",
             "default": "user"
-          },
-          "password": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 8,
-            "title": "Password"
           }
         },
-        "type": "object",
         "required": [
           "email",
           "password"
         ],
-        "title": "UserCreate"
+        "title": "UserCreate",
+        "type": "object"
       },
       "UserPublic": {
         "properties": {
-          "full_name": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 255
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Full Name"
-          },
-          "email": {
-            "type": "string",
-            "maxLength": 255,
-            "format": "email",
-            "title": "Email"
-          },
-          "is_active": {
-            "type": "boolean",
-            "title": "Is Active",
-            "default": true
-          },
-          "role": {
-            "$ref": "#/components/schemas/UserRole",
-            "default": "user"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
           "created_at": {
             "anyOf": [
               {
-                "type": "string",
-                "format": "date-time"
+                "format": "date-time",
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
             "title": "Created At"
-          }
-        },
-        "type": "object",
-        "required": [
-          "email",
-          "id"
-        ],
-        "title": "UserPublic"
-      },
-      "UserRegister": {
-        "properties": {
+          },
+          "email": {
+            "format": "email",
+            "maxLength": 255,
+            "title": "Email",
+            "type": "string"
+          },
           "full_name": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 255
+                "maxLength": 255,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -3056,65 +935,101 @@
             ],
             "title": "Full Name"
           },
-          "email": {
-            "type": "string",
-            "maxLength": 255,
-            "format": "email",
-            "title": "Email"
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
           },
-          "password": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 8,
-            "title": "Password"
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRole",
+            "default": "user"
           }
         },
-        "type": "object",
+        "required": [
+          "email",
+          "id"
+        ],
+        "title": "UserPublic",
+        "type": "object"
+      },
+      "UserRegister": {
+        "properties": {
+          "email": {
+            "format": "email",
+            "maxLength": 255,
+            "title": "Email",
+            "type": "string"
+          },
+          "full_name": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name"
+          },
+          "password": {
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password",
+            "type": "string"
+          }
+        },
         "required": [
           "email",
           "password"
         ],
-        "title": "UserRegister"
+        "title": "UserRegister",
+        "type": "object"
       },
       "UserRole": {
-        "type": "string",
         "enum": [
           "super",
           "admin",
           "user"
         ],
-        "title": "UserRole"
+        "title": "UserRole",
+        "type": "string"
       },
       "UserStats": {
         "properties": {
-          "total_users": {
-            "type": "integer",
-            "title": "Total Users"
-          },
           "active_users_24h": {
-            "type": "integer",
-            "title": "Active Users 24H"
+            "title": "Active Users 24H",
+            "type": "integer"
           },
           "new_registrations_24h": {
-            "type": "integer",
-            "title": "New Registrations 24H"
+            "title": "New Registrations 24H",
+            "type": "integer"
+          },
+          "total_users": {
+            "title": "Total Users",
+            "type": "integer"
           }
         },
-        "type": "object",
         "required": [
           "total_users",
           "active_users_24h",
           "new_registrations_24h"
         ],
-        "title": "UserStats"
+        "title": "UserStats",
+        "type": "object"
       },
       "UserUpdate": {
         "properties": {
           "full_name": {
             "anyOf": [
               {
-                "type": "string",
-                "maxLength": 255
+                "maxLength": 255,
+                "type": "string"
               },
               {
                 "type": "null"
@@ -3144,11 +1059,18 @@
             ]
           }
         },
-        "type": "object",
-        "title": "UserUpdate"
+        "title": "UserUpdate",
+        "type": "object"
       },
       "ValidationError": {
         "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
           "loc": {
             "items": {
               "anyOf": [
@@ -3160,43 +1082,2121 @@
                 }
               ]
             },
-            "type": "array",
-            "title": "Location"
+            "title": "Location",
+            "type": "array"
           },
           "msg": {
-            "type": "string",
-            "title": "Message"
+            "title": "Message",
+            "type": "string"
           },
           "type": {
-            "type": "string",
-            "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
+            "title": "Error Type",
+            "type": "string"
           }
         },
-        "type": "object",
         "required": [
           "loc",
           "msg",
           "type"
         ],
-        "title": "ValidationError"
+        "title": "ValidationError",
+        "type": "object"
       }
     },
     "securitySchemes": {
       "OAuth2PasswordBearer": {
-        "type": "oauth2",
         "flows": {
           "password": {
             "scopes": {},
             "tokenUrl": "/api/v1/login/access-token"
           }
-        }
+        },
+        "type": "oauth2"
+      }
+    }
+  },
+  "info": {
+    "title": "FastAPI Backend Template",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/": {
+      "get": {
+        "operationId": "get_welcome_message_api_v1__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Welcome Message Api V1  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get Welcome Message",
+        "tags": [
+          "Welcome"
+        ]
+      }
+    },
+    "/api/v1/activities/": {
+      "get": {
+        "description": "Retrieve all system-wide activities (SUPER users only).",
+        "operationId": "read_all_activities_api_v1_activities__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_UserActivityPublic_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read All Activities",
+        "tags": [
+          "User Activities"
+        ]
+      }
+    },
+    "/api/v1/activities/me": {
+      "get": {
+        "description": "Retrieve the last 20 activities for the authenticated user.",
+        "operationId": "read_my_activities_api_v1_activities_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserActivitiesPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read My Activities",
+        "tags": [
+          "User Activities"
+        ]
+      }
+    },
+    "/api/v1/admin/dashboard/error-test": {
+      "get": {
+        "description": "Deliberately trigger an error to test the global exception handler (SUPER users only).",
+        "operationId": "trigger_error_api_v1_admin_dashboard_error_test_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Trigger Error",
+        "tags": [
+          "Admin Dashboard"
+        ]
+      }
+    },
+    "/api/v1/admin/dashboard/logs": {
+      "get": {
+        "description": "Retrieve recent system error logs (SUPER users only).",
+        "operationId": "read_system_logs_api_v1_admin_dashboard_logs_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "level",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Level"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemLogsPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read System Logs",
+        "tags": [
+          "Admin Dashboard"
+        ]
+      }
+    },
+    "/api/v1/admin/dashboard/stats": {
+      "get": {
+        "description": "Retrieve user activity metrics and trends (SUPER and ADMIN users only).\nFilters out activities from non-regular users.",
+        "operationId": "read_admin_dashboard_stats_api_v1_admin_dashboard_stats_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminDashboardReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Admin Dashboard Stats",
+        "tags": [
+          "Admin Dashboard"
+        ]
+      }
+    },
+    "/api/v1/checkDBConnection": {
+      "get": {
+        "operationId": "check_database_connection_api_v1_checkDBConnection_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Check Database Connection Api V1 Checkdbconnection Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Check Database Connection",
+        "tags": [
+          "Welcome"
+        ]
+      }
+    },
+    "/api/v1/dashboard/stats": {
+      "get": {
+        "description": "Retrieve comprehensive system and application metrics (SUPER users only).",
+        "operationId": "read_dashboard_stats_api_v1_dashboard_stats_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Dashboard Stats",
+        "tags": [
+          "Dashboard"
+        ]
+      }
+    },
+    "/api/v1/getEnvironment": {
+      "get": {
+        "operationId": "get_env_settings_api_v1_getEnvironment_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Env Settings Api V1 Getenvironment Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Get Env Settings",
+        "tags": [
+          "Welcome"
+        ]
+      }
+    },
+    "/api/v1/login/access-token": {
+      "post": {
+        "description": "OAuth2 compatible token login, get an access token for future requests",
+        "operationId": "login_access_token_api_v1_login_access_token_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_access_token_api_v1_login_access_token_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Login Access Token",
+        "tags": [
+          "Login"
+        ]
+      }
+    },
+    "/api/v1/login/current-user": {
+      "get": {
+        "operationId": "get_current_user_api_v1_login_current_user_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Get Current User",
+        "tags": [
+          "Login"
+        ]
+      }
+    },
+    "/api/v1/login/password-recovery/{email}": {
+      "post": {
+        "operationId": "recover_password_api_v1_login_password_recovery__email__post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "title": "Email",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Recover Password",
+        "tags": [
+          "Login"
+        ]
+      }
+    },
+    "/api/v1/login/secure-data": {
+      "get": {
+        "operationId": "read_secure_api_v1_login_secure_data_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Read Secure Api V1 Login Secure Data Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Secure",
+        "tags": [
+          "Login"
+        ]
+      }
+    },
+    "/api/v1/login/signup": {
+      "post": {
+        "description": "Public signup endpoint for new users.",
+        "operationId": "register_user_api_v1_login_signup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegister"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Register User",
+        "tags": [
+          "Login"
+        ]
+      }
+    },
+    "/api/v1/todos/": {
+      "get": {
+        "operationId": "read_todos_api_v1_todos__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoListsPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Todos",
+        "tags": [
+          "ToDos"
+        ]
+      },
+      "post": {
+        "operationId": "create_todo_api_v1_todos__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoListCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoListPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create Todo",
+        "tags": [
+          "ToDos"
+        ]
+      }
+    },
+    "/api/v1/todos/{id}": {
+      "delete": {
+        "operationId": "delete_todo_api_v1_todos__id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Delete Todo",
+        "tags": [
+          "ToDos"
+        ]
+      },
+      "get": {
+        "operationId": "read_todo_by_id_api_v1_todos__id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoListPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Todo By Id",
+        "tags": [
+          "ToDos"
+        ]
+      },
+      "patch": {
+        "operationId": "update_todo_api_v1_todos__id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToDoListUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoListPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Todo",
+        "tags": [
+          "ToDos"
+        ]
+      }
+    },
+    "/api/v1/users/": {
+      "get": {
+        "operationId": "read_users_api_v1_users__get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_UserPublic_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Users",
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "operationId": "create_user_api_v1_users__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Create User",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/byEmail/{email}": {
+      "get": {
+        "operationId": "read_user_by_email_api_v1_users_byEmail__email__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "title": "Email",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read User By Email",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/byID/{id}": {
+      "get": {
+        "operationId": "read_user_by_id_api_v1_users_byID__id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read User By Id",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/me/password-history": {
+      "get": {
+        "description": "Retrieve the last 5 password changes for the authenticated user.",
+        "operationId": "read_password_history_api_v1_users_me_password_history_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordHistoriesPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Read Password History",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/password": {
+      "patch": {
+        "operationId": "update_password_api_v1_users_password_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePassword"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update Password",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "delete": {
+        "operationId": "delete_user_api_v1_users__id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Delete User",
+        "tags": [
+          "Users"
+        ]
+      },
+      "patch": {
+        "operationId": "update_user_api_v1_users__id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPublic"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Update User",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/{user_name}": {
+      "get": {
+        "operationId": "get_custom_welcome_message_api_v1__user_name__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_name",
+            "required": true,
+            "schema": {
+              "title": "User Name",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Get Custom Welcome Message Api V1  User Name  Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Custom Welcome Message",
+        "tags": [
+          "Welcome"
+        ]
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Health Health Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Health",
+        "tags": [
+          "Health Check"
+        ]
+      }
+    },
+    "/metrics": {
+      "get": {
+        "description": "Endpoint that serves Prometheus metrics.",
+        "operationId": "metrics_metrics_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          }
+        },
+        "summary": "Metrics"
+      }
+    },
+    "/test-email/": {
+      "post": {
+        "operationId": "test_email_test_email__post",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email_to",
+            "required": true,
+            "schema": {
+              "format": "email",
+              "title": "Email To",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Test Email",
+        "tags": [
+          "Test email"
+        ]
       }
     }
   }
