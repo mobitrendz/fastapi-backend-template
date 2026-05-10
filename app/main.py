@@ -20,7 +20,7 @@ from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
 from app.db import initial_data
 from app.middleware.activity_logger import ActivityLoggerMiddleware
-from app.models.generic import Message
+from app.models.generic import ErrorDetail, Message
 
 setup_logging()
 logger = structlog.get_logger(__name__)
@@ -49,6 +49,11 @@ app = FastAPI(
     lifespan=lifespan,
     title=settings.PROJECT_NAME,
     openapi_url="/openapi.json",
+    responses={
+        400: {"model": ErrorDetail, "description": "Bad Request"},
+        403: {"model": ErrorDetail, "description": "Forbidden"},
+        404: {"model": ErrorDetail, "description": "Not Found"},
+    },
 )
 
 if settings.SENTRY_DSN:
