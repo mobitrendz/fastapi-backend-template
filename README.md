@@ -246,18 +246,6 @@ We welcome contributions! Please see our [Contributing Guide](docs/contributing.
 ## 📝 Release Notes
 See the full <a href="release-notes.md" target="_blank">Release Notes</a> for a detailed history of changes.
 
-## 🚀 Release Checklist for Developers
-
-To maintain 2026 enterprise standards, follow this checklist before every merge to `master`:
-
-1.  **Contract Integrity**: Generate and commit the latest schema:
-    ```bash
-    uv run python -c "import json; from app.main import app; print(json.dumps(app.openapi(), indent=2, sort_keys=True))" > openapi.json
-    ```
-2.  **Code Quality**: Run `uv run ruff check .` and `uv run mypy .`.
-3.  **Security**: Execute `uv run bandit -c pyproject.toml -r app`.
-4.  **Verification**: Run `uv run pytest` and ensure 92%+ coverage.
-
 ## ⚖️ License
 This project is licensed under the <a href="LICENSE" target="_blank">MIT License</a>.
 
