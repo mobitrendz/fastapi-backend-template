@@ -3,7 +3,7 @@ from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 
 from app.crud.activity import create_activity
-from app.db.database import async_session_maker
+from app.db import database
 from app.models.user import User
 
 logger = structlog.get_logger(__name__)
@@ -30,7 +30,7 @@ class ActivityLoggerMiddleware(BaseHTTPMiddleware):
             user_id = user.id if user else None
 
             # Create a new session for logging to avoid conflicts with request session
-            async with async_session_maker() as session:
+            async with database.async_session_maker() as session:
                 await create_activity(
                     session=session,
                     user_id=user_id,

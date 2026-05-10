@@ -127,3 +127,19 @@ async def test_get_current_user_inactive_crud(session: AsyncSession):
         await get_current_user(request=mock_request, session=session, token=token)
     assert exc.value.status_code == 400
     assert exc.value.detail == "Inactive user"
+
+
+@pytest.mark.asyncio
+async def test_get_password_history_empty(session: AsyncSession):
+    email = "pass_hist_empty@example.com"
+    user_in = UserCreate(
+        full_name="Hist User",
+        email=email,
+        password="password123",
+        role=UserRole.USER,
+    )
+    user = await user_crud.create_user(session=session, user_create=user_in)
+
+    history = await user_crud.get_password_history(session=session, user_id=user.id)
+    assert history.count == 0
+    assert len(history.data) == 0

@@ -73,3 +73,48 @@ async def test_login_access_token_inactive_coverage(
     )
     assert response.status_code == 400
     assert response.json()["detail"] == "Inactive user"
+
+
+@pytest.mark.asyncio
+async def test_signup_user_duplicate(client: AsyncClient, session: AsyncSession):
+    from app.crud import user as user_crud
+
+    email = "duplicate@example.com"
+    await user_crud.create_user(
+        session=session,
+        user_create=UserCreate(
+            email=email,
+            password="password123",
+            full_name="Existing User",
+        ),
+    )
+    response = await client.post(
+        "/api/v1/login/signup",
+        json={
+            "email": email,
+            "password": "password123",
+            "full_name": "Signup User",
+        },
+    )
+    assert response.status_code == 400
+    assert response.json()["detail"] == "User with this email already exists"
+
+
+@pytest.mark.asyncio
+async def test_recover_password_nonexistent(client: AsyncClient):
+    # Should still return 200 to prevent enumeration
+    response = await client.post(
+        "/api/v1/login/password-recovery/nonexistent@example.com"
+    )
+    assert response.status_code == 200
+    assert "message" in response.json()
+
+
+@pytest.mark.asyncio
+async def test_read_secure_data(client: AsyncClient, normal_user_token: str):
+    response = await client.get(
+        "/api/v1/login/secure-data",
+        headers={"Authorization": f"Bearer {normal_user_token}"},
+    )
+    assert response.status_code == 200
+    assert response.json()["token"] == normal_user_token
