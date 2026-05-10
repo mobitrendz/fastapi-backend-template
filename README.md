@@ -63,7 +63,18 @@ cd fastapi-backend-template
 
 ### 2. Environment Configuration
 
-Refer to the <a href="http://localhost:3000/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation for details on setting up your `.env` file, database credentials, and security keys.
+The application requires several environment variables for security, database connection, and email settings.
+
+1.  **Copy the template**:
+    ```bash
+    cp .env.example .env
+    ```
+2.  **Configure variables**: Open the new `.env` file and update the values. At a minimum, you should update:
+    - `SECRET_KEY`: Generate a secure key (e.g., `openssl rand -hex 32`).
+    - `POSTGRES_PASSWORD`: Set a secure password for your local database.
+    - `SUPER_USER_PASSWORD`: Set the password for the initial admin account.
+
+For a detailed breakdown of all available variables, refer to the <a href="http://localhost:3000/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation.
 
 *Note: The documentation portal requires Zensical to be running locally (`uv run zensical serve`) to access these links.*
 
