@@ -6,6 +6,11 @@
 
 A production-ready FastAPI template designed for scalable, high-performance web applications. This project provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows out of the box.
 
+## 🔗 Related Projects
+
+*   **React Frontend Template**: A companion frontend built with React, Vite, and Tailwind CSS, specifically designed to integrate with this backend.
+    - [GitHub Repository](https://github.com/mobitrendz/react-frontend-template)
+
 ## 🌟 Key Features
 
 *   **AI-Driven Development**: Optimized for **Google Antigravity** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.

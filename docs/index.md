@@ -6,6 +6,11 @@ icon: lucide/home
 
 Welcome to the **FastAPI Backend Template** documentation. This project is a production-ready foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**.
 
+## 🔗 Related Projects
+
+*   **React Frontend Template**: A companion frontend built with React, Vite, and Tailwind CSS.
+    - [GitHub Repository](https://github.com/mobitrendz/react-frontend-template)
+
 ## 🌟 Key Features
 
 *   **Python 3.12+ Runtime**: Leverages the latest interpreter performance enhancements.

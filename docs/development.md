@@ -93,6 +93,15 @@ SENTRY_DSN="your-sentry-dsn"
 ```
 *Note: Leave empty to disable Sentry in local development.*
 
+## 🎨 Frontend Integration (Optional)
+
+This backend is designed to work seamlessly with the [React Frontend Template](https://github.com/mobitrendz/react-frontend-template).
+
+If you are developing both the frontend and backend locally:
+1.  **Clone the frontend**: `git clone https://github.com/mobitrendz/react-frontend-template`
+2.  **CORS**: Ensure `BACKEND_CORS_ORIGINS` in your `.env` includes the frontend's local address (usually `http://localhost:5173`).
+3.  **Frontend Host**: Update `FRONTEND_HOST` in your `.env` to match the frontend URL. This is used for generating links in system emails (e.g., password resets).
+
 ---
 
 ## 🚀 Running the API Locally
