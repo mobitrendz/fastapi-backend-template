@@ -21,8 +21,7 @@ from app.core.limiter import limiter
 from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
 from app.crud.system_log import create_system_log
-from app.db import initial_data
-from app.db.database import async_session_maker
+from app.db import database, initial_data
 from app.middleware.activity_logger import ActivityLoggerMiddleware
 from app.models.generic import ErrorDetail, Message
 
@@ -85,7 +84,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
     logger.error("Unhandled exception", error=str(exc), path=request.url.path)
 
     try:
-        async with async_session_maker() as session:
+        async with database.async_session_maker() as session:
             user = getattr(request.state, "user", None)
             user_id = getattr(user, "id", None) if user else None
 

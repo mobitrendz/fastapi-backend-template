@@ -25,13 +25,19 @@ def postgres_container():
         yield container
 
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="session", autouse=True)
 async def engine(postgres_container):
     # Dynamically build the connection URL from the container
     url = postgres_container.get_connection_url().replace(
         "postgresql+psycopg2", "postgresql+psycopg"
     )
     engine = create_async_engine(url)
+
+    # Patch the global engine and async_session_maker in app.db.database
+    from app.db import database
+
+    database.engine = engine
+    database.async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)

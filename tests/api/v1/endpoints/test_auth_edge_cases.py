@@ -1,6 +1,7 @@
 import jwt
 import pytest
 from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 
@@ -37,3 +38,40 @@ async def test_read_secure_data_endpoint(client: AsyncClient, normal_user_token:
     )
     assert response.status_code == 200
     assert "token" in response.json()
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_not_found(client: AsyncClient):
+    import uuid
+
+    from app.core import security
+
+    token = security.create_access_token(str(uuid.uuid4()))
+    response = await client.get(
+        "/api/v1/login/current-user",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 404
+    assert response.json()["detail"] == "User not found"
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_inactive(client: AsyncClient, session: AsyncSession):
+    from app.core import security
+    from app.crud import user as user_crud
+    from app.models.user import UserCreate
+
+    email = "inactive_edge@example.com"
+    user = await user_crud.create_user(
+        session=session,
+        user_create=UserCreate(
+            email=email, password="password123", full_name="Inactive", is_active=False
+        ),
+    )
+    token = security.create_access_token(str(user.id))
+    response = await client.get(
+        "/api/v1/login/current-user",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Inactive user"
