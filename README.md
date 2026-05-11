@@ -119,9 +119,7 @@ The application requires several environment variables for security, database co
     - `POSTGRES_PASSWORD`: Set a secure password for your local database.
     - `SUPER_USER_PASSWORD`: Set the password for the initial admin account.
 
-For a detailed breakdown of all available variables, refer to the <a href="http://localhost:3000/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation.
-
-*Note: The documentation portal requires Zensical to be running locally (`uv run zensical serve`) to access these links.*
+For a detailed breakdown of all available variables, refer to the <a href="https://mobitrendz.github.io/fastapi-backend-template/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation.
 
 ### 3. Orchestration Launch
 
@@ -139,10 +137,11 @@ docker compose -f docker-compose.yaml up --build
 The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator. It serves as the primary resource for deep-dives into our architecture, development workflows, and deployment strategies.
 
 #### Access & Build
+- **Live Documentation**: [https://mobitrendz.github.io/fastapi-backend-template/](https://mobitrendz.github.io/fastapi-backend-template/)
 - **Serve Locally**: `uv run zensical serve` (Available at: http://localhost:3000)
 - **Build Static Site**: `uv run zensical build`
 
-*For an in-depth understanding of the system, please explore the full <a href="http://localhost:3000" target="_blank">Documentation Portal</a>.*
+*For an in-depth understanding of the system, please explore the full [Documentation Portal](https://mobitrendz.github.io/fastapi-backend-template/).*
 
 ---
 
