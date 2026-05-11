@@ -86,6 +86,7 @@ class Settings(BaseSettings):
     POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
+    POSTGRES_SSLMODE: str = "prefer"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
@@ -96,7 +97,7 @@ class Settings(BaseSettings):
             password=self.POSTGRES_PASSWORD,
             host=self.POSTGRES_SERVER,
             port=self.POSTGRES_PORT,
-            path=self.POSTGRES_DB,
+            path=f"{self.POSTGRES_DB}?sslmode={self.POSTGRES_SSLMODE}",
         )
 
 
