@@ -38,5 +38,5 @@ COPY alembic.ini ./
 # Ensure the script is executable
 RUN chmod +x /app/scripts/prestart.sh
 
-# Default command starts the API
-CMD ["fastapi", "run", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+# Default command runs migrations then starts the API
+CMD ["sh", "-c", "alembic upgrade head && fastapi run app/main.py --host 0.0.0.0 --port 8000"]
