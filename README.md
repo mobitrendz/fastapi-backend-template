@@ -1,140 +1,79 @@
 # FastAPI AI-Optimized Enterprise Backend Template
 
-[![Docker Validation](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml)
-[![Backend Code Quality](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml)
-[![Coverage](coverage.svg)](https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml)
+<a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml" target="_blank"><img src="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/docker-compose-test.yml/badge.svg?branch=develop" alt="Docker Validation"></a>
+<a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml" target="_blank"><img src="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop" alt="Backend Code Quality"></a>
+<a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml" target="_blank"><img src="coverage.svg" alt="Coverage"></a>
 
-A production-ready foundation for scalable web applications leveraging **FastAPI**, **SQLModel**, and **Alembic**. This template is engineered for high-performance Python 3.14+ environments, utilizing **uv** for deterministic dependency management and **Docker Compose** for full-stack orchestration.
+An evolving, enterprise-grade FastAPI template currently in active development. While designed for scalability and high performance, this project is in a rapid growth phase—continuously receiving new features and bug fixes. It provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows.
+
+> [!IMPORTANT]
+> This project is currently in **Active Development (Beta)**. We are adding new functionalities and fixing bugs. While it follows enterprise standards, it should be thoroughly evaluated before use in critical production environments.
+
+## 🏗️ Architectural Pattern
+
+This template follows a **Layered Modular Architecture** to ensure high maintainability and clear separation of concerns:
+
+1.  **API Layer (`app/api`)**: Versioned controllers handling request validation and OpenAPI documentation.
+2.  **Service Layer (`app/services`)**: Business logic orchestrating multiple CRUD operations or external integrations.
+3.  **CRUD Layer (`app/crud`)**: Atomic, reusable database operations.
+4.  **Model Layer (`app/models`)**: Unified SQLModel definitions for both DB tables and API DTOs (Data Transfer Objects).
+5.  **Core Layer (`app/core`)**: Centralized security, configuration, and observability logic.
+
+---
+
+## 🔗 Related Projects
+
+*   **React Frontend Template**: A companion frontend built with React 19, Vite, and Tailwind CSS. It is pre-configured to consume this API and handle its standardized error formats.
+    - [GitHub Repository](https://github.com/mobitrendz/react-frontend-template)
+
+---
 
 ## 🌟 Key Features
 
-*   **AI-Driven Development**: Optimized for **Codex** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.
-*   **Python 3.14+ Runtime**: Leverages the latest interpreter performance enhancements.
+*   **AI-Driven Development**: Optimized for **Google Antigravity** and **Gemini CLI** assisted engineering, refactoring, code review, and feature implementation.
+*   **Python 3.12+ Runtime**: Leverages the latest interpreter performance enhancements.
 *   **Enterprise Observability**: Structured JSON logging with **Structlog** and real-time metrics with **Prometheus**.
 *   **API Standardization**: Integrated **Pagination** for uniform list responses and **Rate Limiting** via SlowAPI.
-*   **Modern Dependency Management**: Powered by [uv](https://astral.sh) for lightning-fast, reproducible builds.
+*   **Modern Dependency Management**: Powered by <a href="https://astral.sh" target="_blank">uv</a> for lightning-fast, reproducible builds.
 *   **Full-Stack Orchestration**: Integrated **PostgreSQL 18**, **Traefik**, and development-only admin/email tooling.
 *   **Enterprise Security**: Centralised OAuth2, JWT implementation, Argon2-based hashing, and automated **Security Scanning** via Bandit.
 *   **Robust Health Monitoring**: Integrated Docker health checks ensuring zero-downtime dependency readiness.
 
 ## 🛠️ Tech Stack
 
-### 🏗️ Core Architecture
-- 🐍 **Python 3.14+** — Latest high-performance interpreter with advanced language features.
-- ⚡ **FastAPI** — High-performance, production-ready web framework for building APIs.
-- 📐 **Pydantic v2** — Modern data validation and settings management using type hints.
-- 🔢 **FastAPI-Pagination** — Uniform pagination support for clean and consistent list responses.
-
-### 🗄️ Persistence & Data
-- 🐘 **PostgreSQL 18** — The world's most advanced open-source relational database.
-- 🧬 **SQLModel** — Elegant unification of SQLAlchemy and Pydantic for data modeling.
-- 🛠️ **Alembic** — Robust database migration management for versioned schema updates.
-- 🔌 **psycopg3** — Modern, high-performance PostgreSQL adapter for Python.
-
-### 🛡️ Security & Health
-- 🔑 **OAuth2 + JWT** — Industry-standard secure authentication and authorization.
-- 🔒 **Argon2** — State-of-the-art password hashing for maximum credential security.
-- 🚦 **SlowAPI** — Advanced rate limiting to protect endpoints from automated abuse.
-- 🛡️ **Bandit** — Automated security linting to identify and mitigate vulnerabilities.
-
-### 📊 Observability & Resilience
-- 🪵 **Structlog** — High-performance structured logging for deep system visibility.
-- 📈 **Prometheus** — Real-time metrics instrumentation for monitoring system health.
-- 🎯 **Sentry SDK** — Proactive error tracking and performance monitoring.
-- 🔄 **Tenacity** — Sophisticated retry logic for handling transient operational failures.
-
-### 📧 Email & Templating
-- ✉️ **Emails** — Simplifies sending emails with custom headers and attachments.
-- 🎨 **Jinja2** — Modern and designer-friendly templating engine for Python.
-- 🔍 **Email-Validator** — Robust validation for email addresses to ensure data integrity.
-
-### 🛠️ Tooling & Infrastructure
-- 📦 **uv** — Next-generation, lightning-fast Python package and project manager.
-- 🐳 **Docker & Compose** — Full-stack container orchestration for environmental parity.
-- 🧭 **Traefik** — Local reverse proxy for stable `.test` service URLs.
-- 📥 **MailCatcher** — Instant SMTP server for capturing and inspecting emails during development.
-- 🦀 **Zensical** — Ultra-fast, Rust-powered documentation generator for this project.
-- 🤖 **Codex** — AI coding collaborator for implementation, review, documentation, and repository maintenance.
-- 🤖 **Gemini CLI** — AI-powered autonomous agent for rapid, surgical engineering.
-
-### 🧪 Quality Assurance
-- 🧪 **Pytest & Coverage** — Mature testing framework with detailed coverage reporting.
-- 🧹 **Ruff** — Extremely fast, all-in-one Python linter and code formatter.
-- 🔍 **Mypy** — Strict static type checking to eliminate runtime type errors.
-- ⚓ **Prek** — Ultra-fast, Rust-powered Git hook manager for automated code quality checks.
-
-## 🤖 AI-Driven Development
-
-This project is built to work well with AI coding assistants such as **Codex** and **Gemini CLI**.
-
-### Core Benefits:
-- **Autonomous Engineering**: AI assistants can research the codebase, plan complex changes, and execute focused edits.
-- **Context Awareness**: Leverages repository guidance such as `GEMINI.md`, existing code patterns, tests, and documentation to keep changes aligned with local standards.
-- **Automated Validation**: Integrated workflow for running tests and linters immediately after code modifications.
-
-To interact with this project using Gemini CLI:
-```bash
-# Start an interactive session
-gemini
-
-# Sandbox - restrict the CLI's access strictly to your current project directory
-gemini --sandbox seatbelt
-
-# Example directive
-> "Add a new CRUD endpoint for 'Products' following the existing user pattern"
-```
-
-## 🛠️ Infrastructure & Orchestration
-
-The project utilises a multi-container architecture managed via Docker Compose. The base `docker-compose.yaml` contains production-oriented services, while `docker-compose.override.yml` adds local development tools such as pgAdmin and MailCatcher.
-
-### Service Architecture
-
-| Service | Technology | Role |
+| Tool Category | Key Dependencies | Core Benefits |
 | :--- | :--- | :--- |
-| **Traefik** | Traefik v3 | Reverse proxy for host-based routing. Uses `traefik/dynamic.yml` in the base stack and `traefik/dynamic.local.yml` in local development. |
-| **API** | FastAPI / Uvicorn | Primary application server with built-in health monitoring. |
-| **DB** | PostgreSQL 18 | Relational data store with persisted volume mapping. |
-| **Prestart** | Python/Alembic | Lifecycle service; executes migrations and populates initial system state. |
-| **pgAdmin** | pgAdmin 4 | Development-only database administration interface from `docker-compose.override.yml`. |
-| **MailCatcher** | MailCatcher | Development-only SMTP server and web interface from `docker-compose.override.yml`. |
+| **Core Framework** | `FastAPI`, `SQLModel` | High-performance, async-native API development with unified data modeling (Pydantic + SQLAlchemy). |
+| **Data Persistence** | `PostgreSQL 18`, `Alembic`, `psycopg3` | The latest stable database engine with modern binary drivers and robust migration management. |
+| **Security** | `pwdlib[argon2]`, `PyJWT`, `Bandit` | State-of-the-art password hashing, industry-standard authentication, and automated security linting. |
+| **Observability** | `Structlog`, `Prometheus`, `Sentry`, `Rich` | Centralized JSON logging, real-time metrics, proactive error tracking, and beautiful local console output. |
+| **Resilience** | `Tenacity`, `SlowAPI` | Automated retries for transient failures and built-in rate limiting to prevent API abuse. |
+| **Testing** | `Pytest`, `Testcontainers`, `Hypothesis` | Isolated infrastructure testing, property-based edge-case detection, and high coverage standards. |
+| **Optimization** | `py-spy`, `Scalene` | Deep profiling of CPU and memory usage to eliminate bottlenecks in production. |
+| **Developer DX** | `uv`, `Ruff`, `Mypy`, `Prek`, `Zensical` | Lightning-fast dependency management, formatting, and strict type checking, all orchestrated via automated hooks. |
 
-## 📂 Project Structure
+---
 
+## 🛡️ Enterprise Security & RBAC
+
+The template implements a robust **Role-Based Access Control (RBAC)** system using FastAPI dependencies.
+
+### User Roles
+- **SUPER**: Full system access (seeded via `.env`).
+- **ADMIN**: Can manage users but cannot access system metrics or other admins.
+- **USER**: Standard access to personal data (e.g., ToDo lists).
+
+### Usage in Routes
+Secure your endpoints using the provided dependencies:
+```python
+from app.api.deps import AllowSuper, AllowAdmin
+
+@router.get("/admin-only")
+async def secure_route(current_user: AllowAdmin):
+    return {"message": "Hello, Admin!"}
 ```
-fastapi-backend-template/
-├── .vscode/                       # Debugging env configuration (launch.json)
-├── app/                           # Main Application Logic
-│   ├── api/                       # API Entry points
-│   │   └── v1/                    # API Versioning
-│   │       ├── endpoints/         # Individual route handlers (e.g., users.py)
-│   │       └── router.py          # Main router merging all v1 endpoints
-│   ├── core/                      # Global configuration and security (JWT, Auth)
-│   ├── crud/                      # Reusable database CRUD operations
-│   ├── db/                        # Connection engine, session, and seed data
-│   ├── email-templates/           # MJML/HTML templates for system emails
-│   ├── models/                    # SQLModels, Tables, and DTOs (Data Transfer Objects)
-│   ├── services/                  # Complex business logic and external integrations
-│   └── main.py                    # FastAPI application initialization
-├── alembic/                       # Database migrations and environment setup
-├── docs/                          # Zensical documentation source (Markdown)
-├── site/                          # Generated Zensical static documentation
-├── scripts/                       # Shell scripts for deployment and startup
-├── traefik/                       # Traefik file-provider route configuration
-├── tests/                         # Pytest suite for unit and integration testing
-├── .env                           # Environment variables (Internal)
-├── .env.example                   # Template for environment variables
-├── .pre-commit-config.yaml        # Prek/Pre-commit hook configuration
-├── alembic.ini                    # Alembic configuration
-├── docker-compose.override.yml    # Container Orchestration Manifest for dev env
-├── docker-compose.yaml            # Container Orchestration Manifest
-├── Dockerfile                     # Multi-stage, non-root Production Build
-├── GEMINI.md                      # AI mandates and architectural context
-├── pyproject.toml                 # Dependency management (uv)
-├── uv.lock                        # Deterministic dependency lock file
-├── zensical.toml                  # Zensical documentation configuration
-└── README.md                      # Project documentation
-```
+
+---
 
 ## 📋 Prerequisites
 
@@ -151,58 +90,38 @@ This project uses **uv** for high-performance dependency management.
   ```powershell
   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
   ```
-- **More info**: [uv Installation Guide](https://docs.astral.sh/uv/getting-started/installation/)
+- **More info**: <a href="https://docs.astral.sh/uv/getting-started/installation/" target="_blank">uv Installation Guide</a>
 
 ### 🐳 Docker & Docker Compose
 Used for full-stack orchestration and environmental parity.
 
-- **Desktop (macOS/Windows/Linux)**: [Install Docker Desktop](https://docs.docker.com/get-docker/)
-- **Linux (Engine only)**: [Install Docker Engine](https://docs.docker.com/engine/install/)
+- **Desktop (macOS/Windows/Linux)**: <a href="https://docs.docker.com/get-docker/" target="_blank">Install Docker Desktop</a>
+- **Linux (Engine only)**: <a href="https://docs.docker.com/engine/install/" target="_blank">Install Docker Engine</a>
 
 ## 🏁 Getting Started
 
 ### 1. Clone the Repository
 ```bash
-git clone -b develop git@github.com:mobitrendz/fastapi-backend-template.git
+git clone git@github.com:mobitrendz/fastapi-backend-template.git
 cd fastapi-backend-template
 ```
 
 ### 2. Environment Configuration
 
-Update the following variables in `.env` file:
+The application requires several environment variables for security, database connection, and email settings.
 
-**Security & Super user**
+1.  **Copy the template**:
+    ```bash
+    cp .env.example .env
+    ```
+2.  **Configure variables**: Open the new `.env` file and update the values. At a minimum, you should update:
+    - `SECRET_KEY`: Generate a secure key (e.g., `openssl rand -hex 32`).
+    - `POSTGRES_PASSWORD`: Set a secure password for your local database.
+    - `SUPER_USER_PASSWORD`: Set the password for the initial admin account.
 
-Generate a secure SECRET_KEY for JWT tokens (e.g., using [JWT Secret Key Generator](https://jwtsecretkeygenerator.com)).
-```bash
-SECRET_KEY="your-generated-hs256-key"
+For a detailed breakdown of all available variables, refer to the <a href="http://localhost:3000/development/#environment-configuration" target="_blank">Environment Configuration</a> section in the development documentation.
 
-# Superuser details
-SUPER_USER_NAME="Sreeraj Sreenivasan"
-SUPER_USER_EMAIL="sreeraj.dev@icloud.com"
-SUPER_USER_PASSWORD="admin123"      # Password must be min. 8 characters
-```
-
-**Database Connection**
-
-```bash
-# Postgres Connection Settings
-POSTGRES_SERVER=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=fastapi_template_db
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=admin
-
-# The app will construct the URL as:
-# postgresql+psycopg://postgres:admin@localhost:5432/fastapi_template_db
-```
-
-**Local pgAdmin settings**
-```bash
-PGADMIN_EMAIL=admin@example.com
-PGADMIN_PASSWORD=admin
-```
-These are used only when `docker-compose.override.yml` is included for local development.
+*Note: The documentation portal requires Zensical to be running locally (`uv run zensical serve`) to access these links.*
 
 ### 3. Orchestration Launch
 
@@ -216,62 +135,52 @@ For a base stack without development-only pgAdmin and MailCatcher services, run:
 docker compose -f docker-compose.yaml up --build
 ```
 
-This triggers the following automated sequence:
+### 4. Documentation (Zensical)
+The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator. It serves as the primary resource for deep-dives into our architecture, development workflows, and deployment strategies.
 
-1. **Database Provisioning**: Postgres 18 initialises with health checks.
-2. **Migration & Seeding**: The `prestart` container runs `alembic upgrade head` and `app/db/initial_data.py`.
-3. **API Warm-up**: The FastAPI service starts only after `prestart` completes successfully.
+#### Access & Build
+- **Serve Locally**: `uv run zensical serve` (Available at: http://localhost:3000)
+- **Build Static Site**: `uv run zensical build`
 
-**Development Note**: Migration files are synchronized between the host and container via Docker volumes.
+*For an in-depth understanding of the system, please explore the full <a href="http://localhost:3000" target="_blank">Documentation Portal</a>.*
 
-### 4. Application Entry Points
-- API Documentation: http://localhost:8000/docs
-- API via Traefik: http://api.fastapi-template.test/docs
-- Database Management: http://localhost:5050 or http://pgadmin.fastapi-template.test
-- MailCatcher UI: http://localhost:1080 or http://mail.fastapi-template.test
-- Traefik Dashboard: http://traefik.fastapi-template.test:8080
-- Health Status: http://localhost:8000/health
+---
 
-### 5. 🛠️ Local Development
-For native development, ensure you have the [uv](https://astral.sh) package manager installed:
+### 5. Local API Development (Hybrid Setup)
 
-```bash
-# Sync environment and dependencies
-uv sync
+For developers who prefer running the database services via Docker while developing the FastAPI application natively on their host machine for faster iteration:
 
-# Activate Prek hooks
-uv run prek install
+1. **Start Database Services only**:
+   ```bash
+   docker compose up -d db pgadmin mailcatcher
+   ```
 
-# Activate virtual environment
-source .venv/bin/activate
+2. **Configure Local Environment**:
+   Ensure your `.env` connects to the local Docker ports (e.g., `POSTGRES_SERVER=localhost` and `POSTGRES_PORT=5432`).
 
-# 1. Generate migrations (after making model changes)
-uv run alembic revision --autogenerate -m "description of changes"
+3. Run API Natively:
+   ```bash
+   # Sync environment and dependencies
+   uv sync
 
-# 2. Execute schema migrations
-uv run alembic upgrade head
+   # Activate virtual environment
+   source .venv/bin/activate
 
-# 3. Seed initial data (superuser, etc.)
-uv run python app/db/initial_data.py
+   # Start development server (Auto-reload enabled)
+   # Use --host 0.0.0.0 to make the server accessible from outside the container or machine
+   uv run fastapi dev --host 0.0.0.0
+   ```
 
-# 4. Start development server (Auto-reload enabled)
-uv run fastapi dev
-```
+4. **Access Endpoints**:
+   - API Documentation: http://localhost:8000/docs
+   - Prometheus Metrics: http://localhost:8000/metrics
+   - pgAdmin: http://localhost:5050
+   - MailCatcher UI: http://localhost:1080
+   - Health Status: http://localhost:8000/health
 
-### 🌐 Local Access via Traefik
-The local Compose override mounts `traefik/dynamic.local.yml`, which routes the API and development tools through custom `.test` domains. To access them, add the following to your `/etc/hosts` file:
-```text
-127.0.0.1 traefik.fastapi-template.test api.fastapi-template.test pgadmin.fastapi-template.test mail.fastapi-template.test
-```
-Services are then available at:
-- **API**: `http://api.fastapi-template.test`
-- **pgAdmin**: `http://pgadmin.fastapi-template.test`
-- **Mailcatcher**: `http://mail.fastapi-template.test`
-- **Traefik Dashboard**: `http://traefik.fastapi-template.test:8080`
+---
 
-The base Traefik config in `traefik/dynamic.yml` excludes pgAdmin and MailCatcher so those local-only services are not published when running with `docker-compose.yaml` alone.
-
-### 6. 🧪 Quality Assurance
+### 6. 🛠️ Local Development
 Maintain system integrity and code quality with the integrated toolchain:
 
 #### 🧹 Linting & Formatting (Ruff)
@@ -304,24 +213,45 @@ uv run bandit -c pyproject.toml -r app
 uv run pytest
 ```
 
-### 7. 📚 Documentation (Zensical)
-The project documentation is built with **Zensical**, a high-performance, Rust-powered documentation generator.
+---
 
-#### Serve Documentation Locally
-```bash
-uv run zensical serve
-```
-Access the local documentation at: http://localhost:3000
+### 🗄️ Database Migrations (Alembic)
 
-#### Build Static Site
+This project uses **Alembic** for robust database schema management. All changes to the database structure must be performed via migration scripts.
+
+#### 🏗️ Creating Migrations
+When you modify your `SQLModel` definitions in `app/models/`, generate a new migration script:
 ```bash
-uv run zensical build
+# Generate a migration script automatically
+uv run alembic revision --autogenerate -m "description of changes"
 ```
+
+#### 🚀 Applying Migrations
+To sync your database with the latest schema:
+```bash
+# Apply all pending migrations to the database
+uv run alembic upgrade head
+```
+
+#### 🔄 Reverting Migrations
+To roll back the last migration:
+```bash
+# Revert the database to the previous version
+uv run alembic downgrade -1
+```
+
+*Note: Ensure your database container (`db` service) is running before executing migration commands.*
 
 ---
 
+## 🤝 Contributing
+We welcome contributions! Please see our [Contributing Guide](docs/contributing.md) for details on how to get involved. If you find a bug or have a feature request, please open an issue on GitHub.
+
 ## 📝 Release Notes
-See the full [Release Notes](release-notes.md) for a detailed history of changes.
+See the full <a href="release-notes.md" target="_blank">Release Notes</a> for a detailed history of changes.
 
 ## ⚖️ License
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the <a href="LICENSE" target="_blank">MIT License</a>.
+
+## 💡 Inspiration
+This project is heavily inspired by the official <a href="https://github.com/fastapi/full-stack-fastapi-template" target="_blank">full-stack-fastapi-template</a> in the FastAPI repository. It builds upon those foundational concepts, incorporating modern toolchain upgrades, enhanced observability, and AI-optimized developer workflows.

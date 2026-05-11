@@ -1,15 +1,13 @@
-import logging
-
+import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from app.core.config import settings
 from app.crud import user as user_crud
-from app.db.database import async_session_maker
+from app.db import database
 from app.models.user import User, UserCreate, UserRole
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 # Initial data creation for the database, including creating a superuser if it does not already exist.
@@ -39,7 +37,7 @@ async def init_db(session: AsyncSession) -> None:
             full_name=settings.SUPER_USER_NAME,
             email=settings.SUPER_USER_EMAIL,
             password=settings.SUPER_USER_PASSWORD,
-            role=UserRole.ADMIN,
+            role=UserRole.SUPER,
         )
         user = await user_crud.create_user(session=session, user_create=user_in)
         logger.info("Initial data created")
@@ -48,15 +46,9 @@ async def init_db(session: AsyncSession) -> None:
 
 
 async def init() -> None:
-    async with async_session_maker() as session:
+    async with database.async_session_maker() as session:
         await init_db(session)
 
 
 async def main() -> None:
     await init()
-
-
-if __name__ == "__main__":
-    import asyncio
-
-    asyncio.run(main())

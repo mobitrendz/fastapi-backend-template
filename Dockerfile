@@ -1,5 +1,5 @@
 # Stage 1: Build dependencies
-FROM python:3.14-slim-bookworm AS builder
+FROM python:3.12-slim-bookworm AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -13,12 +13,13 @@ ARG UV_SYNC_ARGS="--no-dev"
 RUN uv sync --frozen --no-install-project ${UV_SYNC_ARGS}
 
 # Stage 2: Runtime
-FROM python:3.14-slim-bookworm
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
-# Install curl for the health check and libpq for Postgres compatibility
+# Install curl, libpq, and uv
 RUN apt-get update && apt-get install -y --no-install-recommends curl libpq5 && rm -rf /var/lib/apt/lists/*
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Set environment paths
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -32,7 +33,7 @@ COPY --from=builder /app/.venv /app/.venv
 COPY app/ ./app/
 COPY alembic/ ./alembic/
 COPY scripts/ ./scripts/
-COPY alembic.ini .env ./
+COPY alembic.ini ./
 
 # Ensure the script is executable
 RUN chmod +x /app/scripts/prestart.sh

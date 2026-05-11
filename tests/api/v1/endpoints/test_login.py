@@ -78,7 +78,7 @@ async def test_get_current_user(client: AsyncClient, normal_user_token: str):
         headers={"Authorization": f"Bearer {normal_user_token}"},
     )
     assert response.status_code == 200
-    assert response.json()["email"] == "user@example.com"
+    assert response.json()["email"] == "test_user@example.com"
 
 
 @pytest.mark.asyncio
@@ -87,7 +87,7 @@ async def test_get_current_user_invalid_token(client: AsyncClient):
         "/api/v1/login/current-user",
         headers={"Authorization": "Bearer invalidtoken"},
     )
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.asyncio

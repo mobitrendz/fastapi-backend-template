@@ -1,10 +1,10 @@
-import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Annotated, Any
 
 import jwt
+import structlog
 from argon2 import PasswordHasher
 from argon2.exceptions import Argon2Error
 from emails.message import Message
@@ -14,8 +14,7 @@ from jinja2 import Template
 
 from app.core.config import settings
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
