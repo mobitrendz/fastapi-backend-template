@@ -87,7 +87,7 @@ async def test_get_current_user_invalid_token(client: AsyncClient):
         "/api/v1/login/current-user",
         headers={"Authorization": "Bearer invalidtoken"},
     )
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.asyncio
