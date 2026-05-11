@@ -39,11 +39,24 @@ class UserRegister(SQLModel):
     password: str = Field(min_length=8, max_length=128)
 
 
-# UserUpdate model for updating user information
-class UserUpdate(SQLModel):
+# UserUpdate model for standard profile updates (Self-service)
+class UserUpdateMe(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
+    email: EmailStr | None = Field(default=None, max_length=255)
+
+
+# UserUpdateAdmin model for administrative actions (SUPER/ADMIN only)
+class UserUpdateAdmin(SQLModel):
+    full_name: str | None = Field(default=None, max_length=255)
+    email: EmailStr | None = Field(default=None, max_length=255)
     is_active: bool | None = Field(default=None)
     role: UserRole | None = Field(default=None)
+
+
+# Maintain UserUpdate as an alias or base for CRUD logic if needed,
+# but API will use specialized ones.
+class UserUpdate(UserUpdateAdmin):
+    pass
 
 
 # UpdatePassword model for changing a user's password

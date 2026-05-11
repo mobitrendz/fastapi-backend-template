@@ -18,6 +18,7 @@ from app.models.user import (
     UserPublic,
     UserRole,
     UserUpdate,
+    UserUpdateMe,
 )
 
 disable_installed_extensions_check()
@@ -140,10 +141,9 @@ async def update_user(
     if not target_user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Access Control Logic
+    # 1. Access Control Logic (Who can edit whom)
     if current_user.id == id:
-        # Users can edit themselves, but only SUPER can change roles or active status for themselves?
-        # Actually, usually users can't change their own role.
+        # Users can edit themselves, but only SUPER can change roles or active status
         if current_user.role != UserRole.SUPER:
             if user_update.role is not None or user_update.is_active is not None:
                 raise HTTPException(
@@ -151,15 +151,36 @@ async def update_user(
                     detail="Cannot change your own role or active status",
                 )
     elif current_user.role == UserRole.SUPER:
-        pass  # SUPER can do anything
+        pass  # SUPER can update any field on any user
     elif current_user.role == UserRole.ADMIN:
-        # ADMIN can manage USER roles, but not other ADMINs or SUPER
+        # ADMIN can manage regular USERS, but not other ADMINs or SUPERs
         if target_user.role in [UserRole.SUPER, UserRole.ADMIN]:
             raise HTTPException(
                 status_code=403, detail="Admins can only manage regular users."
             )
+        # ADMIN cannot modify the 'role' field (Only SUPER can)
+        if user_update.role is not None:
+            raise HTTPException(
+                status_code=403,
+                detail="Only SUPER users can modify roles.",
+            )
+        # ADMIN is allowed to modify 'is_active' and other fields for regular users
     else:
+        # Regular users cannot edit other users
         raise HTTPException(status_code=403, detail="Not enough permissions")
+
+    # 2. Schema Gating (Mass Assignment Protection)
+    # If not a privileged user, ensure only fields from UserUpdateMe are processed
+    if current_user.role not in [UserRole.SUPER, UserRole.ADMIN]:
+        # Convert to the restricted schema to strip unallowed fields
+        # Crucial: Use exclude_unset=True to avoid setting missing fields to None
+        restricted_data = UserUpdateMe.model_validate(
+            user_update.model_dump(exclude_unset=True)
+        )
+        # Re-wrap into UserUpdate for the CRUD layer
+        user_update = UserUpdate.model_validate(
+            restricted_data.model_dump(exclude_unset=True)
+        )
 
     user = await user_crud.update_user(session=session, id=id, user_update=user_update)
     return UserPublic.model_validate(user)
