@@ -60,7 +60,7 @@ def test_generate_reset_password_email(mocker):
         "app.core.security.render_email_template", return_value="<html>Reset</html>"
     )
     email_to = "test@example.com"
-    email = "user@example.com"
+    email = "test_user@example.com"
     token = "sometoken"  # noqa: S105
     email_data = security.generate_reset_password_email(email_to, email, token)
     assert (

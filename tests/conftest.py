@@ -1,9 +1,12 @@
 from collections.abc import AsyncGenerator
 
+import pytest
 import pytest_asyncio
+from fastapi_pagination import add_pagination
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
+from testcontainers.postgres import PostgresContainer
 
 from app.core import security
 from app.core.config import settings
@@ -12,32 +15,44 @@ from app.db.database import get_session
 from app.main import app
 from app.models.user import UserCreate, UserRole
 
-# Use PostgreSQL for testing (can be configured to a separate test DB if needed)
-# For simplicity, we use the same DB but with transactional isolation (rollback)
-TEST_SQLALCHEMY_DATABASE_URI = str(settings.SQLALCHEMY_DATABASE_URI)
+add_pagination(app)
 
-engine = create_async_engine(TEST_SQLALCHEMY_DATABASE_URI)
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+
+# Testcontainer for Postgres
+@pytest.fixture(scope="session")
+def postgres_container():
+    with PostgresContainer("postgres:18") as container:
+        yield container
 
 
 @pytest_asyncio.fixture(scope="session", autouse=True)
-async def setup_database():
-    # Ensure tables exist
+async def engine(postgres_container):
+    # Dynamically build the connection URL from the container
+    url = postgres_container.get_connection_url().replace(
+        "postgresql+psycopg2", "postgresql+psycopg"
+    )
+    engine = create_async_engine(url)
+
+    # Patch the global engine and async_session_maker in app.db.database
+    from app.db import database
+
+    database.engine = engine
+    database.async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.create_all)
-    yield
+
+    yield engine
+
+    await engine.dispose()
 
 
 @pytest_asyncio.fixture
-async def session() -> AsyncGenerator[AsyncSession]:
-    async with engine.connect() as connection:
-        # Start a transaction
-        transaction = await connection.begin()
-        # Bind the session to the connection
-        async with AsyncSession(bind=connection, expire_on_commit=False) as session:
-            yield session
-            # Rollback the transaction after the test
-            await transaction.rollback()
+async def session(engine) -> AsyncGenerator[AsyncSession]:
+    async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+    async with async_session_maker() as session:
+        yield session
+        await session.rollback()
 
 
 @pytest_asyncio.fixture
@@ -63,6 +78,22 @@ async def superuser_token(session: AsyncSession) -> str:
             full_name=settings.SUPER_USER_NAME,
             email=settings.SUPER_USER_EMAIL,
             password=settings.SUPER_USER_PASSWORD,
+            role=UserRole.SUPER,
+        )
+        user = await user_crud.create_user(session=session, user_create=user_in)
+
+    return security.create_access_token(str(user.id))
+
+
+@pytest_asyncio.fixture
+async def admin_user_token(session: AsyncSession) -> str:
+    email = "test_admin@example.com"
+    user = await user_crud.get_user_by_email(session=session, email=email)
+    if not user:
+        user_in = UserCreate(
+            full_name="Admin User",
+            email=email,
+            password="password123",  # noqa: S106
             role=UserRole.ADMIN,
         )
         user = await user_crud.create_user(session=session, user_create=user_in)
@@ -72,7 +103,7 @@ async def superuser_token(session: AsyncSession) -> str:
 
 @pytest_asyncio.fixture
 async def normal_user_token(session: AsyncSession) -> str:
-    email = "user@example.com"
+    email = "test_user@example.com"
     user = await user_crud.get_user_by_email(session=session, email=email)
     if not user:
         user_in = UserCreate(

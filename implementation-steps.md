@@ -37,7 +37,7 @@ Developer: Sreeraj Sreenivasan - 30 Mar 2026
 
 ### Prerequisites
 
-* Python >=3.14
+* Python >=3.12
 * PostgreSQL 18
 * git
 * uv
@@ -90,7 +90,7 @@ async def root():
 - Run FastAPI
 
 ```bash
-uv run fastapi dev
+uv run fastapi dev --host 0.0.0.0
 ```
 
 ### Create Project folders
@@ -279,7 +279,7 @@ def get_welcome_message():
 - Run fastapi
 
 ```bash
-uv run fastapi dev
+uv run fastapi dev --host 0.0.0.0
 ```
 
 - Open a browser and enter URL
@@ -980,7 +980,7 @@ New user table will be created in postgreSQL my_fastapi database.
 - Restart server and check for the new user data with hashed_password
 
 ```bash
-uv run fastapi dev
+uv run fastapi dev --host 0.0.0.0
 ```
 
 ### Implement OAuth2 JWT Token authentication
@@ -1195,8 +1195,8 @@ POSTGRES_SERVER=host.docker.internal
 
 **2, Create a file named `Dockerfile` in the root folder and add the below line**
 ```bash
-# 1. Use official python 3.14 (or slim) image
-FROM python:3.14-slim-bookworm
+# 1. Use official python 3.12 (or slim) image
+FROM python:3.12-slim-bookworm
 
 # 2. Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -1259,7 +1259,7 @@ http://127.0.0.1:8000/docs
 **1, Update Dockerfile**
 ```bash
 # Stage 1: Build dependencies
-FROM python:3.14-slim-bookworm AS builder
+FROM python:3.12-slim-bookworm AS builder
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -1272,7 +1272,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project --no-dev
 
 # Stage 2: Runtime
-FROM python:3.14-slim-bookworm
+FROM python:3.12-slim-bookworm
 
 WORKDIR /app
 
@@ -1649,9 +1649,9 @@ uv tool install ty@latest
 ```bash
 [tool.ty.environment]
 python = ".venv/bin/python"
-python-version = "3.14"
+python-version = "3.12"
 # Add this to ensure ty looks in the site-packages where the stubs live
-extra-paths = [".venv/lib/python3.14/site-packages"]
+extra-paths = [".venv/lib/python3.12/site-packages"]
 
 [tool.ty.analysis]
 # PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
@@ -1717,7 +1717,7 @@ async def create_user(session: SessionDependency, allow_admin: AllowAdmin, user_
 class UserRole(StrEnum):
     ADMIN = "admin"
     USER = "user"
-    GUEST = "guest"
+    SUPER = "super"
 ```
 
 - Role-based access control dependencies

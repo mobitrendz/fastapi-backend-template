@@ -2,9 +2,9 @@
 set -e
 
 echo "Running migrations..."
-python -m alembic upgrade head
+uv run alembic upgrade head
 
 echo "Seeding initial data..."
-python -m app.db.initial_data
+uv run python -m app.db.initial_data
 
 echo "Prestart complete."

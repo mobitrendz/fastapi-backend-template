@@ -2,8 +2,8 @@ import uuid
 
 from fastapi import APIRouter, HTTPException
 
+from app.api.deps import AllowTodo, CurrentUser
 from app.crud import todo as todo_crud
-from app.crud.user import AllowAdminAndUser, CurrentUser
 from app.db.database import SessionDependency
 from app.models.generic import Message
 from app.models.todo import (
@@ -19,7 +19,7 @@ router = APIRouter()
 @router.post("/", response_model=ToDoListPublic)
 async def create_todo(
     session: SessionDependency,
-    _allow_admin_and_user: AllowAdminAndUser,
+    _allow_todo: AllowTodo,
     current_user: CurrentUser,
     todo_create: ToDoListCreate,
 ) -> ToDoListPublic:
@@ -32,7 +32,7 @@ async def create_todo(
 @router.get("/", response_model=ToDoListsPublic)
 async def read_todos(
     session: SessionDependency,
-    _allow_admin_and_user: AllowAdminAndUser,
+    _allow_todo: AllowTodo,
     current_user: CurrentUser,
 ) -> ToDoListsPublic:
     return await todo_crud.get_todos(session=session, current_user=current_user)
@@ -41,7 +41,7 @@ async def read_todos(
 @router.get("/{id}", response_model=ToDoListPublic)
 async def read_todo_by_id(
     session: SessionDependency,
-    _allow_admin_and_user: AllowAdminAndUser,
+    _allow_todo: AllowTodo,
     current_user: CurrentUser,
     id: uuid.UUID,
 ) -> ToDoListPublic:
@@ -56,7 +56,7 @@ async def read_todo_by_id(
 @router.patch("/{id}", response_model=ToDoListPublic)
 async def update_todo(
     session: SessionDependency,
-    _allow_admin_and_user: AllowAdminAndUser,
+    _allow_todo: AllowTodo,
     current_user: CurrentUser,
     id: uuid.UUID,
     todo_update: ToDoListUpdate,
@@ -75,7 +75,7 @@ async def update_todo(
 @router.delete("/{id}", response_model=Message)
 async def delete_todo(
     session: SessionDependency,
-    _allow_admin_and_user: AllowAdminAndUser,
+    _allow_todo: AllowTodo,
     current_user: CurrentUser,
     id: uuid.UUID,
 ) -> Message:

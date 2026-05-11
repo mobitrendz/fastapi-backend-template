@@ -1,9 +1,9 @@
 [project]
 name = "fastapi-backend-template"
 version = "0.1.0"
-description = "FastAPI learning project"
+description = "High-performance, AI-optimized enterprise backend template built with FastAPI, SQLModel, and PostgreSQL."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.18.4", # For database migrations, allowing for version control of the database schema and easy application of changes across different environments.
     "fastapi[standard]>=0.135.2", # For building the API with FastAPI
@@ -20,25 +20,28 @@ dependencies = [
     "fastapi-pagination>=0.12.34", # For pagination support in API endpoints, making it easier to handle large datasets and improve performance
     "python-multipart>=0.0.22", # For handling multipart form data, useful for file uploads and form submissions in the API
     "pydantic-extra-types>=2.11.1", # For additional Pydantic types, providing more options for data validation and serialization in the application
-    "sentry-sdk>=2.56.0", # For error tracking and monitoring in the application
+    "sentry-sdk[fastapi]>=2.56.0", # For error tracking and monitoring in the application
     "jinja2>=3.1.6",
     "emails>=1.1.1",
     "email-validator>=2.3.0",
+    "rich>=14.3.3",
+    "psutil>=7.2.2",
 ]
 
 [dependency-groups]
 lint = [
-    "ruff>=0.15.11",   # Fast, all-in-one linter and formatter
-    "mypy>=1.20.1",   # Static type checking
+    "ruff>=0.15.5",   # Fast, all-in-one linter and formatter
+    "mypy>=1.10.0",   # Static type checking
     "bandit>=1.8.3",   # Security-focused linting
 ]
-
 test = [
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
     "pytest-asyncio>=1.3.0",
     "httpx>=0.27.0",   # Required for testing FastAPI endpoints
     "pytest-mock>=3.15.1",
+    "testcontainers>=4.14.2",
+    "hypothesis>=6.152.4",
 ]
 
 dev = [
@@ -46,13 +49,17 @@ dev = [
     { include-group = "test" },
     "debugpy>=1.8.20",
     "prek",
+    "py-spy>=0.4.2",
+    "scalene>=2.2.1",
     "types-passlib>=1.7.7.20260211",     # Type stubs for password hashing (helps Mypy)
+    "types-psutil>=7.2.2.20260508",
     "zensical>=0.0.34", # High-performance documentation generator (Rust-powered)
 ]
 
 [tool.ruff]
+
 line-length = 88
-target-version = "py314"
+target-version = "py312"
 lint.select = [
     "E",    # pycodestyle errors
     "W",    # pycodestyle warnings
@@ -67,17 +74,35 @@ lint.select = [
 lint.ignore = ["E501"] # Line too long (handled by formatter)
 
 [tool.mypy]
-strict = true
+# Global strict-like settings but allow overrides
+warn_unused_configs = true
+disallow_subclassing_any = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
 exclude = ["alembic"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
-module = "sqlmodel.*"
+module = ["sqlmodel.*", "testcontainers.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"
+check_untyped_defs = false
 disallow_untyped_defs = false
+disallow_untyped_calls = false
+ignore_missing_imports = true
+disable_error_code = ["no-untyped-def", "no-untyped-call"]
 
 [tool.pytest]
 addopts = [
@@ -92,9 +117,9 @@ asyncio_default_fixture_loop_scope = "session"
 
 [tool.ty.environment]
 python = ".venv/bin/python"
-python-version = "3.14"
+python-version = "3.12"
 # Add this to ensure ty looks in the site-packages where the stubs live
-extra-paths = [".venv/lib/python3.14/site-packages"]
+extra-paths = [".venv/lib/python3.12/site-packages"]
 
 [tool.ty.analysis]
 # PRO TIP: For FastAPI and PyJWT, "replace-imports-with-any" is often better.
@@ -103,3 +128,9 @@ replace-imports-with-any = ["jwt.**", "fastapi.**"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S106"]  # Ignore hardcoded password checks in the tests directory
+
+[tool.bandit]
+exclude_dirs = ["tests", "alembic"]

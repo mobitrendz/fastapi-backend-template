@@ -1,52 +1,122 @@
-import logging
-
-# from app.db import initial_data, backend_pre_start
+import traceback
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+import sentry_sdk
+import structlog
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+from fastapi_pagination import add_pagination
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import EmailStr
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router as v1_router
 from app.core.config import settings
+from app.core.limiter import limiter
+from app.core.logger import setup_logging
 from app.core.security import generate_test_email, send_email
-from app.db import initial_data
-from app.models.generic import Message
+from app.crud.system_log import create_system_log
+from app.db import database, initial_data
+from app.middleware.activity_logger import ActivityLoggerMiddleware
+from app.models.generic import ErrorDetail, Message
 
-logger = logging.getLogger(__name__)
-
-
-# Main application setup using FastAPI. This module defines the main application instance and includes the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. The application also includes a health check endpoint to verify that the application is running and healthy.
-# The lifespan function is used to run startup and shutdown logic for the application. During startup, it seeds the initial data into the database, ensuring that necessary data is present before the application starts handling requests. The shutdown logic can be used to perform any necessary cleanup when the application is shutting down. The use of asynccontextmanager allows for asynchronous operations during startup and shutdown, making it suitable for tasks that may involve I/O operations, such as database interactions.
-# The application is organized to promote maintainability and scalability, with a clear separation of concerns between the main application setup, API routing, database interactions, and initial data seeding. This structure allows for easy extension of the application in the future, such as adding new API endpoints, additional database models, or more complex startup and shutdown logic as needed. The use of logging provides feedback on the application's startup process, making it easier to monitor and debug during development and production. Overall, this setup provides a solid foundation for building a robust and scalable FastAPI application.
+setup_logging()
+logger = structlog.get_logger(__name__)
 
 
+# Main application setup using FastAPI.
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # noqa: UP043
     # --- STARTUP LOGIC ---
-    print("--- START SEEDING INITIAL DATA ---")
-    print(app.summary)
+    logger.info("--- START SEEDING INITIAL DATA ---")
+    logger.debug("Application summary", summary=app.summary)
 
-    # 1. Run migrations (Optional: see note below)
-    # 2. Seed initial data
     try:
         await initial_data.init()
-        print("--- FINISH SEEDING INITIAL DATA ---")
+        logger.info("--- FINISH SEEDING INITIAL DATA ---")
     except Exception as e:
-        print(f"Seeding failed: {e}")
+        logger.error("Seeding failed", error=str(e))
 
     yield  # The app is now running and "healthy"
 
     # --- SHUTDOWN LOGIC ---
-    print("--- SYSTEM SHUTDOWN ---")
+    logger.info("--- SYSTEM SHUTDOWN ---")
 
 
 app = FastAPI(
     lifespan=lifespan,
     title=settings.PROJECT_NAME,
     openapi_url="/openapi.json",
+    responses={
+        400: {"model": ErrorDetail, "description": "Bad Request"},
+        403: {"model": ErrorDetail, "description": "Forbidden"},
+        404: {"model": ErrorDetail, "description": "Not Found"},
+    },
 )
+
+if settings.SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=settings.SENTRY_DSN,
+        traces_sample_rate=1.0,
+        integrations=[
+            FastApiIntegration(),
+        ],
+    )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # type: ignore
+app.add_middleware(SlowAPIMiddleware)
+app.add_middleware(ActivityLoggerMiddleware)
+
+
+@app.exception_handler(ValueError)
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """
+    Capture unhandled exceptions, log them to the database, and return a clean JSON response.
+    """
+    stack_trace = traceback.format_exc()
+    logger.error("Unhandled exception", error=str(exc), path=request.url.path)
+
+    try:
+        async with database.async_session_maker() as session:
+            user = getattr(request.state, "user", None)
+            user_id = getattr(user, "id", None) if user else None
+
+            await create_system_log(
+                session=session,
+                level="ERROR",
+                message=str(exc),
+                stack_trace=stack_trace,
+                path=request.url.path,
+                method=request.method,
+                user_id=user_id,
+                context={
+                    "query_params": str(request.query_params),
+                    "client": request.client.host if request.client else "unknown",
+                },
+            )
+    except Exception as e:
+        logger.error("Failed to log exception to database", error=str(e))
+
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={
+            "detail": "An internal server error occurred. The administrators have been notified."
+        },
+    )
+
+
+# Initialize Prometheus Instrumentator
+Instrumentator().instrument(app).expose(app)
+
+# Initialize Pagination
+add_pagination(app)
 
 
 # Set all CORS enabled origins
@@ -60,17 +130,17 @@ if settings.all_cors_origins:
     )
 
 
-# Include the API router for version 1 of the API, which contains all the endpoint routers for user management, authentication, and welcome messages. This organizes the API endpoints under a common prefix (e.g., /api/v1) and allows for easy versioning of the API in the future.
+# Include the API router for version 1 of the API
 app.include_router(v1_router, prefix=settings.API_V1_STR)
 
 
-# Health check endpoint to verify that the application is running and healthy. This endpoint can be used by monitoring tools or load balancers to check the health of the application and ensure that it is responding to requests as expected.
+# Health check endpoint to verify that the application is running and healthy.
 @app.get("/health", tags=["Health Check"])
 async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-# Test email endpoint to verify that the email sending functionality is working correctly. This endpoint accepts an email address as input and sends a test email to that address, returning a message indicating that the test email was sent successfully. This can be used to verify that the email configuration is correct and that emails are being sent as expected.
+# Test email endpoint to verify email sending functionality.
 @app.post("/test-email/", tags=["Test email"], status_code=201)
 def test_email(email_to: EmailStr) -> Message:
     email_data = generate_test_email(email_to=email_to)

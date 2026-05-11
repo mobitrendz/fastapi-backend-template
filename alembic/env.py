@@ -5,6 +5,8 @@ from sqlmodel import SQLModel
 
 from alembic import context
 from app.core.config import settings
+from app.models.activity import UserActivity  # noqa: F401
+from app.models.system_log import SystemLog  # noqa: F401
 from app.models.todo import ToDoList  # noqa: F401
 from app.models.user import User  # noqa: F401
 
