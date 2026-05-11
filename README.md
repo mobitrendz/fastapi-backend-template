@@ -167,7 +167,8 @@ For developers who prefer running the database services via Docker while develop
    source .venv/bin/activate
 
    # Start development server (Auto-reload enabled)
-   uv run fastapi dev
+   # Use --host 0.0.0.0 to make the server accessible from outside the container or machine
+   uv run fastapi dev --host 0.0.0.0
    ```
 
 4. **Access Endpoints**:
