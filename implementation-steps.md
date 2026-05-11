@@ -90,7 +90,7 @@ async def root():
 - Run FastAPI
 
 ```bash
-uv run fastapi dev
+uv run fastapi dev --host 0.0.0.0
 ```
 
 ### Create Project folders
@@ -279,7 +279,7 @@ def get_welcome_message():
 - Run fastapi
 
 ```bash
-uv run fastapi dev
+uv run fastapi dev --host 0.0.0.0
 ```
 
 - Open a browser and enter URL
@@ -980,7 +980,7 @@ New user table will be created in postgreSQL my_fastapi database.
 - Restart server and check for the new user data with hashed_password
 
 ```bash
-uv run fastapi dev
+uv run fastapi dev --host 0.0.0.0
 ```
 
 ### Implement OAuth2 JWT Token authentication
