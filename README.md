@@ -4,7 +4,10 @@
 <a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml" target="_blank"><img src="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-fastapi-backend-template.yml/badge.svg?branch=develop" alt="Backend Code Quality"></a>
 <a href="https://github.com/mobitrendz/fastapi-backend-template/actions/workflows/test-coverage.yml" target="_blank"><img src="coverage.svg" alt="Coverage"></a>
 
-A production-ready FastAPI template designed for scalable, high-performance web applications. This project provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows out of the box.
+An evolving, enterprise-grade FastAPI template currently in active development. While designed for scalability and high performance, this project is in a rapid growth phase—continuously receiving new features and bug fixes. It provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows.
+
+> [!IMPORTANT]
+> This project is currently in **Active Development (Beta)**. We are continuously adding new functionalities and fixing bugs. While it follows enterprise standards, it should be thoroughly evaluated before use in critical production environments.
 
 ## 🏗️ Architectural Pattern
 

@@ -14,7 +14,7 @@ async def test_get_current_user_malformed_token(client: AsyncClient):
         "/api/v1/login/current-user",
         headers={"Authorization": f"Bearer {token}"},
     )
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.asyncio
@@ -26,8 +26,21 @@ async def test_get_current_user_validation_error(client: AsyncClient):
         "/api/v1/login/current-user",
         headers={"Authorization": f"Bearer {token}"},
     )
-    assert response.status_code == 403
+    assert response.status_code == 401
     assert response.json()["detail"] == "Could not validate credentials"
+
+
+@pytest.mark.asyncio
+async def test_get_current_user_expired_token(client: AsyncClient):
+    # Token that has expired
+    payload = {"sub": "some-user-id", "exp": 1}  # Expired long ago
+    token = jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    response = await client.get(
+        "/api/v1/login/current-user",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Token expired"
 
 
 @pytest.mark.asyncio
