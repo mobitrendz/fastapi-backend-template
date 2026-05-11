@@ -4,7 +4,7 @@ from sqlmodel import select
 
 from app.core.config import settings
 from app.crud import user as user_crud
-from app.db.database import async_session_maker
+from app.db import database
 from app.models.user import User, UserCreate, UserRole
 
 logger = structlog.get_logger(__name__)
@@ -46,7 +46,7 @@ async def init_db(session: AsyncSession) -> None:
 
 
 async def init() -> None:
-    async with async_session_maker() as session:
+    async with database.async_session_maker() as session:
         await init_db(session)
 
 
