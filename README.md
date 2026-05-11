@@ -7,7 +7,7 @@
 An evolving, enterprise-grade FastAPI template currently in active development. While designed for scalability and high performance, this project is in a rapid growth phase—continuously receiving new features and bug fixes. It provides a robust, modular foundation that integrates enterprise-grade security, comprehensive observability, and automated quality assurance workflows.
 
 > [!IMPORTANT]
-> This project is currently in **Active Development (Beta)**. We are continuously adding new functionalities and fixing bugs. While it follows enterprise standards, it should be thoroughly evaluated before use in critical production environments.
+> This project is currently in **Active Development (Beta)**. We are adding new functionalities and fixing bugs. While it follows enterprise standards, it should be thoroughly evaluated before use in critical production environments.
 
 ## 🏗️ Architectural Pattern
 
