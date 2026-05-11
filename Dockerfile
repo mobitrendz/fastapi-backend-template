@@ -33,7 +33,7 @@ COPY --from=builder /app/.venv /app/.venv
 COPY app/ ./app/
 COPY alembic/ ./alembic/
 COPY scripts/ ./scripts/
-COPY alembic.ini .env ./
+COPY alembic.ini ./
 
 # Ensure the script is executable
 RUN chmod +x /app/scripts/prestart.sh
