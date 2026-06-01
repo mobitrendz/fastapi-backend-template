@@ -23,8 +23,9 @@ This template follows a **Layered Modular Architecture** to ensure high maintain
 
 ## 🔗 Related Projects
 
-*   **React Frontend Template**: A companion frontend built with React 19, Vite, and Tailwind CSS. It is pre-configured to consume this API and handle its standardized error formats.
-    - [GitHub Repository](https://github.com/mobitrendz/react-frontend-template)
+- **React Frontend Template**: A companion frontend built with React 19, Vite, and Tailwind CSS. It is pre-configured to consume this API and handle its standardized error formats. [Frontend Template](https://github.com/mobitrendz/react-frontend-template)
+
+- **Expo Template**: [Expo Mobile App Template](https://github.com/mobitrendz/expo-mobile-template)
 
 ---
 
